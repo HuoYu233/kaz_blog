@@ -2,7 +2,7 @@
 title: 基于Transformer的催化反应产率预测
 mathjax: true
 date: 2025/2/25 20:46:25
-img: https://datawhaler.feishu.cn/87dd39a9-09e1-45f5-9e68-fd28666f6058
+img: https://img0.baidu.com/it/u=3213989145,974537053&fm=253&fmt=auto&app=120&f=PNG?w=1023&h=362
 excerpt: RT
 ---
 # 任务概述
@@ -18,8 +18,10 @@ excerpt: RT
 **评价指标**
 
 实验真实结果与预测结果$R^2$决定系数来进行评测:
+$$
+R^2(y,\hat{y})=1-\frac{\sum_{i=1}^n(y_i-\hat{y}_i)^2}{\sum_{i=1}^n(y_i-\bar{y})^2}
+$$
 
-![img](https://datawhaler.feishu.cn/space/api/box/stream/download/asynccode/?code=OGQ0MzBhZTc0NmY4YTc3NTIxZmQwZmEyYjM3NDhmOWNfZE1MSkE2WmRPV01nSnhJM2tERGRlVEVucTgyMkxjOEpfVG9rZW46REVoUmJmeDAyb1lTNXR4ZE9ROGNyT0RhbmFoXzE3NDA0NjQyOTU6MTc0MDQ2Nzg5NV9WNA)
 
 # baseline
 
@@ -60,17 +62,18 @@ SMILES将化学分子中涉及的原子、键、电荷等信息，用对应的AS
 
 RDkit会将分子读取为RDkit中专属的rdkit.Chem.rdchem.Mol对象，并以Mol对象为基础，可以对分子进行转化为各种表达形式，例如SMILES
 
-RDkit是化学信息学中主要的工具，是开源的。网址：http://www.rdkit.org，支持WIN\MAC\Linux，可以被python、Java、C调用。几乎所有的与化学信息学相关的内容都可以在上面找到。
+RDkit是化学信息学中主要的工具，是开源的。网址：http://www.rdkit.org
+支持WIN\MAC\Linux，可以被python、Java、C调用。几乎所有的与化学信息学相关的内容都可以在上面找到。
 
 ## 结果
 
 baseline的$R^2 = 0.0745336043830066$，约0.08
 
-#RNN建模
+# RNN建模
 
 RNN（Recurrent Neural Network）是处理序列数据的一把好手。RNN的网络每层除了会有自己的输出以外，还会输出一个隐向量到下一层。
 
-![img](https://datawhaler.feishu.cn/space/api/box/stream/download/asynccode/?code=NGJhNWM3ZWY1MmYzNGQ0NTNjMzVlMDg3MzhhNDhhM2NfRDc0NFh6dmFvSFdiT2tyNGZJRk91U0xzcklUYU52WjBfVG9rZW46Q0JsMmJzZUxQb1EyTVp4emtCTmNYRmlrbmNkXzE3NDA0NzAxNTU6MTc0MDQ3Mzc1NV9WNA)
+![](https://img-blog.csdnimg.cn/direct/4d59745e6a904f34afcf1713ff2cd2c3.png)
 
 其中，每一层相当于做了一次线性变换：
 

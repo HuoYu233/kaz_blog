@@ -9,7 +9,7 @@ type: about
 
 [福州大学](https://www.fzu.edu.cn/)环境工程本科在读
 
-- Basic Skills：CET4/6、Java、C/C++、Python、JavaScript
+- Basic Skills：CET-6、Java、C/C++、Python、JavaScript
 - Frameworks：Pytorch、Mybatis、Springboot、Vue、Uniapp、Redis
 
 ## 项目经历
