@@ -1,0 +1,3 @@
+[submodule "themes/bamboo1"]
+	path = themes/bamboo1
+	url = git@github.com:yuang01/hexo-theme-bamboo.git
