@@ -1,0 +1,2244 @@
+<!DOCTYPE html>
+<html>
+  <!-- meta/link... -->
+  
+
+
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+  <title>AI面经 | Kaz&#39;s Blog</title>
+
+  <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/favicon.ico">
+  <link rel="stylesheet" href="https://at.alicdn.com/t/font_1911880_c1nvbyezg17.css">
+  <link href="https://unpkg.com/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+  <link href="/js/swiper/swiper@5.4.1.min.css" rel="stylesheet">
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/animate.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+    <link href="https://unpkg.com/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" rel="stylesheet">
+  
+  
+    
+<link rel="stylesheet" href="/js/shareJs/share.min.css">
+
+  
+  <style>
+        @media (max-width: 992px) {
+            #waifu {
+                display: none;
+            }
+        }
+    </style>
+    <script defer src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+
+    
+    
+    <!-- 依赖于jquery和vue -->
+    <script src="https://unpkg.com/jquery@3.5.1/dist/jquery.min.js"></script>
+    <script src="https://unpkg.com/vue@2.6.11/dist/vue.min.js"></script>
+
+    <!-- import link -->
+    
+        
+            
+        
+            
+        
+    
+    <!-- import script -->
+    
+        
+            
+        
+            
+        
+    
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+  
+  <!-- 预加载动画 -->
+  
+  
+  <div class="preloader_6" id="loader">
+  <div class="loader"></div>
+</div>
+  <script>
+    var endLoading = function () {
+      document.body.style.overflow = 'auto';
+      document.getElementById('loader').classList.add("loaded");
+    }
+    window.addEventListener('DOMContentLoaded', endLoading);
+  </script>
+
+
+  <body>
+    <!-- 判断是否为暗黑风格 -->
+    <!-- 判断是否为黑夜模式 -->
+<script defer>
+  let isDark = JSON.parse(localStorage.getItem('dark')) || JSON.parse('false');
+
+  if (isDark) {
+    $(document.body).addClass('darkModel');
+  }
+</script>
+
+    <!-- 需要在上面加载的js -->
+    <script>
+  function loadScript(src, cb) {
+    return new Promise(resolve => {
+      setTimeout(function () {
+        var HEAD = document.getElementsByTagName("head")[0] || document.documentElement;
+        var script = document.createElement("script");
+        script.setAttribute("type", "text/javascript");
+        if (cb) {
+          if (JSON.stringify(cb)) {
+            for (let p in cb) {
+              if (p == "onload") {
+                script[p] = () => {
+                  cb[p]()
+                  resolve()
+                }
+              } else {
+                script[p] = cb[p]
+                script.onload = resolve
+              }
+            }
+          } else {
+            script.onload = () => {
+              cb()
+              resolve()
+            };
+          }
+        } else {
+          script.onload = resolve
+        }
+        script.setAttribute("src", src);
+        HEAD.appendChild(script);
+      });
+    });
+  }
+
+  //https://github.com/filamentgroup/loadCSS
+  var loadCSS = function (src) {
+    return new Promise(resolve => {
+      setTimeout(function () {
+        var link = document.createElement('link');
+        link.rel = "stylesheet";
+        link.href = src;
+        link.onload = resolve;
+        document.getElementsByTagName("head")[0].appendChild(link);
+      });
+    });
+  };
+
+</script> 
+
+<!-- 轮播图所需要的js -->
+<script src="/js/swiper/swiper.min.js"></script>
+<script src="/js/swiper/vue-awesome-swiper.js"></script>
+<script src="/js/swiper/swiper.animate1.0.3.min.js"></script>
+
+<script type="text/javascript">
+  Vue.use(window.VueAwesomeSwiper)
+</script>
+
+
+  <script src="/js/vue-typed-js/index.js"></script>
+
+
+<!-- 首页的公告滚动插件的js需要重新加载 -->
+<script src="/js/vue-seamless-scroll/index.js"></script>
+
+<!-- 打字机效果js -->
+<script src="https://unpkg.com/typed.js@2.0.11"></script>
+
+
+    <div id="safearea">
+      <main class="main" id="pjax-container">
+        <!-- 头部导航 -->
+        
+<header class="header  " 
+  id="navHeader"
+  style="position: fixed;
+  left: 0; top: 0; z-index: 10;width: 100%;"
+>
+  <div class="header-content">
+    <div class="bars">
+      <div id="appDrawer" class="sidebar-image">
+  <div class="drawer-box-icon">
+    <i class="fas fa-bars" aria-hidden="true" @click="showDialogDrawer"></i>
+  </div>
+  
+  <transition name="fade">
+    <div class="drawer-box_mask" v-cloak style="display: none;" v-show="visible" @click.self="cancelDialogDrawer">
+    </div>
+  </transition>
+  <div class="drawer-box" :class="{'active': visible}">
+    <div class="drawer-box-head bg-color">
+      <img class="drawer-box-head_logo lazyload placeholder" src="/medias/logo.png" class="lazyload placeholder" data-srcset="/medias/logo.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="logo">
+      <h3 class="drawer-box-head_title">Kaz&#39;s Blog</h3>
+      <h5 class="drawer-box-head_desc"></h5>
+    </div>
+    
+    <div class="drawer-box-content">
+      <ul class="drawer-box-content_menu">
+        
+        
+          <li class="drawer-box-content_item">
+            <a target="_blank" rel="noopener" href="https://github.com/yuang01/hexo-theme-bamboo">
+              <i class="fas fa-github" aria-hidden="true"></i>
+              <span>Github</span>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+  var body = document.body || document.documentElement || window;
+  var vm = new Vue({
+    el: '#appDrawer',
+    data: {
+      visible: false,
+      top: 0,
+      openArr: [],
+    },
+    computed: {
+    },
+    mounted() {
+    },
+    methods: {
+      isOpen(index) {
+        if (this.openArr.includes(index)) {
+          return true;
+        } else {
+          return false;
+        }
+      },
+      openOrCloseMenu(curIndex) {
+        const index = this.openArr.indexOf(curIndex);
+        if (index !== -1) {
+          this.openArr.splice(index, 1);
+        } else {
+          this.openArr.push(curIndex);
+        }
+      },
+      showDialogDrawer() {
+        this.visible = true;
+        // 防止页面滚动，只能让弹框滚动
+        this.top = $(document).scrollTop()
+        body.style.cssText = 'width: 100%; height: 100%;overflow: hidden;';
+      },
+      cancelDialogDrawer() {
+        this.visible = false;
+        body.removeAttribute('style');
+        $(document).scrollTop(this.top)
+      }
+    },
+    created() {}
+  })
+</script>
+
+    </div>
+    <div class="blog-title" id="author-avatar">
+      
+        <div class="avatar">
+          <img src="/medias/logo.png" class="lazyload placeholder" data-srcset="/medias/logo.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="logo">
+        </div>
+      
+      <a href="/" class="logo">Kaz&#39;s Blog</a>
+    </div>
+    <nav class="navbar">
+      <ul class="menu">
+        
+      </ul>
+      
+      
+        <div id="appSearch">
+  <div class="search"  @click="showDialog()"><i class="fas fa-search" aria-hidden="true"></i></div>
+  <transition name="fade">
+    <div class="message-box_wrapper" style="display: none;" v-cloak v-show="dialogVisible" @click.self="cancelDialogVisible()">
+      <div class="message-box animated bounceInDown">
+        <h2>
+          <span>
+            <i class="fas fa-search" aria-hidden="true"></i>
+            <span class="title">Search</span>
+          </span>
+          <i class="fas fa-times close" pointer style="float:right;" aria-hidden="true" @click.self="cancelDialogVisible()"></i>
+        </h2>
+        <form class="site-search-form">
+          <input type="text"
+            placeholder="Please enter keywords"
+            id="local-search-input" 
+            @click="getSearchFile()"
+            class="st-search-input"
+            v-model="searchInput"
+          />
+        </form>
+        <div class="result-wrapper">
+          <div id="local-search-result" class="local-search-result-cls"></div>
+        </div>
+      </div>
+    </div>
+  </transition>
+</div>
+<script src="/js/local_search.js"></script>
+<script>
+  var body = document.body || document.documentElement || window;
+  var vm = new Vue({
+    el: '#appSearch',
+    data: {
+      dialogVisible: false,
+      searchInput: '',
+      top: 0,
+    },
+    computed: {
+    },
+    mounted() {
+      window.addEventListener('pjax:complete', () => {
+        this.cancelDialogVisible();
+      })
+    },
+    methods: {
+      showDialog() {
+        this.dialogVisible = true;
+        // 防止页面滚动，只能让弹框滚动
+        this.top = $(document).scrollTop()
+        body.style.cssText = 'overflow: hidden;';
+      },
+      getSearchFile() {
+        if (!this.searchInput) {
+          getSearchFile("/search.xml");
+        }
+      },
+      cancelDialogVisible() {
+        this.dialogVisible = false;
+        body.removeAttribute('style');
+        $(document).scrollTop(this.top)
+      },
+    },
+    created() {}
+  })
+</script>
+<!-- 解决刷新页面闪烁问题，可以在元素上添加display: none, 或者用vue.extend方法，详情：https://blog.csdn.net/qq_31393401/article/details/81017912 -->
+<!-- 下面是搜索基本写法 -->
+<!-- <script type="text/javascript" id="local.search.active">
+  var inputArea = document.querySelector("#local-search-input");
+  inputArea.onclick   = function(){ getSearchFile(); this.onclick = null }
+  inputArea.onkeydown = function(){ if(event.keyCode == 13) return false }
+</script> -->
+
+      
+
+    </nav>
+  </div>
+  
+    <a target="_blank" rel="noopener" href="https://github.com/yuang01/hexo-theme-bamboo" class="github-corner color-primary" aria-label="View source on GitHub"><svg width="60" height="60" viewBox="0 0 250 250" style="fill:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+  
+  
+</header>
+        <!-- 内容区域 -->
+        
+<!-- prismjs 代码高亮 -->
+
+
+
+
+<div class="bg-dark-floor" style="position: fixed;left: 0;top: 0;width: 100%;height: 100%;z-index: -1;"></div>
+
+
+  <!-- 文章详情页顶部图片和标题 -->
+
+
+
+
+<div class="post-detail-header" id="thumbnail_canvas" style="background-repeat: no-repeat; background-size: cover; 
+  background-position: center center;position: relative;background-image:url('https://img1.baidu.com/it/u=4282277671,2501328998&fm=253&fmt=auto&app=138&f=JPEG?w=449&h=252')">
+  <div class="post-detail-header-mask"></div>
+  <canvas id="header_canvas"style="position:absolute;bottom:0;pointer-events:none;"></canvas>
+  
+  <div class="post-detail-header_info-box">
+    <div class="title-box">
+      <span class="title">
+        AI面经
+      </span>
+    </div>
+    
+    
+      
+        <span class="post-detail-header_date">
+          <i class="fas fa-calendar"></i> Published in：2025-01-26 |
+        </span>
+      
+
+      
+
+      
+    
+  </div>
+  
+  
+    <script defer src="/js/bubble/bubble.js"></script>
+  
+</div>
+
+
+
+
+
+<div class="post-detail-content post-row" 
+  style="padding-top: 0px;">
+  <div class="main-content">
+    <article class="post post-detail">
+      <div class="post-content">
+        <h3 id="1-机器学习、深度学习、与人工智能对比"><a href="#1-机器学习、深度学习、与人工智能对比" class="headerlink" title="1 机器学习、深度学习、与人工智能对比"></a>1 机器学习、深度学习、与人工智能对比</h3><ul>
+<li><strong>机器学习是一种实现人工智能的方法，深度学习是一种实现机器学习的技术</strong></li>
+</ul>
+<blockquote>
+<p><strong>人工智能</strong>（人工智能是计算机科学的一个分支，它企图了解智能的本质，并生产出一种新的能以人类智能相似的方式做出反应的智能机器）</p>
+<p><strong>分类</strong>： 弱人工智能（当前）、强人工智能、超人工智能</p>
+<p><strong>机器学习</strong>（MachineLearning）简称ML：机器学习属于人工智能的一个分支，也是人工智能的和核心。机器学习理论主要是设计和分析一些让计算机可以自动”学习“的算法。</p>
+<p><strong>深度学习</strong>（DeepLearning）简称DL。<strong>最初</strong>的深度学习是<strong>利用深度神经网络</strong>来解决特征表达的一种学习过程。深度神经网络本身并不是一个全新的概念，可大致理解为包含多个隐含层的神经网络结构。为了提高深层神经网络的训练效果，人们对神经元的连接方法和激活函数等方面做出相应的调整。深度学习是机器学习研究中的一个新的领域，其动机在于<strong>建立、模拟人脑进行分析学习的神经网络，它模仿人脑的机制来解释数据，如图象、声音、文本</strong>。</p>
+</blockquote>
+<h4 id="1-1-人工智能"><a href="#1-1-人工智能" class="headerlink" title="1.1 人工智能"></a>1.1 人工智能</h4><blockquote>
+<p><strong>人工智能（Artificial intelligence）简称AI</strong>。人工智能是计算机科学的一个分支，它企图了解智能的本质，并生产出一种新的能以人类智能相似的方式做出反应的智能机器，是研究、开发用于模拟、延伸和扩展人的智能的理论、方法、技术及应用系统的一门新的技术科学。</p>
+<ul>
+<li><p>人工智能目前分为弱人工智能和强人工智能和超人工智能：</p>
+</li>
+<li><p><strong>弱人工智能</strong>：弱人工智能（Artificial Narrow Intelligence &#x2F;ANI),只专注于完成某个特定的任务，例如语音识别、图象识别和翻译等，是擅长于单个方面的人工智能。它们只是用于解决特定的具体类的任务问题而存在，大都是统计数据，以此从中归纳出模型。由于弱人工智能智能处理较为单一的问题，且发展程度并没有达到模拟人脑思维的程度，所以弱人工智能仍然属于“工具”的范畴，与传统的“产品”在本质上并无区别。</p>
+</li>
+<li><p><strong>强人工智能</strong>：强人工智能（Artificial General lnteligence &#x2F;AGI),属于人类级别的人工智能，在各方面都能和人类比肩，它能够进行思考、计划、解决问题、抽象思维、理解复杂理念、快速学习和从经验中学习等操作，并且和人类一样得心应手。</p>
+</li>
+<li><p><strong>超人工智能</strong>：超人工智能（Artificial Superintelligence&#x2F;ASI），在几乎所有领域都比最聪明的人类大脑都聪明许多，包括科学创新、通识和社交技能。在超人工智能阶段，人工智能已经跨过“奇点”，其计算和思维能力已经远超人脑。此时的人工智能已经不是人类可以理解和想象。人工智能将打破人脑受到的维度限制，其所观察和思考的内容，人脑已经无法理解，人工智能将形成一个新的社会。</p>
+</li>
+</ul>
+<p><strong>目前我们仍处于弱人工智能阶段</strong>。</p>
+</blockquote>
+<h4 id="1-2-机器学习"><a href="#1-2-机器学习" class="headerlink" title="1.2 机器学习"></a>1.2 机器学习</h4><blockquote>
+<p><strong>机器学习（Machine Learning）简称ML</strong>。机器学习属于人工智能的一个分支，也是人工智能的和核心。机器学习理论主要是设计和分析一些让计算机可以自动”学习“的算法。</p>
+</blockquote>
+<h4 id="1-3-深度学习"><a href="#1-3-深度学习" class="headerlink" title="1.3 深度学习"></a>1.3 深度学习</h4><blockquote>
+<p><strong>深度学习（Deep Learning）简称DL</strong>。最初的深度学习是利用深度神经网络来解决特征表达的一种学习过程。深度神经网络本身并不是一个全新的概念，可大致理解为包含多个隐含层的神经网络结构。为了提高深层神经网络的训练效果，人们对神经元的连接方法和激活函数等方面做出相应的调整。深度学习是机器学习研究中的一个新的领域，其动机在于建立、模拟人脑进行分析学习的神经网络，它模仿人脑的机制来解释数据，如图象、声音、文本。</p>
+<p>注意：你可能在接触深度学习的时候也听到过<strong>监督学习</strong>、<strong>非监督学习</strong>、<strong>半监督学习</strong>等概念，下面就顺便对这三个名词解析下：</p>
+<ol>
+<li><strong>监督学习：</strong>用一部分已知分类、有标记的样本来训练机器后，让它用学到的特征，对没有还分类、无标记的样本进行分类、贴标签。多用于分类。</li>
+<li><strong>非监督学习：</strong>所有的数据没有标记，类别未知，让它自己学习样本之间的相似性来进行分类。多用于聚类。</li>
+<li><strong>半监督学习：</strong>有两个样本集，一个有标记，一个没有标记。综合利用有类标的样本（ labeled sample）和没有类标的样本（ unlabeled sample），来生成合适的分类。</li>
+</ol>
+</blockquote>
+<h4 id="1-4-区别与联系"><a href="#1-4-区别与联系" class="headerlink" title="1.4 区别与联系"></a>1.4 区别与联系</h4><p><img src="/%5Cimg%5Cai-mianjing%5Cpic-1.png" class="lazyload placeholder" data-srcset="/%5Cimg%5Cai-mianjing%5Cpic-1.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="img"></p>
+<ul>
+<li>人工智能的研究领域包括 <strong>专家系统</strong>(Expert Systems)、<strong>机器学习</strong>(Machine Learning)、<strong>模式识别</strong>、<strong>进化计算</strong>(Evolutionary Computation)、<strong>模糊逻辑</strong>(Fussy Logic)、<strong>计算机视觉</strong>(Computer Vision)、<strong>自然语言处理</strong>(NLP)、<strong>推荐系统</strong>(Recommender Systems)</li>
+<li>深度学习，一种<strong>实现机器学习</strong>的技术。是机器学习中的一个方法或者分支。</li>
+<li><strong>深度学习是用于建立、模拟人脑进行分析学习的神经网络，并模仿人脑的机制来解释数据的一种机器学习技术</strong>。</li>
+<li>它的基本特点，是试图模仿大脑的神经元之间传递，处理信息的模式。最显著的应用是计算机视觉和<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86&spm=1001.2101.3001.7020">自然语言处理</a>(NLP)领域。显然，<strong>“深度学习”是与机器学习中的“神经网络”是强相关</strong>，“神经网络”也是其主要的算法和手段；或者我们可以将“深度学习”称之为“改良版的神经网络”算法。</li>
+<li><strong>总结：人工智能是一个很老的概念，机器学习是人工智能的一个子集，深度学习又是机器学习的一个子集。机器学习与深度学习都是需要大量数据来“喂”的，是大数据技术上的一个应用，同时深度学习还需要更高的运算能力支撑，如GPU</strong></li>
+</ul>
+<p><img src="/%5Cimg%5Cai-mianjing%5Cpic-2.png" class="lazyload placeholder" data-srcset="/%5Cimg%5Cai-mianjing%5Cpic-2.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="img"></p>
+<h3 id="2-AI的分类"><a href="#2-AI的分类" class="headerlink" title="2 AI的分类"></a>2 AI的分类</h3><ul>
+<li><p><strong>模式识别</strong>：</p>
+<ul>
+<li><p><strong>模式识别是指用计算机对物体进行识别。</strong></p>
+<p><strong>物体指文字、符号、图形、图像、语音、声音等实体对象；</strong></p>
+<p>•<strong>不包括概念、思想、意识等虚拟对象，它们属于认知和哲学研究范畴。</strong></p>
+</li>
+<li><p><strong>模式识别应用：</strong></p>
+<p>• <strong>文字识别，车牌识别，人脸识别，视网膜识别，指纹识别，掌纹识别等</strong></p>
+</li>
+</ul>
+</li>
+<li><p><strong>自然语言处理</strong>：用自然语言同计算机进行通讯的一种技术</p>
+<ul>
+<li>机器翻译</li>
+<li>语音识别（<strong>可以单列</strong>）</li>
+<li>文本分类&#x2F;预测</li>
+</ul>
+</li>
+<li><p><strong>机器学习</strong>（重点是深度学习）：机器学习理论主要是设计和分析一些让计算机可以自动”学习“的算法</p>
+</li>
+<li><p><strong>计算机视觉</strong>：用摄影机和电脑代替人眼对目标进行识别、跟踪和测量等机器视觉，并进一步做图形处理，使电脑处理成为更适合人眼观察或传送给仪器检测的图像</p>
+</li>
+<li><p><strong>智能机器人</strong>：给机器人装上“大脑芯片”，从而使其智能性更强，在认知学 习、自动组织、对模糊信</p>
+<p>息的综合处理等方面将会前进一大步</p>
+</li>
+<li><p><strong>自动程序设计</strong>：自动程序设计是指根据给定问题的原始描述，自动生成满足要求的程序</p>
+</li>
+<li><p><strong>数据挖掘</strong>：从大量的数据中搜索隐藏在其中信息的过程</p>
+</li>
+<li><p><strong>专家系统</strong>等</p>
+</li>
+</ul>
+<h3 id="3-一些深度学习概念"><a href="#3-一些深度学习概念" class="headerlink" title="3 一些深度学习概念"></a>3 一些深度学习概念</h3><h4 id="监督学习基础定义："><a href="#监督学习基础定义：" class="headerlink" title="监督学习基础定义："></a><strong>监督学习基础定义</strong>：</h4><p><strong>有监督学习 (Supervised Learning)</strong>: 使用<strong>已经标注的数据</strong>训练模型，目的是让模型学会如何将输入映射到期望的输出。例如，使用一组已知类别的图片来训练一个图像<strong>分类模型</strong>，模型学习如何根据输入的图片预测正确的类别 。</p>
+<p><strong>无监督学习 (Unsupervised Learning)</strong>: <strong>不使用任何标注数据</strong>，让模型自己发现数据中的结构和模式。例如，<strong>聚类</strong>算法可以将数据分为几个不同的组，而不事先告诉模型应该有多少组，或者各组的特征 。</p>
+<p><strong>半监督学习 (Semi-Supervised Learning)</strong>: 结合<strong>有监督和无监督学习</strong>的方法，使用<strong>少量标注数据和大量未标注数据</strong>共同训练模型。这种方法在标注数据难以获得但未标注数据丰富的场景下特别有用 。 例如：<strong>医学影像</strong>，大部分没有标签，人工打标较为昂贵。可以用</p>
+<ul>
+<li>使用已标注数据训练一个分类器。</li>
+<li>用该分类器对未标注数据进行预测，生成伪标签。</li>
+<li>选择置信度最高的伪标签来扩充训练集。</li>
+<li>结合原始的标注数据和带有伪标签的数据重新训练分类器</li>
+</ul>
+<p><strong>自监督学习 (Self-Supervised Learning)</strong>: 一种特殊的无监督学习方法，通过<strong>自动生成伪标签</strong>来训练模型。这种方法通过创建预测任务（如预测未来的帧、填充缺失的部分、一个自监督学习模型可以通过尝试预测句子中缺失的单词来学习语言的语法和词汇等），使模型能够从输入数据本身学习有用的表示 。 通常是<strong>预训练+下游任务</strong>的方式。</p>
+<p><strong>对比</strong>：</p>
+<blockquote>
+<ul>
+<li><strong>有监督学习</strong>通常需要大量的标注数据，适用于标注数据充足的任务。</li>
+<li><strong>无监督学习</strong>不需要标签，适用于探索数据内在结构和关系的任务。</li>
+<li><strong>半监督学习</strong>结合了有监督和无监督的优点，适用于标注数据有限但无标签数据多的情况。</li>
+<li><strong>自监督学习</strong>则是一种新兴的方法，它能够从未标注的数据中学习到有用的特征表示，适用于标注数据难以获得但需要丰富特征表示的任务。</li>
+</ul>
+</blockquote>
+<p><strong>半监督学习举例</strong></p>
+<ul>
+<li>使用已标注数据训练一个分类器。</li>
+<li>用该分类器对未标注数据进行预测，生成伪标签。</li>
+<li>选择置信度最高的伪标签来扩充训练集。</li>
+<li>结合原始的标注数据和带有伪标签的数据重新训练分类器</li>
+</ul>
+<h4 id="对比预训练："><a href="#对比预训练：" class="headerlink" title="对比预训练："></a><strong>对比预训练</strong>：</h4><blockquote>
+<p>对比预训练是一种自监督学习方法，其核心目标是通过学习<strong>区分不同数据之间的相似性和差异性来提升模型的特征表示能力</strong>。这种方法不依赖于人工标注的数据，而是通过<strong>定义一种或多种对比任务</strong>（比如区分不同图像、文本或声音等），使得模型能够自动学习到数据的<strong>内在特征和结构</strong>。对比预训练通过比较正样本对（相似）和负样本对（不相似）来优化模型，使模型能够捕捉到数据中有用的信息和模式，从而在没有大量标注数据的情况下也能有效提升模型性能 。</p>
+<p><strong>在NLP和CV等领域，对比学习已经成为一种重要的自监督学习方法</strong>，<strong>通过自监督预训练模式</strong>，模型可以从数据本身的先验知识分布中吸取图像或文本的特征，得到一个能够更好地适应不同任务和领域的预训练模 。这种方法的优势在于<strong>无需大量标注数据</strong>，同时可以<strong>显著提高模型的泛化性能和学习能力</strong> 。</p>
+</blockquote>
+<h4 id="平行语料库："><a href="#平行语料库：" class="headerlink" title="平行语料库："></a><strong>平行语料库</strong>：</h4><blockquote>
+<p><strong>平行语料库是收录了某一源语言文本及其对应的目标语文本的语料库</strong>。具体来说，平行语料库包括以下内容：</p>
+<ul>
+<li><strong>源语言和目标语言的对应文本</strong>：这些文本在语义上是相同的，只是用不同的语言表达，如英文原版和中文翻译版。</li>
+<li><strong>对齐的层面</strong>：平行对齐指的是源语文本和目标语文本之间的具体单位的对应关系或翻译关系，可以细分为词汇、语句和段落等层面的对齐。</li>
+<li><strong>类型</strong>：根据所涉及的语种数量和方向，平行语料库可以分为单向平行语料库、双向平行语料库和多向平行语料库。</li>
+<li><strong>应用</strong>：平行语料库对于语言对比、双语词典编纂、机器翻译、翻译策略与规范研究等都具有很高的应用价值。</li>
+</ul>
+<p>总的来说，平行语料库不仅为机器翻译提供了必要的数据支持，也是推动相关领域发展和进步的重要驱动力。随着科技的不断进步和全球化的深入发展，平行语料库将在未来发挥更加重要的作用</p>
+</blockquote>
+<h4 id="联合学习joint-study："><a href="#联合学习joint-study：" class="headerlink" title="联合学习joint study："></a><strong>联合学习joint study</strong>：</h4><blockquote>
+<p><strong>联合学习（Joint Learning）是一种机器学习范式，它涉及同时训练多个模型或任务，以便它们可以共享知识或参数，从而提高整体的学习效率和泛化能力</strong>。</p>
+<p>在联合学习中，不同的模型或任务之间存在一定的关联性，这种关联性可以是因为它们处理相似的数据类型，或者因为它们解决的是相关的子问题。通过联合学习，这些模型可以相互促进，提高各自的性能。以下是一些关键点：</p>
+<ul>
+<li><strong>模型组合</strong>：在联合学习中，一个大模型由多个小模型组成，这些小模型可以独立训练，也可以与其他模型一起联合训练。</li>
+<li><strong>多任务学习</strong>：联合学习与多任务学习（Multi-Task Learning）有相似之处，多任务学习也是让一个模型同时学习多个任务，并且在学习过程中共享参数。这样做的好处是可以利用任务之间的相关性来提升模型的泛化能力。</li>
+<li><strong>应用领域</strong>：联合学习在自然语言处理（NLP）领域有广泛的应用，例如，可以通过联合模型来同时处理语法分析和语义理解等任务。</li>
+<li><strong>端到端学习</strong>：在某些情况下，联合学习还涉及到端到端的训练方法，这意味着从输入到输出的整个流程都被整合在一个学习过程中，以此来优化整体性能。</li>
+</ul>
+<p>总的来说，联合学习是一种强大的学习方法，它通过整合多个相关任务或模型的学习过程，能够提高学习效率和模型的泛化能力。这种方法在处理复杂问题时特别有用，因为它可以有效地利用不同任务之间的共同信息。</p>
+</blockquote>
+<h3 id="4-衡量模型好坏的一些指标"><a href="#4-衡量模型好坏的一些指标" class="headerlink" title="4 衡量模型好坏的一些指标"></a>4 衡量模型好坏的一些指标</h3><h4 id="F1-score-精确率precision-召回率re-call"><a href="#F1-score-精确率precision-召回率re-call" class="headerlink" title="F1 score 精确率precision 召回率re-call"></a>F1 score 精确率precision 召回率re-call</h4><p><img src="/%5Cimg%5Cai-mianjing%5Cpic-3.png" class="lazyload placeholder" data-srcset="/%5Cimg%5Cai-mianjing%5Cpic-3.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="img"></p>
+<p><img src="/%5Cimg%5Cai-mianjing%5Cpic-4.png" class="lazyload placeholder" data-srcset="/%5Cimg%5Cai-mianjing%5Cpic-4.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="img"></p>
+<h4 id="IOU-mIOU"><a href="#IOU-mIOU" class="headerlink" title="IOU mIOU"></a>IOU mIOU</h4><p><img src="/%5Cimg%5Cai-mianjing%5Cpic-5.png" class="lazyload placeholder" data-srcset="/%5Cimg%5Cai-mianjing%5Cpic-5.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="img"></p>
+<h3 id="机器学习20道"><a href="#机器学习20道" class="headerlink" title="机器学习20道"></a>机器学习20道</h3><ol>
+<li><p>网络配置时batchsize的大小怎样设置？过小和过大分别有什么特点？ <strong>小的不稳定 大的速度快</strong></p>
+<blockquote>
+<ul>
+<li>大的batchsize <strong>减少训练时间，提高稳定性</strong>。 这是肯定的，同样的epoch数目，在性能允许情况下，大的batchsize需要的batch数目减少了，所以可以<strong>减少训练时间</strong>。另一方面，大的batch size梯度的计算更加稳定，因为模型训练曲线会更加平滑。</li>
+<li>过大的batchsize 泛化能力下降。而<strong>过大的批量大小会导致收敛速度变慢</strong>，并且可能需要更多的内存 在一定范围内，<strong>增加batchsize有助于收敛的稳定性</strong>，但是随着batchsize的增加，<strong>模型的性能会下降</strong>。</li>
+<li>同样是通过对训练步数的影响，小的batch_size使模型迭代次数增多，<strong>提前到达拟合点</strong>，但是epoch没结束，继续学习训练数据，容易导致过拟合于原始数据</li>
+</ul>
+</blockquote>
+</li>
+<li><p>设置学习率衰减的原因？</p>
+<blockquote>
+<p>学习率衰减是为了让学习率随着训练过程逐渐减小，有助于模型<strong>在接近全局最优解时减小步长</strong>，避免在优化过程中跳过最佳点或产生不必要的波动</p>
+</blockquote>
+</li>
+<li><p>有哪些分类算法？</p>
+<blockquote>
+<p>朴素贝叶斯、逻辑回归、K 最近邻 （KNN）、支持向量机 （SVM）、决策树、随机森林和神经网络</p>
+</blockquote>
+</li>
+<li><p>分类和回归的区别？</p>
+<blockquote>
+<p>分类预测<strong>离散标签</strong>，将数据分类为两个或多个类别。回归预测<strong>连续量</strong>，估计变量之间的关系</p>
+</blockquote>
+</li>
+<li><p>请描述下k-means聚类的过程？</p>
+<blockquote>
+<p>k-means聚类是一种<strong>迭代算法</strong>，首先随机选取k个初始中心点，然后<strong>将每个点分配到最近的中心点形成的簇</strong>中，接着重新计算每个簇的中心点，重复此过程直到中心点不再变化或达到预设的迭代次数。</p>
+</blockquote>
+</li>
+<li><p>训练集、测试集、验证集的作用？</p>
+<blockquote>
+<p>数据集的作用：<strong>训练集用于训练模型</strong>，<strong>验证集用于调整超参数</strong>并在训练过程中提供无偏评估，<strong>测试集</strong>用于评估模型的<strong>泛化性能</strong></p>
+<ol>
+<li><strong>评估偏差</strong>: 如果我们<strong>直接根据测试集调整超参数，那么测试集就不再是独立的评估数据集</strong>。这意味着我们无法准确地估计模型在新数据上的性能，因为测试集已经被用来调整模型了。</li>
+</ol>
+</blockquote>
+</li>
+<li><p>请讲解一下k折交叉验证？</p>
+<blockquote>
+<p>在 k 折叠交叉验证中，数据被划分为 k 个子集。每次，将 k 个子集中的一个用作测试集，并将其他 k-1 子集放在一起形成一个训练集。<strong>该过程重复 k 次，每个 k 个子集恰好用作测试集一次</strong>。</p>
+</blockquote>
+</li>
+<li><p>分类和聚类的区别？</p>
+<blockquote>
+<p>分类是<strong>监督学习任务</strong>，需要<strong>标注数据</strong>来训练模型；聚类是<strong>无监督学习</strong>任务，不需要标注数据，目的是发现数据<strong>内在的结构或模式。</strong></p>
+</blockquote>
+</li>
+<li><p>描述一下梯度的概念？</p>
+<blockquote>
+<p>梯度是导数的多变量推广，表示<strong>函数最快增长的方向和速率</strong>。在优化中，它用于查找函数减小最快的方向。</p>
+<p>eg:</p>
+<p>例如，考虑二元函数 f(x, y) &#x3D; x^2 + y^2。我们可以计算它的梯度：</p>
+<ol>
+<li>计算偏导数：∂f&#x2F;∂x &#x3D; 2x，∂f&#x2F;∂y &#x3D; 2y</li>
+<li>在点 (x0, y0) &#x3D; (1, 1) 处，梯度向量为：∇f(1, 1) &#x3D; [2<em>1, 2</em>1] &#x3D; [2, 2]</li>
+</ol>
+<p>因此，在点 (1, 1) 处，梯度向量指向 [2, 2] 方向，且函数在该方向上的增长率最大，为 √(2^2 + 2^2) &#x3D; √8 ≈ 2.83。这意味着在点 (1, 1) 处，函数 f(x, y) &#x3D; x^2 + y^2 沿着 [2, 2] 方向增长最快，且每单位距离增长 2.83。</p>
+</blockquote>
+</li>
+<li><p>有监督学习、无监督学习和半监督学习的区别？</p>
+<blockquote>
+<p>见 1.1 节</p>
+</blockquote>
+</li>
+<li><p>带核的SVM为什么能分类非线性问题？</p>
+<blockquote>
+<p>非线性问题的 SVM：SVM 可以通过使用内核技巧<strong>将输入空间转换为更高维的空间</strong>来对非线性问题进行分类，从而更容易线性分离数据。</p>
+</blockquote>
+</li>
+<li><p>请描述常见的梯度下降方法？</p>
+<blockquote>
+<p>常用的方法包括批量梯度下降、随机梯度下降 （SGD） 和小批量梯度下降，用于计算损失函数梯度的数据量不同。</p>
+<p>批量梯度下降、随机梯度下降（SGD）和小批量梯度下降是梯度下降优化算法的三种不同实现方式，它们在机器学习和深度学习中被广泛使用来优化模 型的参数。<strong>具体介绍如下</strong>：</p>
+<ul>
+<li><strong>批量梯度下降</strong>：它在每次迭代时<strong>使用所有的训练样本来计算梯度</strong>并更新模型参数。这种方法可以确保每次迭代都沿着全局最优方向更新，因此收敛曲线通常比较平滑。然而，当数据集非常大时，每次迭代的计算成本会非常高，导致训练速度变慢。</li>
+<li><strong>随机梯度下降</strong>：它在<strong>每次迭代时只使用一个训练样本来计算梯度并更新模型参数</strong>。这种方法的优点是计算速度快，可以快速进行模型更新，特别适用于大数据集。但是，由于每次更新只基于一个样本，可能会导致收敛过程波动较大，不一定能收敛到全局最优解。</li>
+<li><strong>小批量梯度下降</strong>：它<strong>介于批量梯度下降和随机梯度下降之间</strong>，每次迭代<strong>使用一小部分训练样本</strong>（即小批量）来计算梯度并更新模型参数。这种方法既保留了批量梯度下降的稳定收敛特性，又具有随机梯度下降的快速计算优势。因此，小批量梯度下降在实践中被广泛应用，尤其是在深度学习模型的训练中。</li>
+</ul>
+<p>总的来说，这三种方法都是梯度下降的变体，目的是通过迭代更新模型参数以最小化损失函数。批量梯度下降使用所有数据，收敛稳定但计算成本高；随机梯度下降使用单个样本，计算快但可能波动大；小批量梯度下降折中了前两者的特点，使用部分数据，既稳定又相对高效。</p>
+</blockquote>
+</li>
+<li><p>Adam、RMSprop、Adagrad、Momentum优化算法？</p>
+<blockquote>
+<p><strong>Adam</strong> 将 <strong>RMSprop 和 Stochastic Gradient Descent 的思想与动量相结合</strong>。它动态调整每个参数的学习率。RMSprop 在训练期间调整学习率，而 Adagrad 通过将学习率缩放为与梯度的所有过去平方值的平方根成反比来调整学习率。动量有助于加速新元朝相关方向发展。</p>
+<p>此方法是在<strong>梯度下降的基础上加入了“惯性”的概念</strong>，即考虑了历史梯度对当前梯度的影响，使得更新过程具有一定的连续性，并能够加快学习速度，减少振荡。Momentum 通过使用动量项来对网络参数进行平滑处理，有助于使梯度的摆动幅度变小，从而加快收敛速度。</p>
+</blockquote>
+</li>
+<li><p>什么是过拟合？怎么解决过拟合问题？</p>
+<blockquote>
+<p>过拟合是指模型在训练数据上表现良好但在新数据上泛化能力差的现象。</p>
+<p><strong>解决过拟合的方法</strong>包括增加<strong>数据量</strong>、减少模型<strong>复杂度</strong>、使用<strong>正则化</strong>技术和集成学习方法等。</p>
+</blockquote>
+</li>
+<li><p>怎样解决梯度消失&#x2F;爆炸问题？</p>
+<blockquote>
+<p><strong>含义</strong>：</p>
+<ol>
+<li><strong>梯度消失</strong>：在深度神经网络的反向传播过程中，梯度可能会因为多层连续的乘法操作而变得非常小，以至于权重几乎不会被更新，导致训练过程提前停止。这种现象通常发生在激活函数选择不当（如使用sigmoid或tanh函数）且网络层次较深的情况下。</li>
+<li><strong>梯度爆炸</strong>：与梯度消失相反，梯度爆炸是指梯度值变得非常大，以至于导致模型参数更新过于频繁和巨大，从而使得模型无法收敛到一个稳定的解。梯度爆炸通常是由于梯度值在反向传播过程中连续乘以较大的数而累积起来的。</li>
+</ol>
+<p>如何解决？</p>
+<ul>
+<li><strong>选择合适的激活函数</strong>：<strong>避免</strong>使用<strong>容易饱和</strong>的激活函数，如sigmoid或tanh，转而使用ReLU（Rectified Linear Units）及其变种Leaky ReLU、Parametric ReLU等，它们在输入值较大时不会饱和，有助于缓解梯度消失问题。</li>
+<li><strong>批量归一化（Batch Normalization）</strong>：通过对每一层的输入进行归一化处理，保持输入数据的均值为0、方差为1，有助于稳定梯度变化，防止梯度消失和爆炸。</li>
+<li><strong>残差连接（Residual Connections）</strong>：在深度网络中使用残差连接，即让前一层的输出直接加到后续某层的输入上，可以保证梯度能够绕过一些层直接传回，从而缓解梯度消失问题。</li>
+<li><strong>梯度裁剪（Gradient Clipping）</strong>：通过设置一个阈值来限制梯度的最大值，可以有效防止梯度爆炸。</li>
+<li><strong>优化器选择</strong>：使用具有自适应学习率调整能力的优化器，如Adam、RMSprop等，可以在不同情况下自动调整学习率，减少梯度消失或爆炸的风险。</li>
+<li><strong>短程记忆结构</strong>：对于循环神经网络（RNN），可以<strong>使用长短时记忆（LSTM）</strong>或门控循环单元（GRU）这类结构来代替传统的RNN结构，因为它们能够更好地捕捉长距离依赖关系，从而缓解梯度消失问题。</li>
+<li><strong>正则化技术</strong>：如L1&#x2F;L2正则化，也可以帮助控制模型参数的规模，间接地减小梯度爆炸的可能性。</li>
+</ul>
+</blockquote>
+</li>
+<li><p>讲解下神经网络反向传播算法？</p>
+<blockquote>
+<p><strong>反向传播算法</strong>：反向传播是人工神经网络中使用的一种方法，用于计算单个输入输出示例的损失函数相对于网络权重的梯度，从而使用梯度下降更新权重。</p>
+</blockquote>
+</li>
+<li><p>激活函数的作用是什么？有哪些激活函数？它们的表达式分别是？</p>
+<blockquote>
+<p>激活函数作用：引入<strong>非线性</strong>因素，使得神经网络可以学习和模拟任何复杂的函数和数据分布，这样网络就能处理非线性问题。如果<strong>没有激活函数，无论神经网络有多少层，输出都只是输入的线性组合</strong>，这大大限制了网络的表达能力和复杂度。</p>
+<p>常见的激活函数包括 Sigmoid、Tanh、ReLU：（需要去了解一下基本原理）</p>
+</blockquote>
+</li>
+<li><p>请讲解一下正则化的概念？L1正则化是什么？L2正则化是什么？</p>
+<blockquote>
+<p>正则化是机器学习和统计学中用于<strong>防止模型过拟合</strong>的一种技术。过拟合是指模型在训练数据上表现得很好，但在未见过的新数据上表现不佳的现象，通常是因为模型过于复杂，学习到了训练数据中的噪声和细节，而不是潜在的数据生成规律。<strong>正则化通过在模型训练的损失函数中添加一个额外的惩罚项来解决这个问题，该惩罚项会惩罚模型的复杂度</strong></p>
+<ul>
+<li><strong>L1正则化</strong>（也称为Lasso正则化）通过向损失函数添加参数的绝对值之和作为惩罚项来工作。L1正则化倾向于产生稀疏参数，即许多参数会变成零，这可以用于特征选择。</li>
+<li><strong>L2正则化</strong>（也称为Ridge正则化）通过向损失函数添加参数的平方和作为惩罚项来工作。与L1正则化不同，L2正则化倾向于使参数非常小但不完全为零，从而保持所有特征但减少其影响。</li>
+<li>在某些情况下，人们可能会<strong>同时使用L1和L2正则化</strong>，这种方法被称为<strong>弹性网络</strong>正则化。</li>
+<li>正则化技术不仅限于线性模型，它们也广泛应用于神经网络、决策树和其他类型的机器学习模型中。在神经网络中，除了L1和L2正则化外，还有如<strong>Dropout</strong>正则化等特殊形式的正则化技术，它通过在训练过程中随机丢弃一部分神经元来防止过拟合。</li>
+</ul>
+</blockquote>
+</li>
+<li><p>除了BatchNormalization还有其他什么方法来加速模型训练吗？</p>
+<blockquote>
+<ol>
+<li>使用<strong>半字训练（半精度浮点数）</strong></li>
+<li><strong>合理的超参数设计</strong>：选择合适的batch size、epoch数量和学习率策略对于加速模型训练至关重要。较小的batch size可以加快单次迭代的速度，而适当的epoch数量和学习率调整可以帮助模型更快地收敛。</li>
+<li><strong>增大batch size</strong>：虽然增大batch size可以提高训练速度，但过大的batch size可能会影响模型的泛化性能和收敛速度。因此，需要根据具体情况选择合适的batch size大小。</li>
+<li><strong>多GPU分布式训练</strong>：通过使用多个GPU进行模型并行或数据并行训练，可以显著提高模型的训练速度。模型并行是将模型的不同部分分配给不同的计算设备，而数据并行则是将数据集分割成多个子集，每个子集在不同的计算设备上进行处理。</li>
+<li><strong>模型压缩与加速技术</strong>：包括参数剪枝、参数量化、紧凑网络设计、知识蒸馏、低秩分解、参数共享等方法。这些技术旨在减少模型的大小和复杂性，从而提高训练和推理的速度。</li>
+<li><strong>使用预训练模型</strong>：在相似任务上使用预训练模型可以显著减少训练时间，因为预训练模型已经学习了大量的特征，只需要对顶层进行微调即可。</li>
+</ol>
+</blockquote>
+</li>
+<li><p>机器学习中，为何要经常对数据进行预处理？</p>
+<blockquote>
+<p>处理噪声、缺失值、降维、结构化非结构化处理</p>
+<ol>
+<li><strong>处理缺失值与噪声</strong>：数据中可能存在缺失值，预处理可以包括填补或删除这些缺失值，以确保数据的完整性。</li>
+<li><strong>无量纲化</strong>：不同特征可能具有不同的量纲和规模，无量纲化处理可以消除这种差异，使得模型能够更公平地评估每个特征的重要性。</li>
+<li><strong>数据规范化</strong>：通过最值归一化或Z-Score规范化等方法，将数据缩放到特定的范围内，有助于加快模型的收敛速度。</li>
+<li><strong>特征工程</strong>：数据预处理是特征工程的一部分，它包括数据清洗、特征提取、特征选择和特征构造等子问题。通过这些步骤，可以创建出能够使机器学习算法达到最佳性能的特征。</li>
+<li><strong>提高模型性能</strong>：干净且经过恰当处理的数据可以帮助算法更准确地学习模式和关系，从而提高模型的性能。</li>
+<li><strong>增强模型泛化能力</strong>：通过正则化等预处理方法，可以防止模型过拟合，提高其在新数据上的泛化能力。</li>
+</ol>
+</blockquote>
+</li>
+</ol>
+
+      </div>
+      <div class="post-tags-categories">
+        
+      </div>
+      
+        <div class="copyright">
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+    <strong>author:  </strong>Kaz</a>
+    </li>
+    <li class="post-copyright-link">
+    <strong>link:  </strong>
+    <a href="/2025/01/26/ai-mianjing/" target="_blank" title="AI面经">http://example.com/2025/01/26/ai-mianjing/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>Copyright notice:   </strong>
+      All articles on this website, unless otherwise stated, adopt <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>
+      reprint policy. If reproduced, please indicate source!
+    </li>
+  </ul>
+<div>
+      
+    </article>
+    <!-- 上一篇文章和下一篇文章 -->
+    
+      <!-- 文章详情页的上一页和下一页 -->
+<div class="post-nav">
+
+
+
+  
+  <div class="post-nav-prev post-nav-item">
+    <div class="post-nav-img" style="background-size: cover; 
+      background-position: center center;">
+      <img class="lazyload lazyload placeholder" src="https://datawhaler.feishu.cn/87dd39a9-09e1-45f5-9e68-fd28666f6058" class="lazyload placeholder" data-srcset="https://datawhaler.feishu.cn/87dd39a9-09e1-45f5-9e68-fd28666f6058" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+    </div>
+    <a href="/2025/02/25/ai4chem/" class="post-nav-link">
+      <div class="title">
+        <i class="fas fa-angle-left"></i> Prev:
+        <div class="title-text">基于Transformer的催化反应产率预测</div>
+      </div>
+      
+      <!-- <div class="content">
+        任务概述构建一个能够准确预测碳氮成键反应产率的预测模型。  
+通过对反应中所包含的反应底物、添加剂、溶剂以及产物进行合理
+      </div> -->
+    </a>
+  </div>
+
+
+
+  
+  <div class="post-nav-next post-nav-item">
+    <div class="post-nav-img" style="background-size: cover; 
+      background-position: center center;">
+      <img class="lazyload lazyload placeholder" src="https://img2.baidu.com/it/u=1093757134,3274186314&fm=253&fmt=auto&app=120&f=JPEG?w=800&h=500" class="lazyload placeholder" data-srcset="https://img2.baidu.com/it/u=1093757134,3274186314&fm=253&fmt=auto&app=120&f=JPEG?w=800&h=500" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" src="" alt="">
+    </div>
+    <a href="/2023/11/25/machine-learning-notes/" class="post-nav-link">
+      <div class="title">
+        Next: <i class="fas fa-angle-right"></i>
+        <div class="title-text">Machine Learning Notes</div>
+      </div>
+      <!-- <div class="content">
+        Course 1监督学习：输入特征x，输出目标y。对数据集进行预测，分为回归和分类
+无监督学习：输入特征x，没有目标y，
+      </div> -->
+    </a>
+  </div>
+
+</div>
+
+    
+    
+
+    <!-- 打赏 -->
+    
+      <div id="appDonate" class="post-donate">
+  <div id="donate_board" class="donate_bar center" ref="donate">
+    <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏" @click="showDialogDrawer()"></a>
+  </div>
+  <transition name="fade">
+    <div 
+      class="donate-box-mask"
+      v-cloak 
+      v-show="visible"
+      @click="cancelDialogDrawer()"
+    >
+    </div>
+  </transition>
+  <transition name="bounce">
+    <div class="donate-box" v-cloak v-show="visible">
+      <div class="donate-box_close">
+        <i class="fas fa-times" aria-hidden="true" @click="cancelDialogDrawer" pointer></i>
+      </div>
+      <div class="donate-box_title">
+        <h4>
+          你的赏识是我前进的动力
+        </h4>
+      </div>
+      <div class="donate-box_tab">
+        <div class="Alipay" pointer :class="{'active': tabActive === 'Alipay'}" @click="changeTabActive('Alipay')">
+          支付宝
+        </div>
+        <div class="WeChatpay" pointer :class="{'active': tabActive === 'WeChatpay'}" @click="changeTabActive('WeChatpay')">
+          微信
+        </div>
+      </div>
+      <div class="donate-box_img">
+        <div class="AlipayImg" v-show="tabActive === 'Alipay'">
+          <img src="https://pica.zhimg.com/80/v2-61f99f8dcf899f54cad2a1aa28b21e44_1440w.webp" class="lazyload placeholder" data-srcset="https://pica.zhimg.com/80/v2-61f99f8dcf899f54cad2a1aa28b21e44_1440w.webp" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="支付宝打赏" />
+        </div> 
+        <div class="WeChatpayImg" v-show="tabActive === 'WeChatpay'">
+          <img src="https://pic2.zhimg.com/80/v2-29e78b52051ce542adf6d786d61fbd19_1440w.webp" class="lazyload placeholder" data-srcset="https://pic2.zhimg.com/80/v2-29e78b52051ce542adf6d786d61fbd19_1440w.webp" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="微信打赏" />
+        </div>
+      </div>
+    </div>
+  </transition>
+</div>
+
+<script>
+  var body = document.body || document.documentElement || window;
+  var vm = new Vue({
+    el: '#appDonate',
+    data: {
+      visible: false,
+      tabActive: 'Alipay',
+      top: 0,
+    },
+    computed: {
+    },
+    mounted() {
+    },
+    methods: {
+      showDialogDrawer() {
+        this.visible = true;
+        // 防止页面滚动，只能让弹框滚动
+        // function getScroll() {
+        //   return {
+        //     left: window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft || 0,
+        //     top: window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0
+        //   };
+        // }
+        this.top = $(document).scrollTop() // or getScroll().top
+        // console.log('aa', $('.main-content'));
+        body.style.cssText = 'overflow: hidden;';
+      },
+      cancelDialogDrawer() {
+        this.visible = false;
+        body.removeAttribute('style');
+        $(document).scrollTop(this.top)
+      },
+      changeTabActive(name) {
+        this.tabActive = name;
+      }
+    },
+    created() {}
+  })
+</script>
+    
+
+    <!-- 分享 -->
+    
+      <!-- https://github.com/overtrue/share.js -->
+<!-- 文章详情页的分享 -->
+<div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+
+<script defer src="/js/shareJs/social-share.min.js"></script>
+</script>
+
+<style>
+  .social-share {
+    margin: 20px 0;
+  }
+</style>
+
+
+    
+    
+    <!-- 评论 -->
+    <!-- 评论 -->
+
+  <div id="myComment">
+    
+      <div id="gitment-container"></div>
+
+    
+  </div>
+
+
+<!-- 还需要在后面这个地址里设置script, comment script in themes\hexo-theme-bamboo\layout\_partial\scripts\index.ejs -->
+
+
+  </div>
+
+  <!-- 目录 -->
+  <aside id='l_side'>
+  
+    
+      <section class="widget side_blogger">
+  <div class='content'>
+    
+      
+        <a class='avatar flat-box rectangle' href='/about/'>
+          <img src='https://pic2.zhimg.com/80/v2-42b72d5ebee4b8d8aa70d9687effe87b_1440w.webp'/>
+        </a>
+      
+    
+    
+      <div class='text'>
+        
+          <h2>青墨书晚风</h2>
+        
+        
+          <p>我是副标题</p>
+
+        
+        
+          <p><span id="jinrishici-sentence">Kaz's Blog</span></p>
+          <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+        
+      </div>
+    
+    
+      <div class="social-wrapper">
+        
+          
+            <a href="/atom.xml"
+              class="social fas fa-rss flat-btn"
+              target="_blank"
+              rel="external nofollow noopener noreferrer">
+              
+            </a>
+          
+        
+          
+            <a href="mailto:me@xxx.com"
+              class="social fas fa-envelope flat-btn"
+              target="_blank"
+              rel="external nofollow noopener noreferrer">
+              
+            </a>
+          
+        
+          
+            <a href="https://github.com/yuang01/hexo-theme-bamboo"
+              class="social fab fa-github flat-btn"
+              target="_blank"
+              rel="external nofollow noopener noreferrer">
+              
+            </a>
+          
+        
+          
+            <a href="tencent://AddContact/?fromId=50&amp;fromSubId=1&amp;subcmd=all&amp;uin=你的qq号码"
+              class="social fab fa-qq flat-btn"
+              target="_blank"
+              rel="external nofollow noopener noreferrer">
+              
+            </a>
+          
+        
+      </div>
+    
+  </div>
+</section>
+
+    
+  
+  
+  
+
+  <div class="layout_sticky">    
+    
+      
+<section class="widget side_toc">
+  
+  <header>
+    
+      <i style="color: " class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name' style="color: ">本文目录</span>
+    
+  </header>
+
+
+  <div class='content'>
+    <div class="toc-main">
+      <div class="toc-content">
+        <!-- <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E3%80%81%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E3%80%81%E4%B8%8E%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%AF%B9%E6%AF%94"><span class="toc-text">1 机器学习、深度学习、与人工智能对比</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD"><span class="toc-text">1.1 人工智能</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0"><span class="toc-text">1.2 机器学习</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0"><span class="toc-text">1.3 深度学习</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-%E5%8C%BA%E5%88%AB%E4%B8%8E%E8%81%94%E7%B3%BB"><span class="toc-text">1.4 区别与联系</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-AI%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-text">2 AI的分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E4%B8%80%E4%BA%9B%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A6%82%E5%BF%B5"><span class="toc-text">3 一些深度学习概念</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E5%AE%9A%E4%B9%89%EF%BC%9A"><span class="toc-text">监督学习基础定义：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%B9%E6%AF%94%E9%A2%84%E8%AE%AD%E7%BB%83%EF%BC%9A"><span class="toc-text">对比预训练：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B9%B3%E8%A1%8C%E8%AF%AD%E6%96%99%E5%BA%93%EF%BC%9A"><span class="toc-text">平行语料库：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%81%94%E5%90%88%E5%AD%A6%E4%B9%A0joint-study%EF%BC%9A"><span class="toc-text">联合学习joint study：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E8%A1%A1%E9%87%8F%E6%A8%A1%E5%9E%8B%E5%A5%BD%E5%9D%8F%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8C%87%E6%A0%87"><span class="toc-text">4 衡量模型好坏的一些指标</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#F1-score-%E7%B2%BE%E7%A1%AE%E7%8E%87precision-%E5%8F%AC%E5%9B%9E%E7%8E%87re-call"><span class="toc-text">F1 score 精确率precision 召回率re-call</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#IOU-mIOU"><span class="toc-text">IOU mIOU</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A020%E9%81%93"><span class="toc-text">机器学习20道</span></a></li></ol> -->
+        <div class="toc"></div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- 手机端目录按钮 -->
+<div id="toc-mobile-btn">
+  <i class="fas fa-list-ul" aria-hidden="true"></i>
+</div>
+
+      
+  <section class="widget side_recent_post">
+    
+  <header>
+    
+      <a style="color: " href='/tags/'><i class="fas fa-book fa-fw" aria-hidden="true"></i><span class='name'>最新文章</span></a>
+    
+  </header>
+
+
+    <div class='content'>
+      
+      <!-- hash算法 -->
+      
+      <div class="aside-list">
+        
+          <div class="aside-list-item">
+            
+            
+            
+
+            <div class="post-img-box">
+              <a href="/2025/02/25/ai4chem/" class="post-img " style="background-size: cover; 
+                background-position: center center;">
+                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="https://datawhaler.feishu.cn/87dd39a9-09e1-45f5-9e68-fd28666f6058" class="lazyload placeholder" data-srcset="https://datawhaler.feishu.cn/87dd39a9-09e1-45f5-9e68-fd28666f6058" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+              </a>
+            </div>
+            <div class="post-date-title">
+              <div>
+                
+                  <span class="post-date">02-25</span>
+                
+              </div>
+              <a class="post-title" href="/2025/02/25/ai4chem/">基于Transformer的催化反应产率预测</a>
+            </div>
+          </div>
+        
+          <div class="aside-list-item">
+            
+            
+            
+
+            <div class="post-img-box">
+              <a href="/2025/01/26/ai-mianjing/" class="post-img " style="background-size: cover; 
+                background-position: center center;">
+                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="https://img1.baidu.com/it/u=4282277671,2501328998&fm=253&fmt=auto&app=138&f=JPEG?w=449&h=252" class="lazyload placeholder" data-srcset="https://img1.baidu.com/it/u=4282277671,2501328998&fm=253&fmt=auto&app=138&f=JPEG?w=449&h=252" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+              </a>
+            </div>
+            <div class="post-date-title">
+              <div>
+                
+                  <span class="post-date">01-26</span>
+                
+              </div>
+              <a class="post-title" href="/2025/01/26/ai-mianjing/">AI面经</a>
+            </div>
+          </div>
+        
+          <div class="aside-list-item">
+            
+            
+            
+
+            <div class="post-img-box">
+              <a href="/2023/11/25/machine-learning-notes/" class="post-img " style="background-size: cover; 
+                background-position: center center;">
+                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="https://img2.baidu.com/it/u=1093757134,3274186314&fm=253&fmt=auto&app=120&f=JPEG?w=800&h=500" class="lazyload placeholder" data-srcset="https://img2.baidu.com/it/u=1093757134,3274186314&fm=253&fmt=auto&app=120&f=JPEG?w=800&h=500" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+              </a>
+            </div>
+            <div class="post-date-title">
+              <div>
+                
+                  <span class="post-date">11-25</span>
+                
+              </div>
+              <a class="post-title" href="/2023/11/25/machine-learning-notes/">Machine Learning Notes</a>
+            </div>
+          </div>
+        
+          <div class="aside-list-item">
+            
+            
+            
+
+            <div class="post-img-box">
+              <a href="/2023/07/07/algorithm-data-structure/" class="post-img " style="background-size: cover; 
+                background-position: center center;">
+                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="https://cdn.acwing.com/media/activity/surface/QQ%E5%9B%BE%E7%89%8720231022233411.jpg" class="lazyload placeholder" data-srcset="https://cdn.acwing.com/media/activity/surface/QQ%E5%9B%BE%E7%89%8720231022233411.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+              </a>
+            </div>
+            <div class="post-date-title">
+              <div>
+                
+                  <span class="post-date">07-07</span>
+                
+              </div>
+              <a class="post-title" href="/2023/07/07/algorithm-data-structure/">Algorithm-Data-Structure</a>
+            </div>
+          </div>
+        
+          <div class="aside-list-item">
+            
+            
+            
+
+            <div class="post-img-box">
+              <a href="/2023/01/22/hello-world/" class="post-img " style="background-size: cover; 
+                background-position: center center;">
+                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="https://datawhale-business.oss-cn-hangzhou.aliyuncs.com/23450/dashboard/1736488152304/image.png" class="lazyload placeholder" data-srcset="https://datawhale-business.oss-cn-hangzhou.aliyuncs.com/23450/dashboard/1736488152304/image.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+              </a>
+            </div>
+            <div class="post-date-title">
+              <div>
+                
+                  <span class="post-date">01-22</span>
+                
+              </div>
+              <a class="post-title" href="/2023/01/22/hello-world/">Hello World</a>
+            </div>
+          </div>
+        
+      </div>
+    </div>
+  </section>
+
+    
+  </div>
+</aside>
+
+  <!-- 图片放大 Wrap images with fancybox support -->
+  <script defer src="/js/wrapImage.js"></script>
+</div>
+
+<!-- 文章详情页背景图 -->
+<div id="appBgSwiper" style="position: fixed;left: 0;top: 0;width: 100%;height: 100%;z-index: -2;"
+	:style="{'background-color': bgColor ? bgColor : 'transparent'}">
+	<transition-group tag="ul" :name="names">
+		<li v-for='(image,index) in img' :key='index' v-show="index === mark" class="bg-swiper-box">
+			<img :src="image" class="bg-swiper-img no-lazy">
+		</li>
+	</transition-group>
+</div>
+<script>
+	var vm = new Vue({
+		el: '#appBgSwiper',
+		data: {
+			names: '' || 'fade' || 'fade', // translate-fade fade
+			mark: 0,
+			img: [],
+			bgColor: '',
+			time: null
+		},
+		methods: {   //添加方法
+			change(i, m) {
+				if (i > m) {
+					// this.names = 'fade';
+				} else if (i < m) {
+					// this.names = 'fade';
+				} else {
+					return;
+				}
+				this.mark = i;
+			},
+			prev() {
+				// this.names = 'fade';
+				this.mark--;
+				if (this.mark === -1) {
+					this.mark = 3;
+					return
+				}
+			},
+			next() {
+				// this.names = 'fade';
+				this.mark++;
+				if (this.mark === this.img.length) {
+					this.mark = 0;
+					return
+				}
+			},
+			autoPlay() {
+				// this.names = 'fade';
+				this.mark++;
+				if (this.mark === this.img.length) {
+					this.mark = 0;
+					return
+				}
+			},
+			play() {
+				let bgImgDelay = '' || '180000'
+				let delay = parseInt(bgImgDelay) || 180000;
+				this.time = setInterval(this.autoPlay, delay);
+			},
+			enter() {
+				clearInterval(this.time);
+			},
+			leave() {
+				this.play();
+			}
+		},
+		created() {
+			this.play()
+		},
+		beforeDestroy() {
+			clearInterval(this.time);
+		},
+		mounted() {
+			let prop = '' || '';
+			let isImg = prop.includes('.bmp') || prop.includes('.jpg') || prop.includes('.png') || prop.includes('.tif') || prop.includes('.gif') || prop.includes('.pcx') || prop.includes('.tga') || prop.includes('.exif') || prop.includes('.fpx') || prop.includes('.psd') || prop.includes('.cdr') || prop.includes('.pcd') || prop.includes('.dxf') || prop.includes('.ufo') || prop.includes('.eps') || prop.includes('.ai') || prop.includes('.raw') || prop.includes('.WMF') || prop.includes('.webp') || prop.includes('.jpeg') || prop.includes('http://') || prop.includes('https://')
+			if (isImg) {
+				let img = prop.split(',');
+				let configRoot = '/'
+				let arrImg = [];
+				img.forEach(el => {
+					var Expression = /http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/;
+					var objExp = new RegExp(Expression);
+
+					if (objExp.test(el)) {
+						// http or https
+						arrImg.push(el);
+					} else {
+						// 非http or https开头
+						// 本地文件
+						let firstStr = el.charAt(0);
+						if (firstStr == '/') {
+							el = el.substr(1); // 删除第一个字符 '/',因为 configRoot最后一个字符为 /
+						}
+						el = configRoot + el;
+						arrImg.push(el);
+					}
+				})
+				this.img = arrImg;
+			} else {
+				this.bgColor = prop;
+			}
+		}
+	})
+</script>
+
+<style>
+	.bg-swiper-box {
+		position: absolute;
+		display: block;
+		width: 100%;
+		height: 100%;
+	}
+
+	.bg-swiper-img {
+		object-fit: cover;
+		width: 100%;
+		height: 100%;
+	}
+</style>
+
+
+  <script>
+  // https://github.com/theme-next/hexo-theme-next/blob/master/layout/_third-party/math/mathjax.swig
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = 'https://unpkg.com/mathjax@3.0/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    // 文章章节标题不能为 “MathJax” ，否则会报错。
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+
+
+
+  <script>
+  function loadMermaid() {
+    if (document.getElementsByClassName('mermaid').length) {
+      if (window.mermaidJsLoad) mermaid.init()
+      else {
+        loadScript('https://unpkg.com/mermaid/dist/mermaid.min.js').then(() => {
+          window.mermaidJsLoad = true
+          mermaid.initialize({
+            theme: 'default',
+          })
+          if ('true') {
+            mermaid.init();
+          }
+        })
+      }
+    }
+  };
+  document.addEventListener("DOMContentLoaded", function () {
+    loadMermaid();
+  })
+
+  document.addEventListener('pjax:complete', function () {
+    loadMermaid();
+  })
+  
+</script>
+
+
+      </main>
+    </div>
+
+    <!-- 页脚 -->
+    
+  
+  
+    <!-- 底部鱼儿跳动效果，依赖于jquery-->
+<div id="j-fish-skip" style=" position: relative;height: 153px;width: auto;"></div>
+<script defer>
+  var RENDERER = {
+    POINT_INTERVAL: 5,
+    FISH_COUNT: 3,
+    MAX_INTERVAL_COUNT: 50,
+    INIT_HEIGHT_RATE: .5,
+    THRESHOLD: 50,
+    FISH_COLOR: '',
+    init: function () {
+      this.setFishColor(); this.setParameters(), this.reconstructMethods(), this.setup(), this.bindEvent(), this.render()
+    },
+    setFishColor: function () {
+      let isDark = JSON.parse(localStorage.getItem('dark')) || JSON.parse('false');
+      if (isDark) {
+        this.FISH_COLOR = '#222'; // 暗黑色，有时间把这整成一个变量
+      } else {
+        this.FISH_COLOR = '' || 'rgba(66, 185, 133, 0.8)';
+      }
+    },
+    setParameters: function () {
+      this.$window = $(window), this.$container = $("#j-fish-skip"), this.$canvas = $("<canvas />"), this.context = this.$canvas.appendTo(this.$container).get(0).getContext("2d"), this.points = [], this.fishes = [], this.watchIds = []
+    },
+    createSurfacePoints: function () {
+      var t = Math.round(this.width / this.POINT_INTERVAL);
+      this.pointInterval = this.width / (t - 1), this.points.push(new SURFACE_POINT(this, 0));
+      for (var i = 1; i < t; i++) {
+        var e = new SURFACE_POINT(this, i * this.pointInterval),
+          h = this.points[i - 1];
+        e.setPreviousPoint(h), h.setNextPoint(e), this.points.push(e)
+      }
+    },
+    reconstructMethods: function () {
+      this.watchWindowSize = this.watchWindowSize.bind(this), this.jdugeToStopResize = this.jdugeToStopResize.bind(this), this.startEpicenter = this.startEpicenter.bind(this), this.moveEpicenter = this.moveEpicenter.bind(this), this.reverseVertical = this.reverseVertical.bind(this), this.render = this.render.bind(this)
+    },
+    setup: function () {
+      this.points.length = 0, this.fishes.length = 0, this.watchIds.length = 0, this.intervalCount = this.MAX_INTERVAL_COUNT, this.width = this.$container.width(), this.height = this.$container.height(), this.fishCount = this.FISH_COUNT * this.width / 500 * this.height / 500, this.$canvas.attr({
+        width: this.width,
+        height: this.height
+      }), this.reverse = !1, this.fishes.push(new FISH(this)), this.createSurfacePoints()
+    },
+    watchWindowSize: function () {
+      this.clearTimer(), this.tmpWidth = this.$window.width(), this.tmpHeight = this.$window.height(), this.watchIds.push(setTimeout(this.jdugeToStopResize, this.WATCH_INTERVAL))
+    },
+    clearTimer: function () {
+      for (; this.watchIds.length > 0;) clearTimeout(this.watchIds.pop())
+    },
+    jdugeToStopResize: function () {
+      var t = this.$window.width(),
+        i = this.$window.height(),
+        e = t == this.tmpWidth && i == this.tmpHeight;
+      this.tmpWidth = t, this.tmpHeight = i, e && this.setup()
+    },
+    bindEvent: function () {
+      this.$window.on("resize", this.watchWindowSize), this.$container.on("mouseenter", this.startEpicenter), this.$container.on("mousemove", this.moveEpicenter)
+    },
+    getAxis: function (t) {
+      var i = this.$container.offset();
+      return {
+        x: t.clientX - i.left + this.$window.scrollLeft(),
+        y: t.clientY - i.top + this.$window.scrollTop()
+      }
+    },
+    startEpicenter: function (t) {
+      this.axis = this.getAxis(t)
+    },
+    moveEpicenter: function (t) {
+      var i = this.getAxis(t);
+      this.axis || (this.axis = i), this.generateEpicenter(i.x, i.y, i.y - this.axis.y), this.axis = i
+    },
+    generateEpicenter: function (t, i, e) {
+      if (!(i < this.height / 2 - this.THRESHOLD || i > this.height / 2 + this.THRESHOLD)) {
+        var h = Math.round(t / this.pointInterval);
+        h < 0 || h >= this.points.length || this.points[h].interfere(i, e)
+      }
+    },
+    reverseVertical: function () {
+      this.reverse = !this.reverse;
+      for (var t = 0, i = this.fishes.length; t < i; t++) this.fishes[t].reverseVertical()
+    },
+    controlStatus: function () {
+      for (var t = 0, i = this.points.length; t < i; t++) this.points[t].updateSelf();
+      for (t = 0, i = this.points.length; t < i; t++) this.points[t].updateNeighbors();
+      this.fishes.length < this.fishCount && 0 == --this.intervalCount && (this.intervalCount = this.MAX_INTERVAL_COUNT, this.fishes.push(new FISH(this)))
+    },
+    render: function () {
+      requestAnimationFrame(this.render), this.controlStatus(), this.context.clearRect(0, 0, this.width, this.height), this.context.fillStyle = this.FISH_COLOR;
+      for (var t = 0, i = this.fishes.length; t < i; t++) this.fishes[t].render(this.context);
+      this.context.save(), this.context.globalCompositeOperation = "xor", this.context.beginPath(), this.context.moveTo(0, this.reverse ? 0 : this.height);
+      for (t = 0, i = this.points.length; t < i; t++) this.points[t].render(this.context);
+      this.context.lineTo(this.width, this.reverse ? 0 : this.height), this.context.closePath(), this.context.fill(), this.context.restore()
+    }
+  },
+  SURFACE_POINT = function (t, i) {
+    this.renderer = t, this.x = i, this.init()
+  };
+  SURFACE_POINT.prototype = {
+    SPRING_CONSTANT: .03,
+    SPRING_FRICTION: .9,
+    WAVE_SPREAD: .3,
+    ACCELARATION_RATE: .01,
+    init: function () {
+      this.initHeight = this.renderer.height * this.renderer.INIT_HEIGHT_RATE, this.height = this.initHeight, this.fy = 0, this.force = {
+        previous: 0,
+        next: 0
+      }
+    },
+    setPreviousPoint: function (t) {
+      this.previous = t
+    },
+    setNextPoint: function (t) {
+      this.next = t
+    },
+    interfere: function (t, i) {
+      this.fy = this.renderer.height * this.ACCELARATION_RATE * (this.renderer.height - this.height - t >= 0 ? -1 : 1) * Math.abs(i)
+    },
+    updateSelf: function () {
+      this.fy += this.SPRING_CONSTANT * (this.initHeight - this.height), this.fy *= this.SPRING_FRICTION, this.height += this.fy
+    },
+    updateNeighbors: function () {
+      this.previous && (this.force.previous = this.WAVE_SPREAD * (this.height - this.previous.height)), this.next && (this.force.next = this.WAVE_SPREAD * (this.height - this.next.height))
+    },
+    render: function (t) {
+      this.previous && (this.previous.height += this.force.previous, this.previous.fy += this.force.previous), this.next && (this.next.height += this.force.next, this.next.fy += this.force.next), t.lineTo(this.x, this.renderer.height - this.height)
+    }
+  };
+  var FISH = function (t) {
+    this.renderer = t, this.init()
+  };
+  FISH.prototype = {
+    GRAVITY: .4,
+    init: function () {
+      this.direction = Math.random() < .5, this.x = this.direction ? this.renderer.width + this.renderer.THRESHOLD : -this.renderer.THRESHOLD, this.previousY = this.y, this.vx = this.getRandomValue(4, 10) * (this.direction ? -1 : 1), this.renderer.reverse ? (this.y = this.getRandomValue(1 * this.renderer.height / 10, 4 * this.renderer.height / 10), this.vy = this.getRandomValue(2, 5), this.ay = this.getRandomValue(.05, .2)) : (this.y = this.getRandomValue(6 * this.renderer.height / 10, 9 * this.renderer.height / 10), this.vy = this.getRandomValue(-5, -2), this.ay = this.getRandomValue(-.2, -.05)), this.isOut = !1, this.theta = 0, this.phi = 0
+    },
+    getRandomValue: function (t, i) {
+      return t + (i - t) * Math.random()
+    },
+    reverseVertical: function () {
+      this.isOut = !this.isOut, this.ay *= -1
+    },
+    controlStatus: function (t) {
+      this.previousY = this.y, this.x += this.vx, this.y += this.vy, this.vy += this.ay, this.renderer.reverse ? this.y > this.renderer.height * this.renderer.INIT_HEIGHT_RATE ? (this.vy -= this.GRAVITY, this.isOut = !0) : (this.isOut && (this.ay = this.getRandomValue(.05, .2)), this.isOut = !1) : this.y < this.renderer.height * this.renderer.INIT_HEIGHT_RATE ? (this.vy += this.GRAVITY, this.isOut = !0) : (this.isOut && (this.ay = this.getRandomValue(-.2, -.05)), this.isOut = !1), this.isOut || (this.theta += Math.PI / 20, this.theta %= 2 * Math.PI, this.phi += Math.PI / 30, this.phi %= 2 * Math.PI), this.renderer.generateEpicenter(this.x + (this.direction ? -1 : 1) * this.renderer.THRESHOLD, this.y, this.y - this.previousY), (this.vx > 0 && this.x > this.renderer.width + this.renderer.THRESHOLD || this.vx < 0 && this.x < -this.renderer.THRESHOLD) && this.init()
+    },
+    render: function (t) {
+      t.save(), t.translate(this.x, this.y), t.rotate(Math.PI + Math.atan2(this.vy, this.vx)), t.scale(1, this.direction ? 1 : -1), t.beginPath(), t.moveTo(-30, 0), t.bezierCurveTo(-20, 15, 15, 10, 40, 0), t.bezierCurveTo(15, -10, -20, -15, -30, 0), t.fill(), t.save(), t.translate(40, 0), t.scale(.9 + .2 * Math.sin(this.theta), 1), t.beginPath(), t.moveTo(0, 0), t.quadraticCurveTo(5, 10, 20, 8), t.quadraticCurveTo(12, 5, 10, 0), t.quadraticCurveTo(12, -5, 20, -8), t.quadraticCurveTo(5, -10, 0, 0), t.fill(), t.restore(), t.save(), t.translate(-3, 0), t.rotate((Math.PI / 3 + Math.PI / 10 * Math.sin(this.phi)) * (this.renderer.reverse ? -1 : 1)), t.beginPath(), this.renderer.reverse ? (t.moveTo(5, 0), t.bezierCurveTo(10, 10, 10, 30, 0, 40), t.bezierCurveTo(-12, 25, -8, 10, 0, 0)) : (t.moveTo(-5, 0), t.bezierCurveTo(-10, -10, -10, -30, 0, -40), t.bezierCurveTo(12, -25, 8, -10, 0, 0)), t.closePath(), t.fill(), t.restore(), t.restore(), this.controlStatus(t)
+    }
+  }, $(function () {
+    RENDERER.init()
+    $('.dark').click(function () {
+      setTimeout(() => {
+        RENDERER.setFishColor();
+        RENDERER.context.fill();
+      });
+    })
+  });
+</script>
+  
+  <div class="footer bg-color">
+    <div class="footer-main">
+      
+        
+          <div class="link">
+            
+          </div>
+        
+      
+        
+          <div class="footer-copyright">
+            <p>Copyright © 2019 - 2020 <a target="_blank" rel="noopener" href="https://github.com/yuang01">yuang01</a> | Powered by <a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/">Hexo</a> | Theme <a target="_blank" rel="noopener" href="https://github.com/yuang01/theme">Bamboo</a> </p>
+
+          </div>
+        
+      
+        
+          <div class="footer-custom">
+            
+          </div>
+        
+      
+    </div>
+  </div>
+
+
+
+    <!-- 渲染暗黑按钮 -->
+    
+      <div class="dark" onclick="toggleDarkMode()">
+  <div class="dark-content">
+    <i class="fas" id="darkIcon" aria-hidden="true"></i>
+  </div>
+</div>
+
+<script defer>
+  $(function() {
+    // 初始化暗黑模式状态
+    let isDark = JSON.parse(localStorage.getItem('dark')) || JSON.parse('false');
+    updateDarkModeIcon(isDark);
+  });
+
+  function toggleDarkMode() {
+    const isDark = $(document.body).hasClass('darkModel');
+    $(document.body).toggleClass('darkModel');
+    localStorage.setItem('dark', !isDark);
+    updateDarkModeIcon(!isDark);
+  }
+
+  function updateDarkModeIcon(isDark) {
+    const iconElement = document.getElementById('darkIcon');
+    if (isDark) {
+      iconElement.classList.remove('fa-moon');
+      iconElement.classList.add('fa-lightbulb');
+    } else {
+      iconElement.classList.remove('fa-lightbulb');
+      iconElement.classList.add('fa-moon');
+    }
+  }
+</script>
+
+    
+    <!-- 渲染回到顶部按钮 -->
+    
+      <div class="goTop top-btn-color" pointer>
+  <i class="fas fa-arrow-up" aria-hidden="true"></i>
+</div>
+<script defer src="/js/goTop.js"></script>
+
+    
+    <!-- 渲染左下角音乐播放器 -->
+    
+      <link rel="stylesheet" href="/js/aplayer/APlayer@1.10.1.min.css">
+<style>
+.aplayer .aplayer-lrc p {
+  
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 16px !important;
+}
+
+.aplayer .aplayer-lrc p.aplayer-lrc-current {
+  
+  font-size: 15px;
+  color: #42b983;
+}
+
+
+.aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+  left: -66px !important;
+}
+
+.aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+  left: 0px !important;
+}
+
+
+</style>
+<meting-js  
+  class=""
+  server="tencent"
+  type="playlist"
+  id="8062553743"
+  fixed='true'
+  autoplay='false'
+  theme='#42b983'
+  loop='all'
+  order='random'
+  preload='auto'
+  volume='0.7'
+  list-folded='true'
+>
+</meting-js>
+
+<!-- <style>
+  #aplayer {
+    position: fixed;
+    left: 0;
+    bottom: 300px;
+  }
+</style> -->
+<script defer src="https://unpkg.com/aplayer@1.10.1/dist/APlayer.min.js"></script>
+<script defer src="https://unpkg.com/meting@2/dist/Meting.min.js"></script>
+    
+
+    <!-- 图片放大 -->
+    
+      <script src="https://unpkg.com/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+    
+
+    <!-- 百度解析 -->
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script async>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <!-- 背景彩带 -->
+    
+      <script async type="text/javascript" size="100" alpha='0.4' zIndex="-1" src="/js/ribbon.min.js"></script>
+    
+
+    <script src="/js/utils/index.js"></script>
+    <script src="/js/app.js"></script>
+    
+    <!-- 文章目录所需js -->
+<!-- <link href="/js/tocbot/tocbot.css" rel="stylesheet">
+<script src="/js/tocbot/tocbot.min.js"></script> -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.18.2/tocbot.min.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.18.2/tocbot.css">
+
+<script>
+  var headerEl = 'h2, h3, h4',  //headers 
+    content = '.post-detail',//文章容器
+    idArr = {};  //标题数组以确定是否增加索引id
+  //add #id
+  var option = {
+    // Where to render the table of contents.
+    tocSelector: '.toc',
+    // Where to grab the headings to build the table of contents.
+    contentSelector: content,
+    // Which headings to grab inside of the contentSelector element.
+    headingSelector: headerEl,
+    scrollSmooth: true,
+    scrollSmoothOffset: -70,
+    // headingsOffset: -($(window).height() * 0.4 - 45),
+    headingsOffset: -($(window).height() * 0.4 - 70),
+    // positionFixedSelector: '.toc-main',
+    // positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto',
+    activeLinkClass: 'is-active-link',
+    orderedList: true,
+    collapseDepth: 20,
+    // onClick: function (e) {},
+  }
+  if ($('.toc').length > 0) {
+
+    $(content).children(headerEl).each(function () {
+      //去除空格以及多余标点
+      var headerId = $(this).text().replace(/[\s|\~|`|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\_|\+|\=|\||\|\[|\]|\{|\}|\;|\:|\"|\'|\,|\<|\.|\>|\/|\?|\：|\，|\。]/g, '');
+
+      headerId = headerId.toLowerCase();
+      if (idArr[headerId]) {
+        //id已经存在
+        $(this).attr('id', headerId + '-' + idArr[headerId]);
+        idArr[headerId]++;
+      }
+      else {
+        //id未存在
+        idArr[headerId] = 1;
+        $(this).attr('id', headerId);
+      }
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+      tocbot.init(option);
+      mobileTocClick();
+    });
+
+  }
+
+  window.tocScrollFn = function () {
+    return bamboo.throttle(function () {
+      findHeadPosition();
+    }, 100)()
+  }
+  window.addEventListener('scroll', tocScrollFn);
+
+  const findHeadPosition = function (top) {
+    if ($('.toc-list').length <= 0) {
+      return false;
+    }
+    setTimeout(() => {  // or DOMContentLoaded 
+      autoScrollToc();
+    }, 0);
+  }
+
+  const autoScrollToc = function () {
+    const $activeItem = document.querySelector('.is-active-link');
+    const $cardToc = document.querySelector('.toc-content');
+    const activePosition = $activeItem.getBoundingClientRect().top
+    const sidebarScrollTop = $cardToc.scrollTop
+    if (activePosition > (document.documentElement.clientHeight - 100)) {
+      $cardToc.scrollTop = sidebarScrollTop + 150
+    }
+    if (activePosition < 150) {
+      $cardToc.scrollTop = sidebarScrollTop - 150
+    }
+  }
+
+  document.addEventListener('pjax:send', function () {
+    if ($('.toc').length) {
+      tocbot.destroy();
+    }
+  });
+
+  document.addEventListener('pjax:complete', function () {
+    if ($('.toc').length) {
+      tocbot.init(option);
+      mobileTocClick();
+    }
+  });
+  
+  // 手机端toc按钮点击出现目录
+  const mobileTocClick = function () {
+    const $cardTocLayout = document.getElementsByClassName('side_toc')[0];
+    const $cardToc = $cardTocLayout.getElementsByClassName('toc-content')[0];
+    let right = '45px';
+    if (window.innerWidth >= 551 && window.innerWidth <= 992) {
+      right = '100px'
+    }
+    const mobileToc = {
+      open: () => {
+        $cardTocLayout.style.cssText = 'animation: toc-open .3s; opacity: 1; right: ' + right
+      },
+
+      close: () => {
+        $cardTocLayout.style.animation = 'toc-close .2s'
+        setTimeout(() => {
+          $cardTocLayout.style.cssText = "opacity:''; animation: ''; right: ''"
+        }, 100)
+      }
+    }
+    document.getElementById('toc-mobile-btn').addEventListener('click', () => {
+      if (window.getComputedStyle($cardTocLayout).getPropertyValue('opacity') === '0') mobileToc.open()
+      else mobileToc.close()
+    })
+
+    $cardToc.addEventListener('click', (e) => {
+      if (window.innerWidth < 992) { // 小于992px的时候
+        mobileToc.close()
+      }
+    })
+  }
+</script>
+
+<style>
+  /* .is-position-fixed {
+    position: sticky !important;
+    top: 74px;
+  }
+
+  .toc-main ul {
+    counter-reset: show-list;
+  }
+
+  .toc-main ul li::before {
+    content: counter(item)".";
+    display: block;
+    position: absolute;
+    left: 12px;
+    top: 0;
+  } */
+</style>
+ 
+
+<!-- 设置导航背景 -->
+<script>
+  let setHeaderClass = () => {
+    const nav = $('#navHeader');
+    const navTop = nav.outerHeight();
+    const winTop = $(window).scrollTop();
+    if(winTop > navTop) {
+      nav.addClass('header-bg-color');
+    }
+    else {
+      nav.removeClass('header-bg-color');
+    }
+  };
+
+  let scrollCollect = () => {
+    return bamboo.throttle(function (e) {
+      setHeaderClass();
+    }, 200)()
+  }
+
+  let initHeaderBg = () => {
+    setHeaderClass();
+  }
+
+  setHeaderClass();
+  window.addEventListener('scroll', scrollCollect);
+
+  document.addEventListener('pjax:send', function () {
+    window.removeEventListener('scroll', scrollCollect)
+  })
+  document.addEventListener('pjax:complete', function () {
+    window.addEventListener('scroll', scrollCollect);
+    setHeaderClass();
+  })
+</script> 
+
+<!-- 渲染issues标签里的内容 -->
+<script>
+  function loadIssuesJS() {
+    if ($(".post-detail").find(".issues-api").length == 0) {
+      return;
+    } 
+    loadScript('/js/issues/index.js');
+  };
+  $(function () {
+    loadIssuesJS();
+  });
+  document.addEventListener('pjax:complete', function () {
+    if (typeof IssuesAPI == "undefined") {
+      loadIssuesJS();
+    }
+  })
+</script>
+
+<!-- 渲染远程json加载的图片标签(getPhotoOnline)里的内容 -->
+<script>
+  function loadPhotoOnlineJS() {
+    if ($(".post-detail").find(".getJsonPhoto-api").length == 0) {
+      return;
+    } 
+    loadScript('/js/getPhotoOnline/index.js');
+  };
+  $(function () {
+    loadPhotoOnlineJS();
+  });
+  document.addEventListener('pjax:complete', function () {
+    if (typeof getPhotoJson == "undefined") {
+      loadPhotoOnlineJS();
+    }
+  })
+</script>
+
+<!-- 渲染远程json加载的talk标签(getTalkOnline)里的内容 -->
+<script>
+  function loadTalkOnlineJS() {
+    if ($(".post-detail").find(".getJsonTalk-api").length == 0) {
+      return;
+    } 
+    loadScript('https://cdnjs.cloudflare.com/ajax/libs/waterfall.js/1.0.2/waterfall.min.js'); // 瀑布流插件，https://raphamorim.io/waterfall.js/
+    loadScript('/js/getTalkOnline/index.js');
+  };
+  $(function () {
+    loadTalkOnlineJS();
+  });
+  document.addEventListener('pjax:complete', function () {
+    if (typeof getTalkJson == "undefined") {
+      loadTalkOnlineJS();
+    }
+  })
+</script>
+
+<!-- 渲染远程json加载的site-card标签(getSiteOnline)里的内容 -->
+<script>
+  function loadSiteOnlineJS() {
+    if ($(".post-detail").find(".getJsonSite-api").length == 0) {
+      return;
+    } 
+    loadScript('/js/getSiteOnline/index.js');
+  };
+  $(function () {
+    loadSiteOnlineJS();
+  });
+  document.addEventListener('pjax:complete', function () {
+    if (typeof getSiteJson == "undefined") {
+      loadSiteOnlineJS();
+    }
+  })
+</script>
+
+<!-- 输入框打字特效 -->
+<!-- 输入框打字特效 -->
+
+  <script src="/js/activate-power-mode.js"></script>
+  <script>
+    POWERMODE.colorful = true;  // 打开随机颜色特效
+    POWERMODE.shake = false;    // 关闭输入框抖动
+    document.body.addEventListener('input', POWERMODE);//监听打字事件
+  </script>
+
+
+<!-- markdown代码一键复制功能 -->
+
+  <link rel="stylesheet" href="https://unpkg.com/v-plugs-ayu/lib/ayu.css">
+  <script src="https://unpkg.com/v-plugs-ayu/lib/ayu.umd.min.js"></script>
+  <script src="/js/clipboard/clipboard.min.js"></script>
+  <div id="appCopy">
+  </div>
+  <script data-pjax>
+    var vm = new Vue({
+      el: '#appCopy',
+      data: {
+      },
+      computed: {
+      },
+      mounted() {
+        const that = this;
+        var copy = 'copy';
+        /* code */
+        var initCopyCode = function () {
+          var copyHtml = '';
+          copyHtml += '<button class="btn-copy" data-clipboard-snippet="" style="position:absolute;top:0;right:0;z-index:1;">';
+          copyHtml += '<i class="fas fa-copy"></i><span>' + copy + '</span>';
+          copyHtml += '</button>';
+          $(".post-detail pre").not('.gutter pre').wrap("<div class='codeBox' style='position:relative;width:100%;'></div>")
+          $(".post-detail pre").not('.gutter pre').before(copyHtml);
+          new ClipboardJS('.btn-copy', {
+            target: function (trigger) {
+              return trigger.nextElementSibling;
+            }
+          });
+        }
+        initCopyCode();
+        $('.btn-copy').unbind('click').bind('click', function () {
+          doSomething();
+        })
+        $(document).unbind('keypress').bind('keypress', function (e) {
+          if (e.ctrlKey && e.keyCode == 67) {
+            doSomething();
+          }
+        })
+
+        function doSomething() {
+          that.$notify({
+            title: "成功",
+            content: "代码已复制，请遵守相关授权协议。",
+            type: 'success'
+          })
+        }
+      },
+      methods: {
+      },
+      created() { }
+    })
+  </script>
+  
+
+<!-- 图片懒加载 -->
+<script defer src="https://unpkg.com/vanilla-lazyload@17.1.0/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazyload",
+    threshold: 0
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    lazyLoadInstance.update();
+  });
+  document.addEventListener('pjax:complete', function () {
+    lazyLoadInstance.update();
+  });
+</script>
+
+
+<!-- 卡片滚动动画 -->
+   
+
+<!-- 评论所需js -->
+
+  
+        <script type="text/javascript">
+  var utteranceComment = {};
+
+  function check_utterance() {
+    let isDark = JSON.parse(localStorage.getItem('dark')) || JSON.parse('false');
+    if (isDark) {
+      utteranceComment.Theme = 'github-dark';
+    } else {
+      utteranceComment.Theme = 'github-light';
+    }
+
+    return document.getElementById("gitment-container");
+  }
+  comment_el = '#gitment-container';
+  load_utterance = function () {
+    if ($(comment_el).length) {
+      // 匿名函数，防止污染全局变量
+      const HEAD = check_utterance();
+
+      var utterances = document.createElement('script');
+      utterances.type = 'text/javascript';
+      utterances.async = true;
+      utterances.setAttribute('issue-term', 'pathname')
+      utterances.setAttribute('theme', utteranceComment.Theme)
+      utterances.setAttribute('repo', '')
+      utterances.crossorigin = 'anonymous';
+      utterances.src = 'https://utteranc.es/client.js';
+      // content 是要插入评论的地方
+      document.getElementById('gitment-container').appendChild(utterances);
+
+    }
+  }
+
+  function dark_utterance() {
+    const HEAD = check_utterance();
+    if (!HEAD) return;
+    const message = {
+      type: 'set-theme',
+      theme: utteranceComment.Theme
+    };
+    const utteranceIframe = document.querySelector('iframe');
+    utteranceIframe.contentWindow.postMessage(message, 'https://utteranc.es');
+  }
+
+  $(document).ready(load_utterance);
+  document.addEventListener('pjax:complete', function () {
+    load_utterance();
+  });
+
+  $('.dark').click(function () {
+    setTimeout(() => {
+      dark_utterance();
+    });
+  })
+
+</script>
+
+<style>
+  .utterances {
+    max-width: inherit !important;
+  }
+</style>
+      
+
+
+<!-- 鼠标点击特效 -->
+<!-- 爱心点击 -->
+
+  
+    <canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 999; pointer-events: none;" ></canvas>
+    <script async src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script>
+    <script async src="/js/cursor/explosion.min.js"></script>
+  
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" data-pjax></script>
+
+
+<!-- 轮播图标签 -->
+<script>
+  var bambooSwiperTag = {};
+  function load_swiper() {
+    if (!document.querySelectorAll(".post-swiper-container")[0]) return;
+    loadCSS("https://unpkg.com/swiper@6/swiper-bundle.min.css")
+    loadScript("https://unpkg.com/swiper@6/swiper-bundle.min.js").then(() => {
+      pjax_swiper();
+    });
+  }
+
+  load_swiper();
+
+  function pjax_swiper() {
+    bambooSwiperTag.swiper = new Swiper('.post-swiper-container', {
+      slidesPerView: 'auto',
+      spaceBetween: 8,
+      centeredSlides: true,
+      loop: true,
+      autoplay: true ? {
+        delay: 3000,
+        stopOnLastSlide: false,
+        disableOnInteraction: false,
+      } : false,
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      on:{
+        init: function(){
+          swiperAnimateCache(this); //隐藏动画元素 
+          swiperAnimate(this); //初始化完成开始动画
+        }, 
+        slideChangeTransitionEnd: function(){ 
+          swiperAnimate(this); //每个slide切换结束时也运行当前slide动画
+          //this.slides.eq(this.activeIndex).find('.ani').removeClass('ani'); 动画只展现一次，去除ani类名
+        } 
+      }
+    });
+  }
+
+  document.addEventListener('pjax:complete', function () {
+    if (!document.querySelectorAll(".post-swiper-container")[0]) return;
+    if (typeof bambooSwiperTag.swiper === "undefined") {
+      load_swiper();
+    } else {
+      pjax_swiper();
+    }
+  });
+</script>
+    <!-- pjax -->
+    
+
+<!-- pjax -->
+
+
+  <script src="/js/pjax@0.2.8/index.js"></script>
+  
+    <div class="pjax-animate">
+  
+    <div class="loading-circle"><div id="loader-circle"></div></div>
+    <script>
+      window.ShowLoading = function() {
+        $(".loading-circle").css("display", "block");
+      };
+      window.HideLoading = function() {
+        $(".loading-circle").css("display", "none");
+      }
+    </script>
+  
+	<script>
+    document.addEventListener('pjax:complete', function () {
+      window.HideLoading();
+    })
+    document.addEventListener('pjax:send', function () {
+      window.ShowLoading();
+    })
+    document.addEventListener('pjax:error', function () {
+      window.HideLoading();
+    })
+	</script>
+</div>
+
+  
+
+  <script>
+    var pjax = new Pjax({
+      elements: 'a[href]:not([href^="#"]):not([href="javascript:void(0)"]):not([no-pjax])',   // 拦截正常带链接的 a 标签
+      selectors: ["#pjax-container","title"],                                   // 根据实际需要确认重载区域
+      cacheBust: false,   // url 地址追加时间戳，用以避免浏览器缓存
+      timeout: 5000
+    });
+
+    document.addEventListener('pjax:send', function (e) {
+
+      try {
+        var currentUrl = window.location.pathname;
+        var targetUrl = e.triggerElement.href;
+        var banUrl = [""];
+        if (banUrl[0] != "") {
+          banUrl.forEach(item => {
+            if(currentUrl.indexOf(item) != -1 || targetUrl.indexOf(item) != -1) {
+              window.location.href = targetUrl;
+            }
+          });
+        }
+      } catch (error) {}
+
+      $(window).unbind('resize');
+      $(window).unbind('scroll');
+      $(document).unbind('scroll');
+      $(document).unbind('click');
+      $('body').unbind('click');
+
+    })
+    
+    document.addEventListener('pjax:complete', function () {
+      $('script[data-pjax], .pjax-reload script').each(function () {
+        $(this).parent().append($(this).remove());
+      });
+    });
+
+    document.addEventListener('pjax:error', function (e) {
+      window.location.href = e.triggerElement.href;
+    })
+    
+    // 刷新不从顶部开始
+    document.addEventListener("DOMContentLoaded", function () {
+      history.scrollRestoration = 'auto';
+    })
+  </script>
+
+
+
+  </body>
+</html>

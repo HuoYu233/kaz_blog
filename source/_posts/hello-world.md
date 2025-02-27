@@ -1,38 +1,40 @@
 ---
 title: Hello World
+mathjax: true
+date: 2023/1/22 20:46:25
+img: https://datawhale-business.oss-cn-hangzhou.aliyuncs.com/23450/dashboard/1736488152304/image.png
+excerpt: 我的halo word
 ---
-Welcome to [Hexo](https://hexo.io/)! This is your very first post. Check [documentation](https://hexo.io/docs/) for more info. If you get any problems when using Hexo, you can find the answer in [troubleshooting](https://hexo.io/docs/troubleshooting.html) or you can ask me on [GitHub](https://github.com/hexojs/hexo/issues).
+勇神牛逼！！！！
 
-## Quick Start
+测试latex
 
-### Create a new post
+$sin(\alpha + \beta)$
 
-``` bash
-$ hexo new "My New Post"
+测试图片
+
+![img](/img/hello-world/Kaz.jpg)
+
+![Transformer](https://datawhale-business.oss-cn-hangzhou.aliyuncs.com/23450/dashboard/1736488152304/image.png)
+
+测试代码块
+
+```python
+import torch
+#attention is all u need
+print("Yong shen NB")
 ```
 
-More info: [Writing](https://hexo.io/docs/writing.html)
-
-### Run server
-
-``` bash
-$ hexo server
+```c++
+#include <iostream>
+using namespace std;
+int main(){
+    cout<<"勇神牛逼";
+    pair<int, int> p;
+    int get = [&](int l, int r){
+    	return l + r >> 1;  
+    };
+    return 0;
+}
 ```
 
-More info: [Server](https://hexo.io/docs/server.html)
-
-### Generate static files
-
-``` bash
-$ hexo generate
-```
-
-More info: [Generating](https://hexo.io/docs/generating.html)
-
-### Deploy to remote sites
-
-``` bash
-$ hexo deploy
-```
-
-More info: [Deployment](https://hexo.io/docs/one-command-deployment.html)
