@@ -974,7 +974,10 @@ $w^{(j)} \cdot x^{(i)}+ b^{(i)} + \mu_i$
 
 也可以将两个网络合并，在内部进行点积输出结果
 
-$J=\sum_{(i,j):r(i,j)=1}\left(v_{u}^{(j)}\cdot v_{m}^{(i)}-y^{(i,j)}\right)^{2}+\text{NN regularization term}$
+$$
+J=\sum_{(i,j):r(i,j)=1}\left(v_{u}^{(j)}\cdot v_{m}^{(i)}-y^{(i,j)}\right)^{2}+\text{NN regularization term}
+$$
+
 
 为了找到电影i的相似电影，找$||v^{(k)} - v^{(i)}||^2$小的电影，最为相似
 

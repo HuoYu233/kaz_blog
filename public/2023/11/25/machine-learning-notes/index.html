@@ -818,7 +818,7 @@
 <p>对于v的获取，使用神经网络</p>
 <p>可以分别建立user network和movie network，使用相同维度的输出层，将结果进行点积</p>
 <p>也可以将两个网络合并，在内部进行点积输出结果</p>
-<p>$J&#x3D;\sum_{(i,j):r(i,j)&#x3D;1}\left(v_{u}^{(j)}\cdot v_{m}^{(i)}-y^{(i,j)}\right)^{2}+\text{NN regularization term}$</p>
+<p>$$<br>J&#x3D;\sum_{(i,j):r(i,j)&#x3D;1}\left(v_{u}^{(j)}\cdot v_{m}^{(i)}-y^{(i,j)}\right)^{2}+\text{NN regularization term}<br>$$</p>
 <p>为了找到电影i的相似电影，找$||v^{(k)} - v^{(i)}||^2$小的电影，最为相似</p>
 <h3 id="Retrieval-and-Ranking"><a href="#Retrieval-and-Ranking" class="headerlink" title="Retrieval and Ranking"></a>Retrieval and Ranking</h3><p>通常样本有几百万或者几千几万，不可能对每个样本构造神经网络，所以采用检索和排名</p>
 <p>检索：生成可能得项目列表，比如从用户最近观看的10个电影中找到相似的，从最常看的3个类别中选出其中的top10，用户所在国家的top20。将检索的项目列表，去除重复项目和用户已经观看</p>
