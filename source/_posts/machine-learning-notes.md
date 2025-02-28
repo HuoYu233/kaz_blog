@@ -73,7 +73,10 @@ $\frac{\partial{J(w,b)}}{\partial{b}} = \frac{1}{m} \sum_{i=1}^{m} (f(x^i)-y^i)$
 
 `·`为两个向量的点积(dot)。
 
-$\vec{w} \cdot \vec{x} = w_1*x_1+w_2*x_2+....+w_n*x_n$
+$$
+\vec{w} \cdot \vec{x} = w_1*x_1+w_2*x_2+....+w_n*x_n
+$$
+
 
 **矢量化**：利用计算机的并行硬件，代码简洁、运行速度快
 

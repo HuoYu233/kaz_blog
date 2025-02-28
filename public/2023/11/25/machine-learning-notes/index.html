@@ -409,7 +409,7 @@
 <h3 id="多元线性回归"><a href="#多元线性回归" class="headerlink" title="多元线性回归"></a>多元线性回归</h3><p>假设特征有$n$个，定义$\vec{x} &#x3D; \begin{bmatrix} x_1 &amp; x_2 &amp; x_3 &amp; … \end{bmatrix}$，参数$\vec{w} &#x3D; \begin{bmatrix} w_1 &amp; w_2 &amp; w_3 &amp; … \end{bmatrix}$</p>
 <p>则$f_{\vec{w},b}&#x3D;\vec{w} \cdot \vec{x} +b$</p>
 <p><code>·</code>为两个向量的点积(dot)。</p>
-<p>$\vec{w} \cdot \vec{x} &#x3D; w_1<em>x_1+w_2</em>x_2+….+w_n*x_n$</p>
+<p>$$<br>\vec{w} \cdot \vec{x} &#x3D; w_1<em>x_1+w_2</em>x_2+….+w_n*x_n<br>$$</p>
 <p><strong>矢量化</strong>：利用计算机的并行硬件，代码简洁、运行速度快</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">f = np.dot(w, x) + b</span><br></pre></td></tr></table></figure>
 
@@ -935,18 +935,14 @@
       background-position: center center;">
       <img class="lazyload lazyload placeholder" src="https://cdn.acwing.com/media/activity/surface/QQ%E5%9B%BE%E7%89%8720231022233411.jpg" class="lazyload placeholder" data-srcset="https://cdn.acwing.com/media/activity/surface/QQ%E5%9B%BE%E7%89%8720231022233411.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" src="" alt="">
     </div>
-    <a href="/2023/07/07/algorithm-data-structure/" class="post-nav-link">
+    <a href="/2023/10/22/algorithm-skills/" class="post-nav-link">
       <div class="title">
         Next: <i class="fas fa-angle-right"></i>
-        <div class="title-text">Algorithm-Data-Structure</div>
+        <div class="title-text">Algorithm-Skills</div>
       </div>
       <!-- <div class="content">
-        链表与邻接表由于用结构体+指针比较慢，一般在面试题使用，在这里使用数组模拟链表
-
-单链表
-
-e[N]：储存链表结点的值
-
+        一般竞赛时间限制在1s或2s，所以时间复杂度尽量控制在$10^7 - 10^8$
+下面给出在不同数据范围下，代码的时间复
       </div> -->
     </a>
   </div>
