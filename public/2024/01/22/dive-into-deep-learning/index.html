@@ -11,7 +11,7 @@
   <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-  <title>关于 | Kaz&#39;s Blog</title>
+  <title>dive-into-deep-learning-notes | Kaz&#39;s Blog</title>
 
   <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/img/favicon.ico">
   <link rel="stylesheet" href="https://at.alicdn.com/t/font_1911880_c1nvbyezg17.css">
@@ -339,17 +339,27 @@
 
 
 <div class="post-detail-header" id="thumbnail_canvas" style="background-repeat: no-repeat; background-size: cover; 
-  background-position: center center;position: relative;background-image:url('https://pic4.zhimg.com/80/v2-e434e3a2888fb4efb1844845b8791d1f_1440w.webp')">
+  background-position: center center;position: relative;background-image:url('https://zh.d2l.ai/_static/logo-with-text.png')">
   <div class="post-detail-header-mask"></div>
   <canvas id="header_canvas"style="position:absolute;bottom:0;pointer-events:none;"></canvas>
   
   <div class="post-detail-header_info-box">
     <div class="title-box">
       <span class="title">
-        关于
+        dive-into-deep-learning-notes
       </span>
     </div>
     
+    
+      
+        <span class="post-detail-header_date">
+          <i class="fas fa-calendar"></i> Published in：2024-01-22 |
+        </span>
+      
+
+      
+
+      
     
   </div>
   
@@ -367,36 +377,166 @@
   <div class="main-content">
     <article class="post post-detail">
       <div class="post-content">
-        <h2 id="基础信息"><a href="#基础信息" class="headerlink" title="基础信息"></a>基础信息</h2><p>[<a href="mailto:1981270473@qq.com">Email</a>] | [<a target="_blank" rel="noopener" href="https://gitee.com/huoyu233">Gitee</a>] | [<a target="_blank" rel="noopener" href="https://github.com/HuoYu233">Github</a>] | [<a target="_blank" rel="noopener" href="https://space.bilibili.com/82505737">Bilibili</a>]</p>
-<p><a target="_blank" rel="noopener" href="https://www.fzu.edu.cn/">福州大学</a>环境工程本科在读</p>
+        <h1 id="1-预备知识"><a href="#1-预备知识" class="headerlink" title="1. 预备知识"></a>1. 预备知识</h1><h2 id="1-1-数据处理"><a href="#1-1-数据处理" class="headerlink" title="1.1 数据处理"></a>1.1 数据处理</h2><p><code>Tensor</code>数据类型和numpy中的<code>ndarray</code>类型相似，但是差异点在于</p>
+<p>首先，GPU很好地支持加速计算，而NumPy仅支持CPU计算；</p>
+<p>其次，张量类支持自动微分。 这些功能使得张量类更适合深度学习</p>
+<p>对于任意具有相同形状的张量， 常见的标准算术运算符（<code>+</code>、<code>-</code>、<code>*</code>、<code>/</code>和<code>**</code>）都可以被升级为按元素运算。 我们可以在同一形状的任意两个张量上调用按元素操作。</p>
+<p>我们也可以把多个张量<em>连结</em>（concatenate）在一起， 把它们端对端地叠起来形成一个更大的张量。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">torch.cat((X, Y), dim=<span class="number">0</span>), torch.cat((X, Y), dim=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<p>对张量中的所有元素进行求和，会产生一个单元素张量。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">torch.<span class="built_in">sum</span>(x)</span><br></pre></td></tr></table></figure>
+
+<p>在某些情况下，即使形状不同，我们仍然可以通过调用 <em>广播机制</em>（broadcasting mechanism）来执行按元素操作。 这种机制的工作方式如下：</p>
+<ol>
+<li>通过适当复制元素来扩展一个或两个数组，以便在转换之后，两个张量具有相同的形状；</li>
+<li>对生成的数组执行按元素操作。</li>
+</ol>
+<p>将深度学习框架定义的张量转换为NumPy张量（<code>ndarray</code>）很容易，反之也同样容易。 torch张量和numpy数组将共享它们的底层内存，就地操作更改一个张量也会同时更改另一个张量。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">A = X.numpy()</span><br><span class="line">B = torch.tensor(A)</span><br></pre></td></tr></table></figure>
+
+<p>要将大小为1的张量转换为Python标量，我们可以调用<code>item</code>函数或Python的内置函数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a = torch.tensor([<span class="number">3.5</span>])</span><br><span class="line">a, a.item(), <span class="built_in">float</span>(a), <span class="built_in">int</span>(a)</span><br></pre></td></tr></table></figure>
+
+<h2 id="1-2-线性代数"><a href="#1-2-线性代数" class="headerlink" title="1.2 线性代数"></a>1.2 线性代数</h2><ul>
+<li><em>Hadamard</em>积</li>
+</ul>
+<p>两个矩阵的按元素乘法称为<em>Hadamard积</em>（Hadamard product）（数学符号⊙）<br>$$<br>A⊙B &#x3D; \begin{bmatrix} a_{11}b_{11} &amp; a_{12}b_{12} &amp;a_{13}b_{13} \ a_{21}b_{21} &amp; a_{22}b_{22} &amp;a_{23}b_{23} \ a_{31}b_{31}&amp;a_{32}b_{32} &amp;a_{3,3}b_{33} \end{bmatrix}<br>$$</p>
+<p>将张量乘以或加上一个标量不会改变张量的形状，其中张量的每个元素都将与标量相加或相乘。</p>
 <ul>
-<li>Basic Skills：CET-6、Java、C&#x2F;C++、Python、JavaScript</li>
-<li>Frameworks：Pytorch、Mybatis、Springboot、Vue、Uniapp、Redis</li>
+<li>降维求和</li>
 </ul>
-<h2 id="项目经历"><a href="#项目经历" class="headerlink" title="项目经历"></a>项目经历</h2><ul>
-<li>[2023.09-2024.04] 面向智慧城市的群智感知平台[<a target="_blank" rel="noopener" href="https://www.fzu-urbansensing.com/Platforms-Applications/Crowdsensing_Platform/">Link</a>]</li>
-<li>[2023.04-2023.06] 福建乡村本地招聘信息工具——闽易聘[<a target="_blank" rel="noopener" href="https://gitee.com/huoyu233/minyipin">Link</a>]</li>
-</ul>
-<h2 id="校园经历"><a href="#校园经历" class="headerlink" title="校园经历"></a>校园经历</h2><ul>
-<li>[2023.07-2024.04] <a target="_blank" rel="noopener" href="https://www.fzu-urbansensing.com/">福州大学人机共融智能课题组</a>开发组成员</li>
-<li>[2021.09-2022.06] 福州大学环境与安全工程学院网络宣传部门成员</li>
-</ul>
-<h2 id="荣誉奖项"><a href="#荣誉奖项" class="headerlink" title="荣誉奖项"></a>荣誉奖项</h2><p><strong>[Undergraduate]</strong></p>
+<p> 我们还可以指定张量沿哪一个轴来通过求和降低维度。 以矩阵为例，为了通过求和所有行的元素来降维（轴0），可以在调用函数时指定<code>axis=0</code>。 由于输入矩阵沿0轴降维以生成输出向量，因此输入轴0的维数在输出形状中消失。</p>
+<p>sum,mean都是同理的</p>
 <ul>
-<li>[2024.12] 第六届全国高校计算机能力挑战赛C++程序设计国赛<strong>二等奖</strong></li>
-<li>[2024.12] 福州大学环安学院2023~2024学年下学期学习进步奖(<strong>50%</strong>)</li>
-<li>[2024.7] 第十六届“中国电机工程学会杯”全国大学生电工数学建模竞赛<strong>一等奖</strong></li>
-<li>[2024.5] COMAP’s 2024 MCM&#x2F;ICM Contest <strong>Honorable Mention</strong></li>
-<li>[2024.4] 第十五届蓝桥杯软件赛C&#x2F;C++ <strong>A组省三等奖</strong></li>
-<li>[2024.4] 福州大学第八届网络信息安全竞赛<strong>三等奖</strong></li>
-<li>[2023.10] 第六届传智杯全国IT技能大赛优秀志愿者</li>
-<li>[2023.4] 福州大学环安学院2022~2023学年上学期精神文明建设奖</li>
+<li>非降维求和</li>
 </ul>
-<p><strong>[High School]</strong></p>
+<p>如果我们想沿某个轴计算<code>A</code>元素的累积总和， 比如<code>axis=0</code>（按行计算），可以调用<code>cumsum</code>函数。 此函数不会沿任何轴降低输入张量的维度。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">A.cumsum(axis=<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+
 <ul>
-<li>[2021.4] 龙岩市学生信息素养提升实践活动数字创作项目一等奖</li>
-<li>[2019.10] 第十届全国青少年科学影像节三等奖</li>
-<li>[2019.6] “外研社杯”全国中学生外语素养大赛福建赛区二等奖</li>
+<li>点积</li>
+</ul>
+<p>给定两个向量$x,y$的点积$x^Ty$(或$&lt;x,y&gt;$)是相同位置的按元素乘积的和<br>$$<br>x^Ty &#x3D; \sum_{i&#x3D;1}^{d}x_iy_i<br>$$</p>
+<p>将两个向量规范化得到单位长度后，点积表示它们夹角的余弦。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">torch.dot(x, y)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>矩阵-向量积</li>
+</ul>
+<p>$$<br>Ax &#x3D; \begin{bmatrix} a_1^T \ a_2^T \ a_3^T \end{bmatrix}x &#x3D; \begin{bmatrix} a_1^Tx \ a_2^Tx \ a_3^Tx \end{bmatrix}<br>$$</p>
+<p>在代码中使用张量表示矩阵-向量积，我们使用<code>mv</code>函数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">torch.mv(A, x)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>矩阵-矩阵乘法</li>
+</ul>
+<p>用行向量$A_i^T$表示矩阵$A$的第$i$行，列向量$b_j$作为矩阵$B$的第$j$列</p>
+<p>看作简单地执行m次矩阵-向量积，并将结果拼接在一起，使用<code>mm</code>函数<br>$$<br>C&#x3D;AB&#x3D; \begin{bmatrix} a_1^T \ a_2^T \ a_3^T \end{bmatrix}\begin{bmatrix} b_1 &amp; b_2 &amp; b_3\ \end{bmatrix} &#x3D; \begin{bmatrix} a_1^Tb_1 &amp; a_1^Tb_2 &amp; a_1^Tb_3\ a_2^Tb_1 &amp; a_2^Tb_2 &amp; a_2^Tb_3 \ a_3^Tb_1 &amp; a_3^Tb_2 &amp; a_3^Tb_3 \end{bmatrix}<br>$$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">torch.mm(A, B)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>范数</li>
+</ul>
+<p>欧几里得距离是一个$L_2$范数： 假设$n$维向量$x$中的元素是$x_1,x_2…x_n$，其$L_2$<em>范数</em>是向量元素平方和的平方根：</p>
+<p>$||x||<em>2 &#x3D; \sqrt{\sum</em>{i&#x3D;1}^{n}x_i^2}$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">u = torch.tensor([<span class="number">3.0</span>, -<span class="number">4.0</span>])</span><br><span class="line">torch.norm(u)</span><br><span class="line">tensor(<span class="number">5.</span>)</span><br></pre></td></tr></table></figure>
+
+<p>深度学习中更经常地使用$L_2$范数的平方，也会经常遇到$L_1$范数，它表示为向量元素的绝对值之和：</p>
+<p>$||x||<em>1 &#x3D; \sum</em>{i&#x3D;1}^{n}|x_i|$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">torch.<span class="built_in">abs</span>(u).<span class="built_in">sum</span>()</span><br></pre></td></tr></table></figure>
+
+<p>矩阵$X$的<em>Frobenius范数</em>（Frobenius norm）是矩阵元素平方和的平方根</p>
+<h2 id="1-3-微积分"><a href="#1-3-微积分" class="headerlink" title="1.3 微积分"></a>1.3 微积分</h2><p>我们可以连结一个多元函数对其所有变量的偏导数，以得到该函数的<em>梯度</em>（gradient）向量。 具体而言，设函数f:Rn→R的输入是 一个n维向量x&#x3D;[x1,x2,…,xn]⊤，并且输出是一个标量。 函数f(x)相对于x的梯度是一个包含n个偏导数的向量:.<br>$$<br>\nabla_\mathbf{x}f(\mathbf{x})&#x3D;\left[\frac{\partial f(\mathbf{x})}{\partial x_1},\frac{\partial f(\mathbf{x})}{\partial x_2},\ldots,\frac{\partial f(\mathbf{x})}{\partial x_n}\right]^\top<br>$$</p>
+<h2 id="1-4-自动微分"><a href="#1-4-自动微分" class="headerlink" title="1.4 自动微分"></a>1.4 自动微分</h2><ul>
+<li>计算图</li>
+<li>反向传播</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">x = torch.arange(<span class="number">4.0</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">y = <span class="number">2</span> * torch.dot(x, x)</span><br><span class="line"><span class="built_in">print</span>(x.grad) <span class="comment"># None</span></span><br><span class="line">y.backward()</span><br><span class="line"><span class="built_in">print</span>(x.grad == <span class="number">4</span> * x) <span class="comment">#tensor([True, True, True, True])</span></span><br><span class="line"><span class="comment"># 在默认情况下，PyTorch会累积梯度，我们需要清除之前的值</span></span><br><span class="line">x.grad.zero_()</span><br></pre></td></tr></table></figure>
+
+<p>当<code>y</code>不是标量时，向量<code>y</code>关于向量<code>x</code>的导数的最自然解释是一个矩阵。 对于高阶和高维的<code>y</code>和<code>x</code>，求导的结果可以是一个高阶张量。</p>
+<p>然而，虽然这些更奇特的对象确实出现在高级机器学习中（包括深度学习中）， 但当调用向量的反向计算时，我们通常会试图计算一批训练样本中每个组成部分的损失函数的导数。 这里，我们的目的不是计算微分矩阵，而是单独计算批量中每个样本的偏导数之和。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 对非标量调用backward需要传入一个gradient参数，该参数指定微分函数关于self的梯度。</span></span><br><span class="line"><span class="comment"># 本例只想求偏导数的和，所以传递一个1的梯度是合适的</span></span><br><span class="line">x.grad.zero_()</span><br><span class="line">y = x * x</span><br><span class="line"><span class="comment"># 等价于y.backward(torch.ones(len(x)))</span></span><br><span class="line">y.<span class="built_in">sum</span>().backward()</span><br><span class="line">x.grad <span class="comment"># tensor([0., 2., 4., 6.])</span></span><br></pre></td></tr></table></figure>
+
+<p>有时，我们希望将某些计算移动到记录的计算图之外。 例如，假设<code>y</code>是作为<code>x</code>的函数计算的，而<code>z</code>则是作为<code>y</code>和<code>x</code>的函数计算的。 想象一下，我们想计算<code>z</code>关于<code>x</code>的梯度，但由于某种原因，希望将<code>y</code>视为一个常数， 并且只考虑到<code>x</code>在<code>y</code>被计算后发挥的作用。</p>
+<p>这里可以分离<code>y</code>来返回一个新变量<code>u</code>，该变量与<code>y</code>具有相同的值， 但丢弃计算图中如何计算<code>y</code>的任何信息。 换句话说，梯度不会向后流经<code>u</code>到<code>x</code>。 因此，下面的反向传播函数计算<code>z=u*x</code>关于<code>x</code>的偏导数，同时将<code>u</code>作为常数处理， 而不是<code>z=x*x*x</code>关于<code>x</code>的偏导数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">x.grad.zero_()</span><br><span class="line">y = x * x</span><br><span class="line">u = y.detach()</span><br><span class="line">z = u * x</span><br><span class="line"></span><br><span class="line">z.<span class="built_in">sum</span>().backward()</span><br><span class="line">x.grad == u <span class="comment"># tensor([True, True, True, True])</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="1-5-概率"><a href="#1-5-概率" class="headerlink" title="1.5 概率"></a>1.5 概率</h2><p>[TODO]</p>
+<h1 id="2-线性神经网络"><a href="#2-线性神经网络" class="headerlink" title="2. 线性神经网络"></a>2. 线性神经网络</h1><h2 id="2-1-线性回归"><a href="#2-1-线性回归" class="headerlink" title="2.1 线性回归"></a>2.1 线性回归</h2><p>定义$\vec{x} &#x3D; \begin{bmatrix} x_1 &amp; x_2 &amp; x_3 &amp; … \end{bmatrix}$，参数$\vec{w} &#x3D; \begin{bmatrix} w_1 &amp; w_2 &amp; w_3 &amp; … \end{bmatrix}$</p>
+<p>$\hat{y} &#x3D; Xw+b$</p>
+<p>损失函数$J(w,b) &#x3D; \frac{1}{2m} \sum_{i&#x3D;1}^{m} {(y^i-\hat{y})}^2$</p>
+<p>随机梯度下降<code>SGD(stochastic gradient descent)</code></p>
+<h2 id="2-2-softmax"><a href="#2-2-softmax" class="headerlink" title="2.2 softmax"></a>2.2 softmax</h2><ul>
+<li><p><em>独热编码</em>（one-hot encoding）</p>
+<p>独热编码是一个向量，它的分量和类别一样多。 类别对应的分量设置为1，其他所有分量设置为0。</p>
+</li>
+</ul>
+<p><img src="https://zh.d2l.ai/_images/softmaxreg.svg" class="lazyload placeholder" data-srcset="https://zh.d2l.ai/_images/softmaxreg.svg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="../_images/softmaxreg.svg"></p>
+<p>要将输出视为概率，我们必须保证在任何数据上的输出都是非负的且总和为1。 此外，我们需要一个训练的目标函数，来激励模型精准地估计概率。 例如， 在分类器输出0.5的所有样本中，我们希望这些样本是刚好有一半实际上属于预测的类别。 这个属性叫做<em>校准</em>（calibration）。</p>
+<p>softmax函数能够将未规范化的预测变换为非负数并且总和为1，同时让模型保持 可导的性质。 为了完成这一目标，我们首先对每个未规范化的预测求幂，这样可以确保输出非负。 为了确保最终输出的概率值总和为1，我们再让每个求幂后的结果除以它们的总和。如下式：</p>
+<p>$\hat{y} &#x3D; softmax(o)$</p>
+<p>其中，<br>$$<br>\hat{y}<em>j &#x3D; \frac{exp(o_j)}{\sum</em>{k}{exp(o_k)}}<br>$$</p>
+<p>在预测过程中，我们仍然可以用下式来选择最有可能的类别。</p>
+<p>$argmax\ \hat{y}_j &#x3D; argmax\ o_j$</p>
+<p>尽管softmax是一个非线性函数，但softmax回归的输出仍然由输入特征的仿射变换决定。 因此，softmax回归是一个<em>线性模型</em>（linear model）。</p>
+<p>其中，对于任何标签$y$和模型预测$\hat{y}$，损失函数为：</p>
+<p>$l(y,\hat{y})&#x3D;-\sum_{j&#x3D;q}^{q}y_jlog\hat{y}_j$</p>
+<p>通常被称为<em>交叉熵损失</em>（cross-entropy loss）</p>
+<h1 id="3-多层感知机"><a href="#3-多层感知机" class="headerlink" title="3. 多层感知机"></a>3. 多层感知机</h1><h2 id="3-1-激活函数"><a href="#3-1-激活函数" class="headerlink" title="3.1 激活函数"></a>3.1 激活函数</h2><p>我们可以通过在网络中加入一个或多个隐藏层来克服线性模型的限制， 使其能处理更普遍的函数关系类型。 要做到这一点，最简单的方法是将许多全连接层堆叠在一起。 每一层都输出到上面的层，直到生成最后的输出。 我们可以把前$L-1$层看作表示，把最后一层看作线性预测器。 这种架构通常称为<em>多层感知机</em>（multilayer perceptron），通常缩写为<em>MLP</em>。</p>
+<p>多层感知机在输出层和输入层之间增加一个或多个全连接隐藏层，并通过激活函数转换隐藏层的输出。</p>
+<p><img src="https://zh.d2l.ai/_images/mlp.svg" class="lazyload placeholder" data-srcset="https://zh.d2l.ai/_images/mlp.svg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="../_images/mlp.svg"></p>
+<p><em>激活函数</em>（activation function）通过计算加权和并加上偏置来确定神经元是否应该被激活， 它们将输入信号转换为输出的可微运算。 大多数激活函数都是非线性的。 由于激活函数是深度学习的基础，下面简要介绍一些常见的激活函数。</p>
+<ul>
+<li>ReLU</li>
+</ul>
+<p>$ReLU(x) &#x3D; max(x,0)$</p>
+<p><img src="https://zh.d2l.ai/_images/output_mlp_76f463_21_0.svg" class="lazyload placeholder" data-srcset="https://zh.d2l.ai/_images/output_mlp_76f463_21_0.svg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="../_images/output_mlp_76f463_21_0.svg"></p>
+<ul>
+<li>sigmoid</li>
+</ul>
+<p>$sigmoid(x)&#x3D;\frac{1}{1+exp(-x)}$</p>
+<p><img src="https://zh.d2l.ai/_images/output_mlp_76f463_51_0.svg" class="lazyload placeholder" data-srcset="https://zh.d2l.ai/_images/output_mlp_76f463_51_0.svg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="../_images/output_mlp_76f463_51_0.svg"></p>
+<ul>
+<li>tanh</li>
+</ul>
+<p>$tanh(x) &#x3D; \frac{1-exp(-2x)}{1+exp(-2x)}$</p>
+<p><img src="https://zh.d2l.ai/_images/output_mlp_76f463_81_0.svg" class="lazyload placeholder" data-srcset="https://zh.d2l.ai/_images/output_mlp_76f463_81_0.svg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="../_images/output_mlp_76f463_81_0.svg"></p>
+<h2 id="3-2-误差"><a href="#3-2-误差" class="headerlink" title="3.2 误差"></a>3.2 误差</h2><p><em>训练误差</em>（training error）是指， 模型在训练数据集上计算得到的误差。 <em>泛化误差</em>（generalization error）是指， 模型应用在同样从原始样本的分布中抽取的无限多数据样本时，模型误差的期望。</p>
+<p>问题是，我们永远不能准确地计算出泛化误差。 这是因为无限多的数据样本是一个虚构的对象。 在实际中，我们只能通过将模型应用于一个独立的测试集来估计泛化误差， 该测试集由随机选取的、未曾在训练集中出现的数据样本构成。</p>
+<p><img src="https://zh.d2l.ai/_images/capacity-vs-error.svg" class="lazyload placeholder" data-srcset="https://zh.d2l.ai/_images/capacity-vs-error.svg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="../_images/capacity-vs-error.svg"></p>
+<h2 id="3-3-权重衰退"><a href="#3-3-权重衰退" class="headerlink" title="3.3 权重衰退"></a>3.3 权重衰退</h2><p>在训练参数化机器学习模型时， <em>权重衰减</em>（weight decay）是最广泛使用的正则化的技术之一， 它通常也被称为$L_2$正则化。</p>
+<p>一种简单的方法是通过线性函数$f(x)&#x3D;w^Tx$ 中的权重向量的某个范数来度量其复杂性， 例如$||w||^2$。 要保证权重向量比较小， 最常用方法是将其范数作为惩罚项加到最小化损失的问题中。 将原来的训练目标<em>最小化训练标签上的预测损失</em>， 调整为<em>最小化预测损失和惩罚项之和</em>。 现在，如果我们的权重向量增长的太大， 我们的学习算法可能会更集中于最小化权重范数$||w||^2$。 这正是我们想要的。</p>
+<p>我们通过<em>正则化常数</em>$\lambda$来描述这种权衡， 这是一个非负超参数，我们使用验证数据拟合：</p>
+<p>$L(w,b)+\frac{\lambda}{2}||w||_2$</p>
+<p>此外，为什么我们首先使用$L_2$范数，而不是$L_1$范数。 事实上，这个选择在整个统计领域中都是有效的和受欢迎的。 $L_2$正则化线性模型构成经典的<em>岭回归</em>（ridge regression）算法， $L_1$正则化线性回归是统计学中类似的基本模型， 通常被称为<em>套索回归</em>（lasso regression）。 使用$L_2$范数的一个原因是它对权重向量的大分量施加了巨大的惩罚。 这使得我们的学习算法偏向于在大量特征上均匀分布权重的模型。 在实践中，这可能使它们对单个变量中的观测误差更为稳定。 相比之下，$L_1$惩罚会导致模型将权重集中在一小部分特征上， 而将其他权重清除为零。 这称为<em>特征选择</em>（feature selection），这可能是其他场景下需要的。</p>
+<p>$L_2$正则化回归的小批量随机梯度下降更新如下式：</p>
+<p>$w &#x3D; (1-\alpha\lambda) w - \frac{\alpha}{n}\sum_{i&#x3D;1}^{n}(w^Tx^{(i)}+b-y^{(i)})$</p>
+<p>我们仅考虑惩罚项，优化算法在训练的每一步<em>衰减</em>权重。 与特征选择相比，权重衰减为我们提供了一种连续的机制来调整函数的复杂度。 较小的$\lambda$值对应较少约束的$w$， 而较大的$\lambda$值对$w$的约束更大。</p>
+<p>在<code>pytorch</code>中，我们在实例化优化器时直接通过<code>weight_decay</code>指定weight decay超参数。 默认情况下，PyTorch同时衰减权重和偏移。 这里我们只为权重设置了<code>weight_decay</code>，所以偏置参数$b$不会衰减。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">trainer = torch.optim.SGD([</span><br><span class="line">        &#123;<span class="string">&quot;params&quot;</span>:net[<span class="number">0</span>].weight,<span class="string">&#x27;weight_decay&#x27;</span>: wd&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;params&quot;</span>:net[<span class="number">0</span>].bias&#125;], lr=lr)</span><br><span class="line"><span class="comment"># wd为lambda</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>正则化是处理过拟合的常用方法：在训练集的损失函数中加入惩罚项，以降低学习到的模型的复杂度。</li>
+<li>保持模型简单的一个特别的选择是使用$L_2$惩罚的权重衰减。这会导致学习算法更新步骤中的权重衰减。</li>
+<li>权重衰减功能在深度学习框架的优化器中提供。</li>
+<li>在同一训练代码实现中，不同的参数集可以有不同的更新行为。</li>
+</ul>
+<h2 id="3-4-丢弃法"><a href="#3-4-丢弃法" class="headerlink" title="3.4 丢弃法"></a>3.4 丢弃法</h2><p>当面对更多的特征而样本不足时，线性模型往往会过拟合。 相反，当给出更多样本而不是特征，通常线性模型不会过拟合。 不幸的是，线性模型泛化的可靠性是有代价的。 简单地说，线性模型没有考虑到特征之间的交互作用。 对于每个特征，线性模型必须指定正的或负的权重，而忽略其他特征。</p>
+<p>那么关键的挑战就是如何注入这种噪声。 一种想法是以一种<em>无偏向</em>（unbiased）的方式注入噪声。 这样在固定住其他层时，每一层的期望值等于没有噪音时的值。</p>
+<p>在每次训练迭代中，他将从均值为零的分布$\epsilon~N(0,\delta^2)$采样噪声添加到输入$x$， 从而产生扰动点$x’&#x3D;x+\epsilon$， 预期是$E(x’)&#x3D;x$。</p>
+<p>在标准暂退法正则化中，通过按保留（未丢弃）的节点的分数进行规范化来消除每一层的偏差。 换言之，每个中间活性值ℎ以<em>暂退概率</em>$p$由随机变量ℎ′替换，如下所示：</p>
+<p>$h’&#x3D; 0 \ when\ p&#x3D;0$</p>
+<p>$h’&#x3D;\frac{h}{1-p} \ otherwise$</p>
+<p><img src="https://zh.d2l.ai/_images/dropout2.svg" class="lazyload placeholder" data-srcset="https://zh.d2l.ai/_images/dropout2.svg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="../_images/dropout2.svg"></p>
+<p>对于深度学习框架的高级API，我们只需在每个全连接层之后添加一个<code>Dropout</code>层， 将暂退概率作为唯一的参数传递给它的构造函数。 在训练时，<code>Dropout</code>层将根据指定的暂退概率随机丢弃上一层的输出（相当于下一层的输入）。 在测试时，<code>Dropout</code>层仅传递数据。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">net = nn.Sequential(nn.Flatten(),</span><br><span class="line">        nn.Linear(<span class="number">784</span>, <span class="number">256</span>),</span><br><span class="line">        nn.ReLU(),</span><br><span class="line">        <span class="comment"># 在第一个全连接层之后添加一个dropout层</span></span><br><span class="line">        nn.Dropout(dropout1),</span><br><span class="line">        nn.Linear(<span class="number">256</span>, <span class="number">256</span>),</span><br><span class="line">        nn.ReLU(),</span><br><span class="line">        <span class="comment"># 在第二个全连接层之后添加一个dropout层</span></span><br><span class="line">        nn.Dropout(dropout2),</span><br><span class="line">        nn.Linear(<span class="number">256</span>, <span class="number">10</span>))</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>暂退法在前向传播过程中，计算每一内部层的同时丢弃一些神经元。</li>
+<li>暂退法可以避免过拟合，它通常与控制权重向量的维数和大小结合使用的。</li>
+<li>暂退法将活性值ℎ替换为具有期望值ℎ的随机变量。</li>
+<li>暂退法仅在训练期间使用。</li>
 </ul>
 
       </div>
@@ -412,7 +552,47 @@
 
 
 
+  
+  <div class="post-nav-prev post-nav-item">
+    <div class="post-nav-img" style="background-size: cover; 
+      background-position: center center;">
+      <img class="lazyload lazyload placeholder" src="https://img1.baidu.com/it/u=4282277671,2501328998&fm=253&fmt=auto&app=138&f=JPEG?w=449&h=252" class="lazyload placeholder" data-srcset="https://img1.baidu.com/it/u=4282277671,2501328998&fm=253&fmt=auto&app=138&f=JPEG?w=449&h=252" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+    </div>
+    <a href="/2025/01/26/ai-mianjing/" class="post-nav-link">
+      <div class="title">
+        <i class="fas fa-angle-left"></i> Prev:
+        <div class="title-text">AI面经</div>
+      </div>
+      
+      <!-- <div class="content">
+        1 机器学习、深度学习、与人工智能对比
+机器学习是一种实现人工智能的方法，深度学习是一种实现机器学习的技术
 
+
+人工智能
+      </div> -->
+    </a>
+  </div>
+
+
+
+  
+  <div class="post-nav-next post-nav-item">
+    <div class="post-nav-img" style="background-size: cover; 
+      background-position: center center;">
+      <img class="lazyload lazyload placeholder" src="https://img2.baidu.com/it/u=1093757134,3274186314&fm=253&fmt=auto&app=120&f=JPEG?w=800&h=500" class="lazyload placeholder" data-srcset="https://img2.baidu.com/it/u=1093757134,3274186314&fm=253&fmt=auto&app=120&f=JPEG?w=800&h=500" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" src="" alt="">
+    </div>
+    <a href="/2023/11/25/machine-learning-notes/" class="post-nav-link">
+      <div class="title">
+        Next: <i class="fas fa-angle-right"></i>
+        <div class="title-text">Machine Learning Notes</div>
+      </div>
+      <!-- <div class="content">
+        Course 1监督学习：输入特征x，输出目标y。对数据集进行预测，分为回归和分类
+无监督学习：输入特征x，没有目标y，
+      </div> -->
+    </a>
+  </div>
 
 </div>
 
@@ -518,116 +698,29 @@
   <div class="layout_sticky">    
     
       
-      
-      
-      
-  <section class="widget side_archives">
-    
-    <header><a style="color: red" href='/archives/'><i class="fas fa-archive fa-fw" aria-hidden="true"></i><span class='name'>归档</span></a></header><div class="content"><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/02/"><span class="card-archive-list-date">February 2025</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/01/"><span class="card-archive-list-date">January 2025</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/01/"><span class="card-archive-list-date">January 2024</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/11/"><span class="card-archive-list-date">November 2023</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/10/"><span class="card-archive-list-date">October 2023</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/09/"><span class="card-archive-list-date">September 2023</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/08/"><span class="card-archive-list-date">August 2023</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/07/"><span class="card-archive-list-date">July 2023</span><span class="card-archive-list-count">1</span></a></li></ul></div>
-  </section>
-
-      <section class="widget side_webinfo">
+<section class="widget side_toc">
   
   <header>
     
-      <i style="color: " class="fas fa-chart-line fa-fw" aria-hidden="true"></i><span class='name' style="color: ">站点信息</span>
+      <i style="color: " class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name' style="color: ">本文目录</span>
     
   </header>
 
 
   <div class='content'>
-    <div class="webinfo">
-      
-        <div class="webinfo-item">
-          <div>文章数目：</div>
-          <div>12 篇</div>
-        </div>
-      
-
-      
-        <div class="webinfo-item">
-          <div>已运行时间：</div>
-          <div id="webinfo-runtime-count" publish_date="03/24/2020 21:34:09"></div>
-        </div>
-        <script>
-          var BirthDay = new Date(new Date('2023/01/23'));
-          var today = new Date();
-          var timeold = (today.getTime() - BirthDay.getTime());
-          var daysold = Math.floor(timeold / (24 * 60 * 60 * 1000));
-          document.getElementById('webinfo-runtime-count').innerHTML = daysold + ' 天';
-        </script>
-      
-
-
-      
-
-      
-
-      
-
-      
-        <div class="webinfo-item">
-          <div>最后活动时间：</div>
-          
-            <div id="last-update" style="display: none;">Sat Mar 01 2025 23:27:50 GMT+0800 (中国标准时间)</div>
-            <div id="last-update-show">2025-03-01 日</div>
-          
-        </div>
-        
-        <script>
-          function timeago(dateTimeStamp) {
-              var minute = 1000 * 60; //把分，时，天，周，半个月，一个月用毫秒表示
-              var hour = minute * 60;
-              var day = hour * 24;
-              var week = day * 7;
-              var month = day * 30;
-              var now = new Date().getTime(); //获取当前时间毫秒
-              var diffValue = now - dateTimeStamp; //时间差
-              if (diffValue < 0) {
-                  return;
-              }
-              var minC = diffValue / minute; //计算时间差的分，时，天，周，月
-              var hourC = diffValue / hour;
-              var dayC = diffValue / day;
-              var weekC = diffValue / week;
-              var monthC = diffValue / month;
-              if (monthC >= 1 && monthC <= 3) {
-                  result = " " + parseInt(monthC) + " 月前"
-              } else if (weekC >= 1 && weekC <= 3) {
-                  result = " " + parseInt(weekC) + " 周前"
-              } else if (dayC >= 1 && dayC <= 6) {
-                  result = " " + parseInt(dayC) + " 天前"
-              } else if (hourC >= 1 && hourC <= 23) {
-                  result = " " + parseInt(hourC) + " 小时前"
-              } else if (minC >= 1 && minC <= 59) {
-                  result = " " + parseInt(minC) + " 分钟前"
-              } else if (diffValue >= 0 && diffValue <= minute) {
-                  result = "刚刚"
-              } else {
-                  var datetime = new Date();
-                  datetime.setTime(dateTimeStamp);
-                  var Nyear = datetime.getFullYear();
-                  var Nmonth = datetime.getMonth() + 1 < 10 ? "0" + (datetime.getMonth() + 1) : datetime.getMonth() + 1;
-                  var Ndate = datetime.getDate() < 10 ? "0" + datetime.getDate() : datetime.getDate();
-                  var Nhour = datetime.getHours() < 10 ? "0" + datetime.getHours() : datetime.getHours();
-                  var Nminute = datetime.getMinutes() < 10 ? "0" + datetime.getMinutes() : datetime.getMinutes();
-                  var Nsecond = datetime.getSeconds() < 10 ? "0" + datetime.getSeconds() : datetime.getSeconds();
-                  result = Nyear + "-" + Nmonth + "-" + Ndate
-              }
-              return result;
-          }
-          var lastUpDate = document.getElementById('last-update').innerHTML;
-          try {
-            document.getElementById('last-update-show').innerHTML = timeago(new Date(lastUpDate));
-          } catch (error) {
-            document.getElementById('last-update-show').innerHTML = '2025-03-01 日';
-          }
-        </script>
-        
-      
+    <div class="toc-main">
+      <div class="toc-content">
+        <!-- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86"><span class="toc-text">1. 预备知识</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86"><span class="toc-text">1.1 数据处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0"><span class="toc-text">1.2 线性代数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-%E5%BE%AE%E7%A7%AF%E5%88%86"><span class="toc-text">1.3 微积分</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-4-%E8%87%AA%E5%8A%A8%E5%BE%AE%E5%88%86"><span class="toc-text">1.4 自动微分</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-5-%E6%A6%82%E7%8E%87"><span class="toc-text">1.5 概率</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E7%BA%BF%E6%80%A7%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="toc-text">2. 线性神经网络</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92"><span class="toc-text">2.1 线性回归</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-softmax"><span class="toc-text">2.2 softmax</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA"><span class="toc-text">3. 多层感知机</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0"><span class="toc-text">3.1 激活函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-%E8%AF%AF%E5%B7%AE"><span class="toc-text">3.2 误差</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-%E6%9D%83%E9%87%8D%E8%A1%B0%E9%80%80"><span class="toc-text">3.3 权重衰退</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-4-%E4%B8%A2%E5%BC%83%E6%B3%95"><span class="toc-text">3.4 丢弃法</span></a></li></ol></li></ol> -->
+        <div class="toc"></div>
+      </div>
     </div>
   </div>
 </section>
+<!-- 手机端目录按钮 -->
+<div id="toc-mobile-btn">
+  <i class="fas fa-list-ul" aria-hidden="true"></i>
+</div>
+
       
     
   </div>
@@ -756,6 +849,59 @@
 		height: 100%;
 	}
 </style>
+
+
+  <script>
+  // https://github.com/theme-next/hexo-theme-next/blob/master/layout/_third-party/math/mathjax.swig
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = 'https://unpkg.com/mathjax@3.0/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    // 文章章节标题不能为 “MathJax” ，否则会报错。
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
 
 
 
