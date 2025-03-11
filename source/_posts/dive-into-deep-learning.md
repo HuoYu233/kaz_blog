@@ -152,7 +152,7 @@ $$
 - 反向传播
 
 ```python
-x = torch.arange(4.0, requires_grad=True)
+x = torch.arange(4.0, requires_grad=True) #需要保存梯度
 y = 2 * torch.dot(x, x)
 print(x.grad) # None
 y.backward()
@@ -171,7 +171,7 @@ x.grad.zero_()
 x.grad.zero_()
 y = x * x
 # 等价于y.backward(torch.ones(len(x)))
-y.sum().backward()
+y.sum().backward() #对y的sum反向传播，把张量变成标量
 x.grad # tensor([0., 2., 4., 6.])
 ```
 
@@ -182,12 +182,14 @@ x.grad # tensor([0., 2., 4., 6.])
 ```python
 x.grad.zero_()
 y = x * x
-u = y.detach()
+u = y.detach() #分离y
 z = u * x
 
 z.sum().backward()
 x.grad == u # tensor([True, True, True, True])
 ```
+
+- 深度学习框架可以自动计算导数：我们首先将梯度附加到想要对其计算偏导数的变量上，然后记录目标值的计算，执行它的反向传播函数，并访问得到的梯度。
 
 ## 1.5 概率
 
@@ -342,6 +344,13 @@ net = nn.Sequential(nn.Flatten(),
 - 暂退法可以避免过拟合，它通常与控制权重向量的维数和大小结合使用的。
 - 暂退法将活性值ℎ替换为具有期望值ℎ的随机变量。
 - 暂退法仅在训练期间使用。
+
+## 3.5 正向传播、反向传播、计算图
+
+- 前向传播在神经网络定义的计算图中按顺序计算和存储中间变量，它的顺序是从输入层到输出层。
+- 反向传播按相反的顺序（从输出层到输入层）计算和存储神经网络的中间变量和参数的梯度。
+- 在训练深度学习模型时，前向传播和反向传播是相互依赖的。
+- 训练比预测需要更多的内存。
 
 
 

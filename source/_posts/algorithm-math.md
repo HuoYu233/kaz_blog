@@ -82,6 +82,8 @@ void get_primes(int n)
 
 $n$只会被他的最小质因子筛掉
 
+$O(n)$
+
 ```cpp
 int primes[N], cnt;     // primes[]存储所有素数
 bool st[N];         // st[x]存储x是否被筛掉
@@ -135,6 +137,8 @@ int gcd(int a, int b)
     return b ? gcd(b, a % b) : a;
 }
 ```
+
+可以使用库函数`__gcd(int a, int b)`，此外最小公倍数=$\frac{a  b}{gcd(a,b)}$
 
 ### 欧拉函数
 
