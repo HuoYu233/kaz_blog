@@ -6,6 +6,8 @@ img: https://img0.baidu.com/it/u=3520508,2967101156&fm=253&fmt=auto&app=138&f=JP
 excerpt: transformer论文阅读笔记
 ---
 
+![img](https://imgmd.oss-cn-shanghai.aliyuncs.com/BERT_IMG/attention-%E8%AE%A1%E7%AE%97%E5%9B%BE.png)
+
 # 之前的工作
 
 RNN 存在长期依赖问题（隐含信息一直传递到后面会消失），且无法并行
@@ -34,6 +36,10 @@ N=6，在输入添加一个掩码多头注意力
 
 通过Q，K，V，计算两个词的相似度
 
+Transformer采用自注意力机制
+
+![img](https://imgmd.oss-cn-shanghai.aliyuncs.com/BERT_IMG/QKV-%E7%9F%A9%E9%98%B5%E8%A1%A8%E7%A4%BA.jpg)
+
 ## Scaled Dot-Product Attention
 
 Q，K的维度都是$d_k$，V的维度是$d_v$
@@ -48,9 +54,11 @@ $Attention(Q,K,V) = softmax( \frac{QK^T}{\sqrt{d_k}}  )V$
 
 ## 多头自注意力机制
 
-h=8，八头自注意力
+h=8
 
-TODO
+**多头相当于把原始信息 Source 放入了多个子空间中，也就是捕捉了多个信息，对于使用 multi-head（多头） attention 的简单回答就是，多头保证了 attention 可以注意到不同子空间的信息，捕捉到更加丰富的特征信息**。
+
+![img](https://imgmd.oss-cn-shanghai.aliyuncs.com/BERT_IMG/multi-head-%E6%8B%BC%E6%8E%A5.jpg)
 
 ## 其他
 
@@ -59,6 +67,8 @@ TODO
 KV来自编码器，Q来自解码器
 
 掩码多头注意力时，点积设置为-∞
+
+![img](https://imgmd.oss-cn-shanghai.aliyuncs.com/BERT_IMG/mask-attention-map-softmax.jpg)
 
 ## 前馈神经网络
 
@@ -72,11 +82,13 @@ $FFN(x) = ReLU(xW1 + b1)W2 + b2$
 
 ## 嵌入层和Softmax
 
-在两个嵌入层的矩阵参数选择一样的，然后再乘以$\sqrt{d_model}$
+在两个嵌入层的矩阵参数选择一样的，然后再乘以$\sqrt{d_{model}}$
 
 （可能由于L2正则化权重值很小，下面还要和位置编码相加，保证两个向量的scale差不多，所以乘）
 
 ## 位置编码
+
+**由于 Attention 值的计算最终会被加权求和，也就是说两者最终计算的 Attention 值都是一样的，进而也就表明了 Attention 丢掉了 X1的序列顺序信息。**
 
 Attention自己是没有包含时序的信息的
 所以要有位置编码
@@ -86,3 +98,7 @@ $PE(pos,2i) = sin(pos/10000^{2i/d_{model}})$
 $PE(pos,2i + 1) = cos(pos/10000^{2i/d_{model}})$
 
 PE都在[-1,1]且$PE_{pos_k}$是$PE_{pos}$的线性组合
+
+**某个单词的位置信息是其他单词位置信息的线性组合，这种线性组合就意味着位置向量中蕴含了相对位置信息。**
+
+$X_{final\_embedding}=Embedding+PositionalEmbedding$

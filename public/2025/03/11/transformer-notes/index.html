@@ -377,7 +377,8 @@
   <div class="main-content">
     <article class="post post-detail">
       <div class="post-content">
-        <h1 id="之前的工作"><a href="#之前的工作" class="headerlink" title="之前的工作"></a>之前的工作</h1><p>RNN 存在长期依赖问题（隐含信息一直传递到后面会消失），且无法并行</p>
+        <p><img src="https://imgmd.oss-cn-shanghai.aliyuncs.com/BERT_IMG/attention-%E8%AE%A1%E7%AE%97%E5%9B%BE.png" class="lazyload placeholder" data-srcset="https://imgmd.oss-cn-shanghai.aliyuncs.com/BERT_IMG/attention-%E8%AE%A1%E7%AE%97%E5%9B%BE.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="img"></p>
+<h1 id="之前的工作"><a href="#之前的工作" class="headerlink" title="之前的工作"></a>之前的工作</h1><p>RNN 存在长期依赖问题（隐含信息一直传递到后面会消失），且无法并行</p>
 <p>LSTM 通过遗忘门，输入门，输出门解决长期依赖问题，但是还是无法并行</p>
 <p>Transformer仅仅依赖注意力机制（Attention），不需要考虑两个词离得多远，且能实现并行</p>
 <h1 id="模型架构"><a href="#模型架构" class="headerlink" title="模型架构"></a>模型架构</h1><p>输入$(x_1,x_2,…,x_n)$，编码器输出$(z_1,z_2,…,z_n)$，输入到解码器输出$(y_1,y_2,…,y_m)$</p>
@@ -386,26 +387,33 @@
 <h2 id="编码器"><a href="#编码器" class="headerlink" title="编码器"></a>编码器</h2><p>N&#x3D;6，每一层有两个子层：多头注意力层和前馈神经网络层，每个子层后面还有一个残差网络和层归一化(Add &amp; Norm)</p>
 <h2 id="解码器"><a href="#解码器" class="headerlink" title="解码器"></a>解码器</h2><p>N&#x3D;6，在输入添加一个掩码多头注意力</p>
 <h2 id="注意力机制"><a href="#注意力机制" class="headerlink" title="注意力机制"></a>注意力机制</h2><p>通过Q，K，V，计算两个词的相似度</p>
+<p>Transformer采用自注意力机制</p>
+<p><img src="https://imgmd.oss-cn-shanghai.aliyuncs.com/BERT_IMG/QKV-%E7%9F%A9%E9%98%B5%E8%A1%A8%E7%A4%BA.jpg" class="lazyload placeholder" data-srcset="https://imgmd.oss-cn-shanghai.aliyuncs.com/BERT_IMG/QKV-%E7%9F%A9%E9%98%B5%E8%A1%A8%E7%A4%BA.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="img"></p>
 <h2 id="Scaled-Dot-Product-Attention"><a href="#Scaled-Dot-Product-Attention" class="headerlink" title="Scaled Dot-Product Attention"></a>Scaled Dot-Product Attention</h2><p>Q，K的维度都是$d_k$，V的维度是$d_v$</p>
 <p>Q，K做内积，再除以$\sqrt{d_k}$，做一层<code>softmax</code>就是V的权重</p>
 <p>$Attention(Q,K,V) &#x3D; softmax( \frac{QK^T}{\sqrt{d_k}}  )V$</p>
 <p>为了防止softmax的梯度很小减慢训练速度，所以处理$\sqrt{d_k}$</p>
 <p><img src="/img/transformer-notes/pic-2.png" class="lazyload placeholder" data-srcset="/img/transformer-notes/pic-2.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="pic-2"></p>
-<h2 id="多头自注意力机制"><a href="#多头自注意力机制" class="headerlink" title="多头自注意力机制"></a>多头自注意力机制</h2><p>h&#x3D;8，八头自注意力</p>
-<p>TODO</p>
+<h2 id="多头自注意力机制"><a href="#多头自注意力机制" class="headerlink" title="多头自注意力机制"></a>多头自注意力机制</h2><p>h&#x3D;8</p>
+<p><strong>多头相当于把原始信息 Source 放入了多个子空间中，也就是捕捉了多个信息，对于使用 multi-head（多头） attention 的简单回答就是，多头保证了 attention 可以注意到不同子空间的信息，捕捉到更加丰富的特征信息</strong>。</p>
+<p><img src="https://imgmd.oss-cn-shanghai.aliyuncs.com/BERT_IMG/multi-head-%E6%8B%BC%E6%8E%A5.jpg" class="lazyload placeholder" data-srcset="https://imgmd.oss-cn-shanghai.aliyuncs.com/BERT_IMG/multi-head-%E6%8B%BC%E6%8E%A5.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="img"></p>
 <h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>在Encoder-Decoder注意力层</p>
 <p>KV来自编码器，Q来自解码器</p>
 <p>掩码多头注意力时，点积设置为-∞</p>
+<p><img src="https://imgmd.oss-cn-shanghai.aliyuncs.com/BERT_IMG/mask-attention-map-softmax.jpg" class="lazyload placeholder" data-srcset="https://imgmd.oss-cn-shanghai.aliyuncs.com/BERT_IMG/mask-attention-map-softmax.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="img"></p>
 <h2 id="前馈神经网络"><a href="#前馈神经网络" class="headerlink" title="前馈神经网络"></a>前馈神经网络</h2><p>由两个线性回归和一个ReLU的全连接层</p>
 <p>$FFN(x) &#x3D; ReLU(xW1 + b1)W2 + b2$</p>
 <p>内层的维度2048</p>
 <p>（先由attention计算相似度拿到感兴趣的信息，语义空间在MLP隐藏层里面转化为2048维）</p>
-<h2 id="嵌入层和Softmax"><a href="#嵌入层和Softmax" class="headerlink" title="嵌入层和Softmax"></a>嵌入层和Softmax</h2><p>在两个嵌入层的矩阵参数选择一样的，然后再乘以$\sqrt{d_model}$</p>
+<h2 id="嵌入层和Softmax"><a href="#嵌入层和Softmax" class="headerlink" title="嵌入层和Softmax"></a>嵌入层和Softmax</h2><p>在两个嵌入层的矩阵参数选择一样的，然后再乘以$\sqrt{d_{model}}$</p>
 <p>（可能由于L2正则化权重值很小，下面还要和位置编码相加，保证两个向量的scale差不多，所以乘）</p>
-<h2 id="位置编码"><a href="#位置编码" class="headerlink" title="位置编码"></a>位置编码</h2><p>Attention自己是没有包含时序的信息的<br>所以要有位置编码</p>
+<h2 id="位置编码"><a href="#位置编码" class="headerlink" title="位置编码"></a>位置编码</h2><p><strong>由于 Attention 值的计算最终会被加权求和，也就是说两者最终计算的 Attention 值都是一样的，进而也就表明了 Attention 丢掉了 X1的序列顺序信息。</strong></p>
+<p>Attention自己是没有包含时序的信息的<br>所以要有位置编码</p>
 <p>$PE(pos,2i) &#x3D; sin(pos&#x2F;10000^{2i&#x2F;d_{model}})$</p>
 <p>$PE(pos,2i + 1) &#x3D; cos(pos&#x2F;10000^{2i&#x2F;d_{model}})$</p>
 <p>PE都在[-1,1]且$PE_{pos_k}$是$PE_{pos}$的线性组合</p>
+<p><strong>某个单词的位置信息是其他单词位置信息的线性组合，这种线性组合就意味着位置向量中蕴含了相对位置信息。</strong></p>
+<p>$X_{final_embedding}&#x3D;Embedding+PositionalEmbedding$</p>
 
       </div>
       <div class="post-tags-categories">
