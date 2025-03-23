@@ -11,7 +11,7 @@
   <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-  <title>基于Transformer的催化反应产率预测 | Kaz&#39;s Blog</title>
+  <title>Optuna搜参优化LightGBM预测催化反应产率 | Kaz&#39;s Blog</title>
 
   <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/img/favicon.ico">
   <link rel="stylesheet" href="https://at.alicdn.com/t/font_1911880_c1nvbyezg17.css">
@@ -346,7 +346,7 @@
   <div class="post-detail-header_info-box">
     <div class="title-box">
       <span class="title">
-        基于Transformer的催化反应产率预测
+        Optuna搜参优化LightGBM预测催化反应产率
       </span>
     </div>
     
@@ -380,7 +380,7 @@
         <h1 id="任务概述"><a href="#任务概述" class="headerlink" title="任务概述"></a>任务概述</h1><p>构建一个能够准确预测碳氮成键反应产率的预测模型。  </p>
 <p>通过对反应中所包含的反应底物、添加剂、溶剂以及产物进行合理的特征化，运用机器学习模型或者深度学习模型拟合预测反应的产率。</p>
 <p>或者利用训练集数据对开源大语言模型进行微调以预测反应的产率。</p>
-<p>训练集中包含19999条反应数据，测试集中包含3539条反应数据。约85%与12%。每条训练数据包含 rxnid, Reactant1, Reactant2 , Product , Additive , Solvent , Yield字段。其中 Reactant1 , Reactant2 , Product , Additive , Solvent 字段中为对应物质的SMILES字符串，Yield字段为目标字段，是经过归一化的浮点数。</p>
+<p>训练集中包含19999条反应数据，测试集中包含3539条反应数据。每条训练数据包含 rxnid, Reactant1, Reactant2 , Product , Additive , Solvent , Yield字段。其中 Reactant1 , Reactant2 , Product , Additive , Solvent 字段中为对应物质的SMILES字符串，Yield字段为目标字段，是经过归一化的浮点数。</p>
 <p><strong>评价指标</strong></p>
 <p>实验真实结果与预测结果$R^2$决定系数来进行评测:<br>$$<br>R^2(y,\hat{y})&#x3D;1-\frac{\sum_{i&#x3D;1}^n(y_i-\hat{y}<em>i)^2}{\sum</em>{i&#x3D;1}^n(y_i-\bar{y})^2}<br>$$</p>
 <h1 id="baseline"><a href="#baseline" class="headerlink" title="baseline"></a>baseline</h1><ol>
@@ -409,14 +409,68 @@
 <h2 id="RDKit"><a href="#RDKit" class="headerlink" title="RDKit"></a>RDKit</h2><p>RDkit会将分子读取为RDkit中专属的rdkit.Chem.rdchem.Mol对象，并以Mol对象为基础，可以对分子进行转化为各种表达形式，例如SMILES</p>
 <p>RDkit是化学信息学中主要的工具，是开源的。网址：<a target="_blank" rel="noopener" href="http://www.rdkit.org/">http://www.rdkit.org</a><br>支持WIN\MAC\Linux，可以被python、Java、C调用。几乎所有的与化学信息学相关的内容都可以在上面找到。</p>
 <h2 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h2><p>baseline的$R^2 &#x3D; 0.0745336043830066$，约0.08</p>
-<h1 id="RNN建模"><a href="#RNN建模" class="headerlink" title="RNN建模"></a>RNN建模</h1><p>RNN（Recurrent Neural Network）是处理序列数据的一把好手。RNN的网络每层除了会有自己的输出以外，还会输出一个隐向量到下一层。</p>
-<p><img src="https://img-blog.csdnimg.cn/direct/4d59745e6a904f34afcf1713ff2cd2c3.png" class="lazyload placeholder" data-srcset="https://img-blog.csdnimg.cn/direct/4d59745e6a904f34afcf1713ff2cd2c3.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp"></p>
-<p>其中，每一层相当于做了一次线性变换：</p>
-<p>$$h_n &#x3D; \sigma(W_{hh}h_{n-1} + W_{hx}x_n + b_n)$$</p>
-<p>每层的输出：$$ y_n &#x3D; Softmax(Vh_n + c)$$</p>
-<p>通过隐向量的不断传递，序列后面的部分就通过“阅读”隐向量，获取前面序列的信息，从而提升学习能力。</p>
-<p>但是RNN也有缺点：如果序列太长，那么两个相距比较远的字符之间的联系需要通过多个隐藏向量。</p>
-<p>同时，RNN需要一层一层地传递，所以并行能力差，同时也比较容易出现梯度消失或梯度爆炸问题。</p>
+<h1 id="My-model"><a href="#My-model" class="headerlink" title="My model"></a>My model</h1><p>SMILE表达式：字符串表示分子结构的化学信息学标准。</p>
+<p>分子指纹：它通过捕捉分子中每个原子的局部环境信息，将分子结构编码为固定长度的二进制向量或者整数向量</p>
+<ul>
+<li>对于每个原子，根据其邻居的标识符更新自己的标识符。</li>
+<li>更新规则通常基于哈希函数，将邻居的标识符组合成一个新的标识符。</li>
+<li>迭代次数等于半径 r。</li>
+</ul>
+<p><strong>具体的从SMILES表达式转成分子指纹的步骤：</strong></p>
+<p>在 Morgan 指纹中，每个原子的 <strong>初始标识符</strong> 是基于原子的局部环境计算的。具体来说，初始标识符通常由以下原子属性决定：</p>
+<ul>
+<li><p>原子类型（如 C、N、O 等）</p>
+</li>
+<li><p>原子的电荷</p>
+</li>
+<li><p>原子的度（连接的键数）</p>
+</li>
+<li><p>原子的氢原子数</p>
+</li>
+<li><p>其他可能的属性（如是否在环中）</p>
+</li>
+<li><p>哈希函数将标识符映射到一个固定范围的整数（通常是 0 到 $2^{n}-1$，其中 n是指纹的位数）。</p>
+</li>
+<li><p>例如，如果指纹长度是 1024 位，则哈希值的范围是 0 到 1023。</p>
+</li>
+</ul>
+<p><strong>指纹生成</strong></p>
+<ul>
+<li>将所有原子的哈希值映射到一个固定长度的位向量中。</li>
+<li>如果某个哈希值对应的位被置为 1，则表示该特征存在于分子中。</li>
+</ul>
+<p>Optuna：</p>
+<p>内含优化搜索，不用穷举式搜索，速度更快。</p>
+<p>支持连续值，网格只支持离散值</p>
+<p>LightGBM：</p>
+<p>轻量级的梯度提升树</p>
+<p>通过数据压缩使得训练更快</p>
+<p><strong>为什么不用随机森林</strong></p>
+<p>GBDT在大数据集上表现比RF好，LightGBM又是在XgBoost上进行优化的</p>
+<p><strong>有哪些特征？</strong></p>
+<p>最大叶子数量，最大深度，每个节点的最小样本数，建树随机选择的特征比例，随机选择的样本比例，正则化项系数</p>
+<p>结果：</p>
+<p>Best trial:<br>  R2: 0.32038588335457874<br>  Params:<br>    num_leaves: 250<br>    learning_rate: 0.04051655617169133<br>    max_depth: 17<br>    min_data_in_leaf: 10<br>    feature_fraction: 0.4350306415682709<br>    bagging_fraction: 0.6540225841297226<br>    bagging_freq: 1<br>    lambda_l1: 0.000524499451410933<br>    lambda_l2: 0.01259645970374942</p>
+<p>LGBM算法提出的核心目的是为了解决GBDT算法框架在处理海量数据时计算效率低下的问题，而从实践效果来看，LGBM也确实做到了这点——LGBM以牺牲极小的计算精度为代价，将GBDT的计算效率提升了近20倍</p>
+<p>Optuna 相比 GridSearch 有以下优势：</p>
+<ol>
+<li><strong>效率更高</strong><ul>
+<li><strong>GridSearch</strong>：遍历所有参数组合，计算量大，耗时长。</li>
+<li><strong>Optuna</strong>：基于贝叶斯优化等算法，智能选择有潜力的参数，减少不必要的计算。</li>
+</ul>
+</li>
+<li><strong>支持复杂搜索空间</strong><ul>
+<li><strong>GridSearch</strong>：只能处理离散参数值。</li>
+<li><strong>Optuna</strong>：支持连续、离散、条件参数等多种类型，适应复杂搜索空间。</li>
+</ul>
+</li>
+<li><strong>动态调整搜索方向</strong><ul>
+<li><strong>GridSearch</strong>：固定搜索路径，无法根据结果调整。</li>
+<li><strong>Optuna</strong>：根据历史结果动态调整搜索方向，更快找到最优解。</li>
+</ul>
+</li>
+</ol>
+<p>就是要手动的交叉验证</p>
 
       </div>
       <div class="post-tags-categories">
@@ -587,7 +641,7 @@ LSTM 通过遗忘门，输入门，输出门解
   <div class='content'>
     <div class="toc-main">
       <div class="toc-content">
-        <!-- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%BB%E5%8A%A1%E6%A6%82%E8%BF%B0"><span class="toc-text">任务概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#baseline"><span class="toc-text">baseline</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#SMILES"><span class="toc-text">SMILES</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Morgan-fingerprint"><span class="toc-text">Morgan fingerprint</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RDKit"><span class="toc-text">RDKit</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E6%9E%9C"><span class="toc-text">结果</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#RNN%E5%BB%BA%E6%A8%A1"><span class="toc-text">RNN建模</span></a></li></ol> -->
+        <!-- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%BB%E5%8A%A1%E6%A6%82%E8%BF%B0"><span class="toc-text">任务概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#baseline"><span class="toc-text">baseline</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#SMILES"><span class="toc-text">SMILES</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Morgan-fingerprint"><span class="toc-text">Morgan fingerprint</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RDKit"><span class="toc-text">RDKit</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E6%9E%9C"><span class="toc-text">结果</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#My-model"><span class="toc-text">My model</span></a></li></ol> -->
         <div class="toc"></div>
       </div>
     </div>
