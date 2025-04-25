@@ -7,7 +7,7 @@ type: about
 
 [[Email](mailto:1981270473@qq.com)] | [[Gitee](https://gitee.com/huoyu233)] | [[Github](https://github.com/HuoYu233)] | [[Bilibili](https://space.bilibili.com/82505737)]
 
-[福州大学](https://www.fzu.edu.cn/)环境工程本科在读
+厦门大学人工智能硕士研究生在读
 
 - Basic Skills：CET-6、Java、C/C++、Python、JavaScript
 - Frameworks：Pytorch、Mybatis、Springboot、Vue、Uniapp、Redis
@@ -25,6 +25,8 @@ type: about
 ## 荣誉奖项
 
 **[Undergraduate]**
+
+- [2025.4] 福州大学第二十二届程序设计竞赛暨校ACM/ICPC集训队选拔赛**三等奖**
 
 - [2024.12] 第六届全国高校计算机能力挑战赛C++程序设计国赛**二等奖**
 - [2024.12] 福州大学环安学院2023~2024学年下学期学习进步奖(**50%**)
