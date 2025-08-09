@@ -91,11 +91,19 @@ h=8
 
 ![img](https://imgmd.oss-cn-shanghai.aliyuncs.com/BERT_IMG/multi-head-%E6%8B%BC%E6%8E%A5.jpg)
 
-投影参数矩阵 $W^Q_i ∈ R^{d_{model}×d_k}$ , $W^K_i ∈ R^{d_{model}×d_k}$  , $W^V_i ∈ R^{d_{model}×d_v}$ 以及$W_O ∈ R^{{hdv}×d_{model}}$ .   dk = dv = dmodel/h = 64.
+投影参数矩阵
+
+$W^Q_i \in R^{d_{model}×d_k}$ 
+
+$W^K_i \in R^{d_{model}×d_k}$  , 
+
+$W^V_i \in R^{d_{model}×d_v}$ 
+
+$W_O \in R^{ {hd_v}×d_{model} }$
+
+dk = dv = dmodel/h = 64
 
 计算消耗和一次注意力差不多，但是能学到更多的信息。
-
-
 
 ## masked多头注意力
 
@@ -104,8 +112,6 @@ h=8
 计算出来的结果作为上面的input的Q
 
 ![img](https://imgmd.oss-cn-shanghai.aliyuncs.com/BERT_IMG/mask-attention-map-softmax.jpg)
-
-
 
 ## Encoder-Decoder注意力层
 
