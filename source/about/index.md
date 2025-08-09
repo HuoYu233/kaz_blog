@@ -9,7 +9,7 @@ type: about
 
 厦门大学人工智能硕士研究生在读
 
-- Basic Skills：CET-6、Java、C/C++、Python、JavaScript
+- Basic Skills：CET-6、Java、C++、Python、JavaScript
 - Frameworks：Pytorch、Mybatis、Springboot、Vue、Uniapp、Redis
 
 ## 项目经历
