@@ -52,7 +52,7 @@ $L_{InfoNCE}=-log\frac{exp(f(z_i,z_j)/\tau)}{\sum_{k=1}^Nexp(f(z_i,z_k)/\tau)}$
 
 $L_{MLM}=\sum_{i\in T}-logP(s_i|S_{\setminus T})$
 
-其中，TTT 表示被掩码的 token 位置集合，$S_{\setminus T}$表示在特定位置 token 被掩码的蛋白质/结构序列。
+其中，T 表示被掩码的 token 位置集合，$S_{\setminus T}$表示在特定位置 token 被掩码的蛋白质/结构序列。
 
 最终的损失函数由 **2 个 MLM 损失函数** 与 **6 个 InfoNCE 损失函数** 的平均值构成。
 

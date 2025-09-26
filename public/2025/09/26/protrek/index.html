@@ -402,7 +402,7 @@
 <p>其中，$z_i$和 $z_j$ 表示任意两种模态的嵌入，$f(z_i,z_j)$ 表示嵌入之间的相似性分数，$N$ 为批次中的配对总数，$\tau$ 为可学习的温度参数。我们分别针对 <strong>序列–结构、序列–功能、结构–功能</strong> 三种模态配对，从两个方向计算 InfoNCE 损失，共得到 <strong>6 个对比学习损失函数</strong>。</p>
 <p>此外，我们还在 ProTrek 的 <strong>序列编码器</strong> 和 <strong>结构编码器</strong> 中引入了 <strong>掩码语言模型（Masked Language Modeling, MLM）</strong> [40] 的损失函数，以保持模型在氨基酸和 3Di token 水平上的识别能力。其训练目标是通过捕捉被掩码位置与周围上下文之间的依赖关系来预测被掩码的 token，损失函数形式化表达为：</p>
 <p>$L_{MLM}&#x3D;\sum_{i\in T}-logP(s_i|S_{\setminus T})$</p>
-<p>其中，TTT 表示被掩码的 token 位置集合，$S_{\setminus T}$表示在特定位置 token 被掩码的蛋白质&#x2F;结构序列。</p>
+<p>其中，T 表示被掩码的 token 位置集合，$S_{\setminus T}$表示在特定位置 token 被掩码的蛋白质&#x2F;结构序列。</p>
 <p>最终的损失函数由 <strong>2 个 MLM 损失函数</strong> 与 <strong>6 个 InfoNCE 损失函数</strong> 的平均值构成。</p>
 <h3 id="预训练设置"><a href="#预训练设置" class="headerlink" title="预训练设置"></a>预训练设置</h3><p>我们将 ProTrek 的 <strong>序列编码器</strong> 初始化为 <strong>ESM-2 650M</strong> [19]，<strong>文本编码器</strong> 初始化为 <strong>PubMedBERT</strong> [15]，而 <strong>结构编码器</strong> 因无可用的预训练模型，则采用随机初始化。</p>
 <p>在优化过程中，我们使用 <strong>DeepSpeed 策略</strong> [44] 并采用 <strong>AdamW 优化器</strong> [42]，其超参数设置为：</p>
