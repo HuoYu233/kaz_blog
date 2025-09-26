@@ -388,7 +388,67 @@
 <li>Advanced Protein ChatGPT</li>
 </ul>
 <p>Chao Wang, Hehe Fan, Ruijie Quan, and Yi Yang. Protchatgpt: Towards understanding proteins with large language models. arXiv preprint arXiv:2402.09649, 2024.</p>
-<h2 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h2><p>todo</p>
+<h2 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h2><h3 id="蛋白质-功能对的构建"><a href="#蛋白质-功能对的构建" class="headerlink" title="蛋白质-功能对的构建"></a>蛋白质-功能对的构建</h3><p>对于给定的蛋白质，我们利用 <strong>UniProt 数据库</strong> [7] 中几乎所有子条目的描述信息来构建蛋白质-功能对。我们将蛋白质的子条目信息分为两类：<strong>序列水平</strong> 和 <strong>残基水平</strong>（见补充表 2）。</p>
+<ul>
+<li><strong>序列水平信息</strong>：由一条或多条完整句子组成，描述蛋白质的整体特征，如其功能和催化活性。</li>
+<li><strong>残基水平信息</strong>：包含关于蛋白质序列中特定残基的描述性片段，如结合位点和活性位点，这些信息不能直接使用。</li>
+</ul>
+<p>对于残基水平的子条目，我们使用 <strong>GPT-4</strong> [39] 生成多个特定模板句子，从而将零散的信息组织成连贯的句子。对于序列水平的子条目，我们同样利用 GPT-4 对描述进行 <strong>释义</strong>，并生成多个备选句子，以增强模型对文本输入的鲁棒性。最终，一个蛋白质的每个子条目都会生成一条文本句子，并与该蛋白质配对，形成 <strong>蛋白质-功能对</strong>，用于训练或评估。</p>
+<hr>
+<h3 id="预训练数据集的构建"><a href="#预训练数据集的构建" class="headerlink" title="预训练数据集的构建"></a>预训练数据集的构建</h3><p>首先，我们在经过人工审核的 <strong>Swiss-Prot 数据库</strong> [5] 上执行了 <strong>50% 序列相似性聚类</strong>。其中，选择 1000 个簇作为验证集，另 1000 个簇作为测试集，其余数据用作训练集。对于每个蛋白质，我们按照上述方法构建蛋白质-功能对，最终得到 <strong>1400 万条高质量的蛋白质-功能对</strong>，并以此训练了 ProTrek 的初始版本。该初始模型为 <strong>35M 参数规模</strong>，在 12 张 <strong>NVIDIA 80G A100 GPU</strong> 上运行 <strong>100K 步</strong>完成预训练。</p>
+<p>接着，我们利用初始 ProTrek 模型对 <strong>UniRef50 数据库</strong> [7] 中的 <strong>3 亿条蛋白质-功能对</strong>进行打分与筛选，保留所有得分高于 Swiss-Prot 平均分的蛋白质-功能对，最终得到 <strong>2500 万条数据</strong>。将这 2500 万条与原始的 1400 万条合并，构成了 <strong>最终的预训练数据集</strong>。</p>
+<h3 id="预训练损失函数"><a href="#预训练损失函数" class="headerlink" title="预训练损失函数"></a>预训练损失函数</h3><p>我们采用 <strong>InfoNCE 损失函数</strong> [43] 来实现蛋白质序列–结构–功能的对比学习。InfoNCE 损失函数可以表示为：</p>
+<p>$\mathcal{L}<em>{InfoNCE}&#x3D;-log\frac{exp(f(z_i,z_j)&#x2F;\tau)}{\sum</em>{k&#x3D;1}^Nexp(f(z_i,z_k)&#x2F;\tau)}$</p>
+<p>其中，$z_i$和 $z_j$ 表示任意两种模态的嵌入，$f(z_i,z_j)$ 表示嵌入之间的相似性分数，$N$ 为批次中的配对总数，$\tau$ 为可学习的温度参数。我们分别针对 <strong>序列–结构、序列–功能、结构–功能</strong> 三种模态配对，从两个方向计算 InfoNCE 损失，共得到 <strong>6 个对比学习损失函数</strong>。</p>
+<p>此外，我们还在 ProTrek 的 <strong>序列编码器</strong> 和 <strong>结构编码器</strong> 中引入了 <strong>掩码语言模型（Masked Language Modeling, MLM）</strong> [40] 的损失函数，以保持模型在氨基酸和 3Di token 水平上的识别能力。其训练目标是通过捕捉被掩码位置与周围上下文之间的依赖关系来预测被掩码的 token，损失函数形式化表达为：</p>
+<p>$\mathcal{L}<em>{MLM}&#x3D;\sum</em>{i\in T}-logP(s_i|S_{\setminus T})$</p>
+<p>其中，TTT 表示被掩码的 token 位置集合，$S_{\setminus T}$表示在特定位置 token 被掩码的蛋白质&#x2F;结构序列。</p>
+<p>最终的损失函数由 <strong>2 个 MLM 损失函数</strong> 与 <strong>6 个 InfoNCE 损失函数</strong> 的平均值构成。</p>
+<h3 id="预训练设置"><a href="#预训练设置" class="headerlink" title="预训练设置"></a>预训练设置</h3><p>我们将 ProTrek 的 <strong>序列编码器</strong> 初始化为 <strong>ESM-2 650M</strong> [19]，<strong>文本编码器</strong> 初始化为 <strong>PubMedBERT</strong> [15]，而 <strong>结构编码器</strong> 因无可用的预训练模型，则采用随机初始化。</p>
+<p>在优化过程中，我们使用 <strong>DeepSpeed 策略</strong> [44] 并采用 <strong>AdamW 优化器</strong> [42]，其超参数设置为：</p>
+<ul>
+<li>β1&#x3D;0.9，β2&#x3D;0.98；</li>
+<li>L2 权重衰减设为 0.01。</li>
+</ul>
+<p>学习率在前 <strong>2000 步</strong> 内从 0 <strong>逐步升至 4e-4</strong>，随后通过 <strong>余弦退火调度</strong> [41] 降至 <strong>4e-5</strong>。整个训练过程共持续约 <strong>100K 步</strong>，在 <strong>20 张 NVIDIA 80G A100 GPU</strong> 上完成。</p>
+<p>在输入处理上，我们将蛋白质序列与结构序列 <strong>截断至最多 512 个 token</strong>，而测试描述文本则 <strong>截断至最多 100 个 token</strong>。整体批量大小为 <strong>1280 个蛋白质-序列-结构-功能配对</strong>。此外，训练过程中我们采用了 <strong>混合精度训练</strong> 来加速模型训练。</p>
+<h3 id="蛋白质-功能检索基准"><a href="#蛋白质-功能检索基准" class="headerlink" title="蛋白质-功能检索基准"></a>蛋白质-功能检索基准</h3><p>我们利用 <strong>Swiss-Prot 测试集</strong>中的 <strong>4,000 个蛋白质</strong>构建了蛋白质-功能检索基准。为评估 ProTrek 在其他数据库蛋白质上的泛化性能，我们在测试集中额外加入了 <strong>从 UniProt 随机采样的 100,000 个蛋白质</strong>作为负样本。所有这些蛋白质的文本描述被加入文本集合中。</p>
+<p>在 <strong>蛋白质到文本检索任务</strong>中，模型需要检索与 Swiss-Prot 测试集蛋白质最匹配的功能描述。相反，在 <strong>文本到蛋白质检索任务</strong>中，模型需要在接近 <strong>104,000 个负样本蛋白质</strong>的背景下，从 Swiss-Prot 中找到与查询功能描述（仅使用人工审阅的描述作为查询文本）匹配的蛋白质。</p>
+<p>为减少配对数量较少的子部分对评估偏差的影响，我们选择了 <strong>配对数量最多的前 33 个功能子部分</strong>进行评估。</p>
+<hr>
+<h3 id="检测功能相似的蛋白质"><a href="#检测功能相似的蛋白质" class="headerlink" title="检测功能相似的蛋白质"></a>检测功能相似的蛋白质</h3><p>在 ProTrek 及所有基线方法中，我们基于同一 Swiss-Prot 测试集（4,000 个蛋白质）进行了 <strong>全对全搜索（all-versus-all search）</strong>，并比较了它们在寻找 <strong>具有相同 GO 注释的蛋白质</strong>时的性能。</p>
+<p>对于给定的查询蛋白质，其 GO 注释集合记为 $G_q$。同样地，对于数据库中检索到的每个候选结果，其 GO 注释集合记为 $G_h$。若存在至少一个共同的 GO 注释，即满足：$G_q \cap G_h \neq \emptyset$</p>
+<p>则认为该结果是 <strong>正确命中（correct hit）</strong>。</p>
+<p>在图 2c 中，y 轴的数值由 <strong>所有查询蛋白质的正确命中数</strong>汇总得到。</p>
+<hr>
+<h3 id="Mean-Average-Precision（MAP）"><a href="#Mean-Average-Precision（MAP）" class="headerlink" title="Mean Average Precision（MAP）"></a>Mean Average Precision（MAP）</h3><p><strong>平均平均精度（Mean Average Precision, MAP）</strong> 是信息检索任务中常用的指标，其定义为所有查询的 <strong>平均精度（AP）</strong> 的平均值。</p>
+<p>对于给定查询，<strong>AP</strong> 的计算公式为：</p>
+<p>$AP &#x3D; \frac{1}{R} \sum_{i&#x3D;1}^{N} P(i) \cdot r(i)$</p>
+<p>其中：</p>
+<ul>
+<li>$R$表示相关结果的数量；</li>
+<li>$N$ 表示结果总数；</li>
+<li>$P(i)$ 表示排名列表中第$i$个位置的精度；</li>
+<li>$r(i)$表示第$ i $个结果是否相关（相关为 1，不相关为 0）。</li>
+</ul>
+<p>最终，<strong>MAP</strong> 定义为所有查询的 AP 的平均值：</p>
+<p>$AP &#x3D; \frac{1}{Q} \sum_{q&#x3D;1}^{Q} AP_q$</p>
+<h3 id="深度学习基线模型"><a href="#深度学习基线模型" class="headerlink" title="深度学习基线模型"></a>深度学习基线模型</h3><p>在蛋白质-功能检索任务中，我们将 ProTrek 与 <strong>ProtST</strong> [35] 中的 <strong>ProtST-ESM-1b</strong> 以及 <strong>ProteinDT</strong> [20] 中的 <strong>ProtBERT BFD-512-1e-5-1e-1-text-512-1e-5-1e-1-InfoNCE-0.1-batch-9-gpu-8-epoch-5</strong> 进行比较。<br> 在下游蛋白质任务中，我们使用 <strong>ESM-2 650M 版本</strong> [19] 和 <strong>ProtST-ESM-1b</strong> 作为基线模型。</p>
+<hr>
+<h3 id="下游任务微调"><a href="#下游任务微调" class="headerlink" title="下游任务微调"></a>下游任务微调</h3><p>我们严格遵循 <strong>SaprotHub</strong> [27] 的微调设置，包括数据集预处理、划分及微调超参数等。我们对所有模型参数进行微调直至收敛，并根据其在验证集上的表现选择最佳检查点。</p>
+<hr>
+<h3 id="工具运行命令"><a href="#工具运行命令" class="headerlink" title="工具运行命令"></a>工具运行命令</h3><p><strong>Foldseek</strong><br> 我们使用了 <strong>Foldseek</strong> 的版本 <code>ef4e960ab84fc502665eb7b84573dfff9c2aa89d</code>。命令行在默认参数下执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">foldseek easy-search pdb <span class="built_in">dir</span> targetDB aln.m8 tmpFolder</span><br></pre></td></tr></table></figure>
+
+<p><strong>MMseqs2</strong><br> 我们使用了 <strong>MMseqs2</strong> 的版本 <code>edb8223d1ea07385ffe63d4f103af0eb12b2058e</code>。命令行在默认参数下执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mmseqs easy-search seqs.fasta targetDB alnRes.m8 tmp</span><br></pre></td></tr></table></figure>
+
+<h4 id="BLASTP"><a href="#BLASTP" class="headerlink" title="BLASTP"></a><strong>BLASTP</strong></h4><p>我们使用了 <strong>Protein-Protein BLAST 2.15.0+</strong> 版本。命令行运行方式如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">blastp -query seqs.fasta -db db -outfmt 6 -out blastp_result</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h4 id="DIAMOND"><a href="#DIAMOND" class="headerlink" title="DIAMOND"></a><strong>DIAMOND</strong></h4><p>我们使用了 <strong>DIAMOND v2.1.9.163</strong> 版本。在 <strong>very-sensitive</strong> 模式下运行，命令行如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">diamond blastp -q seqs.fasta -d db -o result.tsv --very-sensitive -k 0</span><br></pre></td></tr></table></figure>
 
       </div>
       <div class="post-tags-categories">
@@ -409,7 +469,7 @@
   <div class="post-nav-next post-nav-item">
     <div class="post-nav-img" style="background-size: cover; 
       background-position: center center;">
-      <img class="lazyload lazyload placeholder" src="https://i1.hdslb.com/bfs/archive/ce2cdffabecfa83b56b588d7dbab21f90eb54281.png" class="lazyload placeholder" data-srcset="https://i1.hdslb.com/bfs/archive/ce2cdffabecfa83b56b588d7dbab21f90eb54281.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" src="" alt="">
+      <img class="lazyload lazyload placeholder" src="https://upload.wikimedia.org/wikipedia/commons/9/96/Pytorch_logo.png" class="lazyload placeholder" data-srcset="https://upload.wikimedia.org/wikipedia/commons/9/96/Pytorch_logo.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" src="" alt="">
     </div>
     <a href="/2025/07/01/tudui-pytorch/" class="post-nav-link">
       <div class="title">
@@ -540,7 +600,7 @@
   <div class='content'>
     <div class="toc-main">
       <div class="toc-content">
-        <!-- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Expectation"><span class="toc-text">Expectation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Method"><span class="toc-text">Method</span></a></li></ol> -->
+        <!-- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Expectation"><span class="toc-text">Expectation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Method"><span class="toc-text">Method</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%9B%8B%E7%99%BD%E8%B4%A8-%E5%8A%9F%E8%83%BD%E5%AF%B9%E7%9A%84%E6%9E%84%E5%BB%BA"><span class="toc-text">蛋白质-功能对的构建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%84%E8%AE%AD%E7%BB%83%E6%95%B0%E6%8D%AE%E9%9B%86%E7%9A%84%E6%9E%84%E5%BB%BA"><span class="toc-text">预训练数据集的构建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%84%E8%AE%AD%E7%BB%83%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="toc-text">预训练损失函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%84%E8%AE%AD%E7%BB%83%E8%AE%BE%E7%BD%AE"><span class="toc-text">预训练设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%9B%8B%E7%99%BD%E8%B4%A8-%E5%8A%9F%E8%83%BD%E6%A3%80%E7%B4%A2%E5%9F%BA%E5%87%86"><span class="toc-text">蛋白质-功能检索基准</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A3%80%E6%B5%8B%E5%8A%9F%E8%83%BD%E7%9B%B8%E4%BC%BC%E7%9A%84%E8%9B%8B%E7%99%BD%E8%B4%A8"><span class="toc-text">检测功能相似的蛋白质</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mean-Average-Precision%EF%BC%88MAP%EF%BC%89"><span class="toc-text">Mean Average Precision（MAP）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%BA%BF%E6%A8%A1%E5%9E%8B"><span class="toc-text">深度学习基线模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E6%B8%B8%E4%BB%BB%E5%8A%A1%E5%BE%AE%E8%B0%83"><span class="toc-text">下游任务微调</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7%E8%BF%90%E8%A1%8C%E5%91%BD%E4%BB%A4"><span class="toc-text">工具运行命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#BLASTP"><span class="toc-text">BLASTP</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#DIAMOND"><span class="toc-text">DIAMOND</span></a></li></ol></li></ol></li></ol> -->
         <div class="toc"></div>
       </div>
     </div>
