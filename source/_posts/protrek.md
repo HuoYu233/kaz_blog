@@ -44,13 +44,13 @@ Chao Wang, Hehe Fan, Ruijie Quan, and Yi Yang. Protchatgpt: Towards understandin
 
 我们采用 **InfoNCE 损失函数** [43] 来实现蛋白质序列–结构–功能的对比学习。InfoNCE 损失函数可以表示为：
 
-$\mathcal{L}_{InfoNCE}=-log\frac{exp(f(z_i,z_j)/\tau)}{\sum_{k=1}^Nexp(f(z_i,z_k)/\tau)}$
+$L_{InfoNCE}=-log\frac{exp(f(z_i,z_j)/\tau)}{\sum_{k=1}^Nexp(f(z_i,z_k)/\tau)}$
 
 其中，$z_i$和 $z_j$ 表示任意两种模态的嵌入，$f(z_i,z_j)$ 表示嵌入之间的相似性分数，$N$ 为批次中的配对总数，$\tau$ 为可学习的温度参数。我们分别针对 **序列–结构、序列–功能、结构–功能** 三种模态配对，从两个方向计算 InfoNCE 损失，共得到 **6 个对比学习损失函数**。
 
 此外，我们还在 ProTrek 的 **序列编码器** 和 **结构编码器** 中引入了 **掩码语言模型（Masked Language Modeling, MLM）** [40] 的损失函数，以保持模型在氨基酸和 3Di token 水平上的识别能力。其训练目标是通过捕捉被掩码位置与周围上下文之间的依赖关系来预测被掩码的 token，损失函数形式化表达为：
 
-$\mathcal{L}_{MLM}=\sum_{i\in T}-logP(s_i|S_{\setminus T})$
+$L_{MLM}=\sum_{i\in T}-logP(s_i|S_{\setminus T})$
 
 其中，TTT 表示被掩码的 token 位置集合，$S_{\setminus T}$表示在特定位置 token 被掩码的蛋白质/结构序列。
 
@@ -62,7 +62,7 @@ $\mathcal{L}_{MLM}=\sum_{i\in T}-logP(s_i|S_{\setminus T})$
 
 在优化过程中，我们使用 **DeepSpeed 策略** [44] 并采用 **AdamW 优化器** [42]，其超参数设置为：
 
-- β1=0.9，β2=0.98；
+- $\beta_1$=0.9，$\beta_2$=0.98；
 - L2 权重衰减设为 0.01。
 
 学习率在前 **2000 步** 内从 0 **逐步升至 4e-4**，随后通过 **余弦退火调度** [41] 降至 **4e-5**。整个训练过程共持续约 **100K 步**，在 **20 张 NVIDIA 80G A100 GPU** 上完成。
