@@ -2,7 +2,7 @@
 title: 小土堆深度学习学习笔记
 mathjax: true
 date: 2025/7/1 20:46:25
-img: https://i2.hdslb.com/bfs/archive/aedf385ac09752547290e85319b88081c812cf06.jpg@672w_378h_1c_!web-search-common-cover.avif
+img: https://i1.hdslb.com/bfs/archive/ce2cdffabecfa83b56b588d7dbab21f90eb54281.png
 excerpt: 小土堆深度学习学习笔记
 ---
 ## 准备
