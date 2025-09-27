@@ -13,16 +13,13 @@ type: about
 - Frameworks：Pytorch、Mybatis、Springboot、Vue、Uniapp、Redis
 - Research Interest：NLP、LLM、AI4Science
 
-## 项目经历
-
-- [2023.09-2024.04] 面向智慧城市的群智感知平台[[Link](https://www.fzu-urbansensing.com/Platforms-Applications/Crowdsensing_Platform/)]
-- [2023.04-2023.06] 福建乡村本地招聘信息工具——闽易聘[[Link](https://gitee.com/huoyu233/minyipin)]
-
 ## 科研经历
 
-- [2025.7-NOW] ZhangLab,School of Life Science,Xiamen University
+- [2025.7-NOW] [ZhangLab](https://github.com/zhanglabxmu)，School of Life Science，Xiamen University
 
-- [2023.07-2024.04] [福州大学人机共融智能课题组](https://www.fzu-urbansensing.com/)，福州大学计算机与大数据学院
+- [2023.07-2024.04] [人机共融智能课题组](https://www.fzu-urbansensing.com/)，福州大学计算机与大数据学院
+  - 面向智慧城市的群智感知平台[[Link](https://www.fzu-urbansensing.com/Platforms-Applications/Crowdsensing_Platform/)]
+
 
 ## 荣誉奖项
 
