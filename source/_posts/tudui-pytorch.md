@@ -2,7 +2,7 @@
 title: 小土堆深度学习学习笔记
 mathjax: true
 date: 2025/7/1 20:46:25
-img: https://www.pytorch.wiki/pytorch-logo.png
+img: https://i-blog.csdnimg.cn/direct/f73de16c9a484304b1f5f3ea29daddb7.jpeg
 excerpt: 小土堆深度学习学习笔记
 ---
 ## 准备

@@ -11,6 +11,7 @@ excerpt: 利用蛋白质语言模型和图神经网络实现蛋白质序列到�
 
 - RGCN is not pre-trained
 - Learning about BLEU、Rouge-1、Rouge-2 、Rouge-L  and Bert score
+- Use the seq-structure-function pair dataset for Protein function task
 
 ## Method
 
@@ -118,6 +119,10 @@ $H_S^{k+1}=(H_S^k+1_nh_GW_V^k)W_O^k$
 
 ![Figure 4: Analyzing Protein Description Lengths: Distribution of Tokens per Sample with Threshold Highlight at 256 tokens (in red).](./img/prot2text/fig4.png)
 
-### Source Code
+### Source
 
-https://github.com/hadi-abdine/Prot2Text
+Github：https://github.com/hadi-abdine/Prot2Text
+
+Web server：http://nlp.polytechnique.fr/prot2text#proteins
+
+Hugging face：https://huggingface.co/collections/habdine/prot2text-suite-66e48fe3596fcff3e41be4e7

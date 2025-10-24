@@ -381,6 +381,7 @@
 <h2 id="Expectation"><a href="#Expectation" class="headerlink" title="Expectation"></a>Expectation</h2><ul>
 <li>RGCN is not pre-trained</li>
 <li>Learning about BLEU、Rouge-1、Rouge-2 、Rouge-L  and Bert score</li>
+<li>Use the seq-structure-function pair dataset for Protein function task</li>
 </ul>
 <h2 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h2><h3 id="Graph-Construction"><a href="#Graph-Construction" class="headerlink" title="Graph Construction"></a>Graph Construction</h3><blockquote>
 <p>使用 AlphaFold 获得 3D 蛋白质的结构后，我们继续将蛋白质表示为异质图 $G &#x3D; （V,E,R）$，其中 $V &#x3D; [N] :&#x3D; {1,…,N }$ 是代表蛋白质氨基酸的顶点集，$E ⊆ V × V$ 是代表节点之间各种相互作用的边集，R 是一组不同的边相互作用。每个节点 u 都与一个特征向量 $x_u ∈ R^d$ 相关联，包含相关信息，例如局部结构特征和相关氨基酸的理化性质。这使得图能够保留对蛋白质结构和功能至关重要的细粒度信息。为了模拟氨基酸之间的不同相互作用和关系，我们引入了连接节点的不同类型的边。因此，每个边 $i &#x3D; （v， u）$ 都与边缘类型 $e_i ∈ R$ 相关联。顺序边缘用于连接蛋白质序列中的相邻节点，有效地表示氨基酸的顺序并捕获蛋白质一级结构的线性排列。这些顺序信息对于理解蛋白质内的折叠模式和功能基序至关重要。此外，我们利用空间边缘在蛋白质 3D 结构中空间非常接近的节点之间建立连接。这些边缘在编码蛋白质的三级结构和折叠模式方面发挥着关键作用，使我们能够捕获蛋白质核心内氨基酸的复杂空间排列。我们进一步扩展了图结构，将氢键相互作用作为额外的边缘类型。氢键是基本的非共价相互作用，对于稳定蛋白质结构和实现特定分子识别事件至关重要。通过整合不同的边缘类型，我们全面的蛋白质图可以更全面、更详细地描述蛋白质的结构，同时捕获短程和长程相互作用。</p>
@@ -434,7 +435,9 @@
 <p><img src="/./img/prot2text/fig3.png" class="lazyload placeholder" data-srcset="/./img/prot2text/fig3.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="Figure 3: Ground-truth labels vs text-free Generated functions: A textual comparison of the pre-defined labels and generated text outputs for 3 different proteins from the test set. The used text generation configuration if these examples are the following: length penalty = 2.0, no repeat ngram size=3 and early stopping=True."></p>
 <h3 id="Training-Details"><a href="#Training-Details" class="headerlink" title="Training Details"></a>Training Details</h3><p>训练数据集由 256690 个具有独特氨基酸序列的蛋白质组成。然而，有些蛋白质有相同的描述。训练数据集总共有 48,251 个独特的功能描述。每个描述的平均token数为 57.51。我们选择在标记化期间将所有描述截断到最大长度 256，因为这个标记数量覆盖了所有描述的 98.7%，如图 4 所示。 分词器Prot2Text 分词器是 GPT-2 分词器的实例，具有两个额外的标记。在 GPT-2 模型中，pad token、序列的开始 token 和序列的结束 token 共享相同的索引。由于 Prot2Text 架构是一种编码器-解码器架构，因此我们选择通过添加两个额外的标记来分隔这三个标记，分别表示序列的开始和序列的结束。对于两个添加的标记，我们同样需要将相应的嵌入添加到 GPT-2 单词嵌入矩阵中，同时保持矩阵的其余部分完整。</p>
 <p><img src="/./img/prot2text/fig4.png" class="lazyload placeholder" data-srcset="/./img/prot2text/fig4.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="Figure 4: Analyzing Protein Description Lengths: Distribution of Tokens per Sample with Threshold Highlight at 256 tokens (in red)."></p>
-<h3 id="Source-Code"><a href="#Source-Code" class="headerlink" title="Source Code"></a>Source Code</h3><p><a target="_blank" rel="noopener" href="https://github.com/hadi-abdine/Prot2Text">https://github.com/hadi-abdine/Prot2Text</a></p>
+<h3 id="Source"><a href="#Source" class="headerlink" title="Source"></a>Source</h3><p>Github：<a target="_blank" rel="noopener" href="https://github.com/hadi-abdine/Prot2Text">https://github.com/hadi-abdine/Prot2Text</a></p>
+<p>Web server：<a target="_blank" rel="noopener" href="http://nlp.polytechnique.fr/prot2text#proteins">http://nlp.polytechnique.fr/prot2text#proteins</a></p>
+<p>Hugging face：<a target="_blank" rel="noopener" href="https://huggingface.co/collections/habdine/prot2text-suite-66e48fe3596fcff3e41be4e7">https://huggingface.co/collections/habdine/prot2text-suite-66e48fe3596fcff3e41be4e7</a></p>
 
       </div>
       <div class="post-tags-categories">
@@ -448,6 +451,24 @@
 <div class="post-nav">
 
 
+
+  
+  <div class="post-nav-prev post-nav-item">
+    <div class="post-nav-img" style="background-size: cover; 
+      background-position: center center;">
+      <img class="lazyload lazyload placeholder" src="https://datawhalechina.github.io/all-in-rag/logo.svg" class="lazyload placeholder" data-srcset="https://datawhalechina.github.io/all-in-rag/logo.svg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+    </div>
+    <a href="/2025/10/21/all-in-rag/" class="post-nav-link">
+      <div class="title">
+        <i class="fas fa-angle-left"></i> Prev:
+        <div class="title-text">DataWhale-all-in-Rag-Notes</div>
+      </div>
+      
+      <!-- <div class="content">
+        
+      </div> -->
+    </a>
+  </div>
 
 
 
@@ -589,7 +610,7 @@ Fengyuan Dai, Yuli
   <div class='content'>
     <div class="toc-main">
       <div class="toc-content">
-        <!-- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Expectation"><span class="toc-text">Expectation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Method"><span class="toc-text">Method</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Graph-Construction"><span class="toc-text">Graph Construction</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Graph-Encoding"><span class="toc-text">Graph Encoding</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Sequence-Encoding"><span class="toc-text">Sequence Encoding</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MultiModal-Fusion"><span class="toc-text">MultiModal Fusion</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Text-Generation"><span class="toc-text">Text Generation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dataset"><span class="toc-text">Dataset</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Baseline"><span class="toc-text">Baseline</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Metrics"><span class="toc-text">Metrics</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Result"><span class="toc-text">Result</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Scaling-to-Larger-Models"><span class="toc-text">Scaling to Larger Models</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Visualization-of-Generated-Descriptions"><span class="toc-text">Visualization of Generated Descriptions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Training-Details"><span class="toc-text">Training Details</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Source-Code"><span class="toc-text">Source Code</span></a></li></ol></li></ol> -->
+        <!-- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Expectation"><span class="toc-text">Expectation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Method"><span class="toc-text">Method</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Graph-Construction"><span class="toc-text">Graph Construction</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Graph-Encoding"><span class="toc-text">Graph Encoding</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Sequence-Encoding"><span class="toc-text">Sequence Encoding</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MultiModal-Fusion"><span class="toc-text">MultiModal Fusion</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Text-Generation"><span class="toc-text">Text Generation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dataset"><span class="toc-text">Dataset</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Baseline"><span class="toc-text">Baseline</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Metrics"><span class="toc-text">Metrics</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Result"><span class="toc-text">Result</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Scaling-to-Larger-Models"><span class="toc-text">Scaling to Larger Models</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Visualization-of-Generated-Descriptions"><span class="toc-text">Visualization of Generated Descriptions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Training-Details"><span class="toc-text">Training Details</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Source"><span class="toc-text">Source</span></a></li></ol></li></ol> -->
         <div class="toc"></div>
       </div>
     </div>
