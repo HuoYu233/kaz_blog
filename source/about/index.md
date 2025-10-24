@@ -21,7 +21,7 @@ type: about
   - 面向智慧城市的群智感知平台[[Link](https://www.fzu-urbansensing.com/Platforms-Applications/Crowdsensing_Platform/)]
 
 
-## 荣誉奖项
+## 获奖经历
 
 **[Undergraduate]**
 

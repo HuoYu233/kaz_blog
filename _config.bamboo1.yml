@@ -59,7 +59,7 @@ sidebar:
       shape: rectangle # circle, rectangle
       url: /about/index
       title: Kaz
-      subtitle: "雫"
+      subtitle: "好戏都在烟火里"
       jinrishici: false # Poetry Today. You can set a string, and it will be displayed when loading fails.
       fontFammily: Titillium Web,'PingFang SC','Hiragino Sans GB','Microsoft JhengHei','Microsoft YaHei',sans-serif
       background: '#fff'
@@ -396,6 +396,9 @@ notice:
     #   url: 'http://baidu.com'
     - title: '祝我复试顺利！'
       date: '2025-02-24'
+      url: ''
+    - title: '1024愿望：早日发篇B'
+      date: '2025-10-24'
       url: ''
     
   
