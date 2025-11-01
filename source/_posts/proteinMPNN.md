@@ -194,3 +194,133 @@ ProteinMPNN 的实验设计成功率高，加上计算效率高、几乎适用�
 **`chain_M` 与随机链顺序**：随机打乱链顺序 + chain mask 可以训练模型去适应不同链排列与部分已知/部分未知的场景（即 order-agnostic decoding）。
 
 **`mask_self`**：为 interface 专门做的掩码，后面计算 interface loss 时通常只想考虑跨链相互作用，不希望把同链内部也计入。
+
+
+
+== 模型结构信息 == 
+模块: features, 类型: ProteinFeatures
+模块: W_e, 类型: Linear
+模块: W_s, 类型: Embedding
+模块: encoder_layers, 类型: ModuleList
+模块: decoder_layers, 类型: ModuleList
+模块: W_out, 类型: Linear
+
+== 可训练参数详情 ==                                       
+可训练: features.embeddings.linear.weight, 形状: torch.Size([16, 66]), 参数量: 1,056
+可训练: features.embeddings.linear.bias, 形状: torch.Size([16]), 参数量: 16
+可训练: features.edge_embedding.weight, 形状: torch.Size([128, 416]), 参数量: 53,248
+可训练: features.norm_edges.weight, 形状: torch.Size([128]), 参数量: 128
+可训练: features.norm_edges.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: W_e.weight, 形状: torch.Size([128, 128]), 参数量: 16,384
+可训练: W_e.bias, 形状: torch.Size([128]), 参数量: 128 
+可训练: W_s.weight, 形状: torch.Size([21, 128]), 参数量: 2,688
+可训练: encoder_layers.0.norm1.weight, 形状: torch.Size([128]), 参数量: 128
+可训练: encoder_layers.0.norm1.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: encoder_layers.0.norm2.weight, 形状: torch.Size([128]), 参数量: 128
+可训练: encoder_layers.0.norm2.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: encoder_layers.0.norm3.weight, 形状: torch.Size([128]), 参数量: 128
+可训练: encoder_layers.0.norm3.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: encoder_layers.0.W1.weight, 形状: torch.Size([128, 384]), 参数量: 49,152
+可训练: encoder_layers.0.W1.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: encoder_layers.0.W2.weight, 形状: torch.Size([128, 128]), 参数量: 16,384
+可训练: encoder_layers.0.W2.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: encoder_layers.0.W3.weight, 形状: torch.Size([128, 128]), 参数量: 16,384
+可训练: encoder_layers.0.W3.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: encoder_layers.0.W11.weight, 形状: torch.Size([128, 384]), 参数量: 49,152
+可训练: encoder_layers.0.W11.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: encoder_layers.0.W12.weight, 形状: torch.Size([128, 128]), 参数量: 16,384
+可训练: encoder_layers.0.W12.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: encoder_layers.0.W13.weight, 形状: torch.Size([128, 128]), 参数量: 16,384
+可训练: encoder_layers.0.W13.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: encoder_layers.0.dense.W_in.weight, 形状: torch.Size([512, 128]), 参数量: 65,536
+可训练: encoder_layers.0.dense.W_in.bias, 形状: torch.Size([512]), 参数量: 512
+可训练: encoder_layers.0.dense.W_out.weight, 形状: torch.Size([128, 512]), 参数量: 65,536
+可训练: encoder_layers.0.dense.W_out.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: encoder_layers.1.norm1.weight, 形状: torch.Size([128]), 参数量: 128
+可训练: encoder_layers.1.norm1.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: encoder_layers.1.norm2.weight, 形状: torch.Size([128]), 参数量: 128
+可训练: encoder_layers.1.norm2.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: encoder_layers.1.norm3.weight, 形状: torch.Size([128]), 参数量: 128
+可训练: encoder_layers.1.norm3.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: encoder_layers.1.W1.weight, 形状: torch.Size([128, 384]), 参数量: 49,152
+可训练: encoder_layers.1.W1.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: encoder_layers.1.W2.weight, 形状: torch.Size([128, 128]), 参数量: 16,384
+可训练: encoder_layers.1.W2.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: encoder_layers.1.W3.weight, 形状: torch.Size([128, 128]), 参数量: 16,384
+可训练: encoder_layers.1.W3.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: encoder_layers.1.W11.weight, 形状: torch.Size([128, 384]), 参数量: 49,152
+可训练: encoder_layers.1.W11.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: encoder_layers.1.W12.weight, 形状: torch.Size([128, 128]), 参数量: 16,384
+可训练: encoder_layers.1.W12.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: encoder_layers.1.W13.weight, 形状: torch.Size([128, 128]), 参数量: 16,384
+可训练: encoder_layers.1.W13.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: encoder_layers.1.dense.W_in.weight, 形状: torch.Size([512, 128]), 参数量: 65,536
+可训练: encoder_layers.1.dense.W_in.bias, 形状: torch.Size([512]), 参数量: 512
+可训练: encoder_layers.1.dense.W_out.weight, 形状: torch.Size([128, 512]), 参数量: 65,536
+可训练: encoder_layers.1.dense.W_out.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: encoder_layers.2.norm1.weight, 形状: torch.Size([128]), 参数量: 128
+可训练: encoder_layers.2.norm1.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: encoder_layers.2.norm2.weight, 形状: torch.Size([128]), 参数量: 128
+可训练: encoder_layers.2.norm2.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: encoder_layers.2.norm3.weight, 形状: torch.Size([128]), 参数量: 128
+可训练: encoder_layers.2.norm3.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: encoder_layers.2.W1.weight, 形状: torch.Size([128, 384]), 参数量: 49,152
+可训练: encoder_layers.2.W1.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: encoder_layers.2.W2.weight, 形状: torch.Size([128, 128]), 参数量: 16,384
+可训练: encoder_layers.2.W2.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: encoder_layers.2.W3.weight, 形状: torch.Size([128, 128]), 参数量: 16,384
+可训练: encoder_layers.2.W3.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: encoder_layers.2.W11.weight, 形状: torch.Size([128, 384]), 参数量: 49,152
+可训练: encoder_layers.2.W11.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: encoder_layers.2.W12.weight, 形状: torch.Size([128, 128]), 参数量: 16,384
+可训练: encoder_layers.2.W12.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: encoder_layers.2.W13.weight, 形状: torch.Size([128, 128]), 参数量: 16,384
+可训练: encoder_layers.2.W13.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: encoder_layers.2.dense.W_in.weight, 形状: torch.Size([512, 128]), 参数量: 65,536
+可训练: encoder_layers.2.dense.W_in.bias, 形状: torch.Size([512]), 参数量: 512
+可训练: encoder_layers.2.dense.W_out.weight, 形状: torch.Size([128, 512]), 参数量: 65,536
+可训练: encoder_layers.2.dense.W_out.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: decoder_layers.0.norm1.weight, 形状: torch.Size([128]), 参数量: 128
+可训练: decoder_layers.0.norm1.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: decoder_layers.0.norm2.weight, 形状: torch.Size([128]), 参数量: 128
+可训练: decoder_layers.0.norm2.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: decoder_layers.0.W1.weight, 形状: torch.Size([128, 512]), 参数量: 65,536
+可训练: decoder_layers.0.W1.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: decoder_layers.0.W2.weight, 形状: torch.Size([128, 128]), 参数量: 16,384
+可训练: decoder_layers.0.W2.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: decoder_layers.0.W3.weight, 形状: torch.Size([128, 128]), 参数量: 16,384
+可训练: decoder_layers.0.W3.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: decoder_layers.0.dense.W_in.weight, 形状: torch.Size([512, 128]), 参数量: 65,536
+可训练: decoder_layers.0.dense.W_in.bias, 形状: torch.Size([512]), 参数量: 512
+可训练: decoder_layers.0.dense.W_out.weight, 形状: torch.Size([128, 512]), 参数量: 65,536
+可训练: decoder_layers.0.dense.W_out.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: decoder_layers.1.norm1.weight, 形状: torch.Size([128]), 参数量: 128
+可训练: decoder_layers.1.norm1.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: decoder_layers.1.norm2.weight, 形状: torch.Size([128]), 参数量: 128
+可训练: decoder_layers.1.norm2.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: decoder_layers.1.W1.weight, 形状: torch.Size([128, 512]), 参数量: 65,536
+可训练: decoder_layers.1.W1.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: decoder_layers.1.W2.weight, 形状: torch.Size([128, 128]), 参数量: 16,384
+可训练: decoder_layers.1.W2.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: decoder_layers.1.W3.weight, 形状: torch.Size([128, 128]), 参数量: 16,384
+可训练: decoder_layers.1.W3.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: decoder_layers.1.dense.W_in.weight, 形状: torch.Size([512, 128]), 参数量: 65,536
+可训练: decoder_layers.1.dense.W_in.bias, 形状: torch.Size([512]), 参数量: 512
+可训练: decoder_layers.1.dense.W_out.weight, 形状: torch.Size([128, 512]), 参数量: 65,536
+可训练: decoder_layers.1.dense.W_out.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: decoder_layers.2.norm1.weight, 形状: torch.Size([128]), 参数量: 128
+可训练: decoder_layers.2.norm1.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: decoder_layers.2.norm2.weight, 形状: torch.Size([128]), 参数量: 128
+可训练: decoder_layers.2.norm2.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: decoder_layers.2.W1.weight, 形状: torch.Size([128, 512]), 参数量: 65,536
+可训练: decoder_layers.2.W1.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: decoder_layers.2.W2.weight, 形状: torch.Size([128, 128]), 参数量: 16,384
+可训练: decoder_layers.2.W2.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: decoder_layers.2.W3.weight, 形状: torch.Size([128, 128]), 参数量: 16,384
+可训练: decoder_layers.2.W3.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: decoder_layers.2.dense.W_in.weight, 形状: torch.Size([512, 128]), 参数量: 65,536
+可训练: decoder_layers.2.dense.W_in.bias, 形状: torch.Size([512]), 参数量: 512
+可训练: decoder_layers.2.dense.W_out.weight, 形状: torch.Size([128, 512]), 参数量: 65,536
+可训练: decoder_layers.2.dense.W_out.bias, 形状: torch.Size([128]), 参数量: 128
+可训练: W_out.weight, 形状: torch.Size([21, 128]), 参数量: 2,688
+可训练: W_out.bias, 形状: torch.Size([21]), 参数量: 21
