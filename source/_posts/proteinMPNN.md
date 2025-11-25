@@ -102,14 +102,26 @@ ProteinMPNN 的实验设计成功率高，加上计算效率高、几乎适用�
 
 > 输出的边特征 E 就是图的连接权重，用于 message passing。
 
+没有提供侧链Cb原子坐标，通过几何构造公式（基于理想键长、键角、二面角）
+
+构建局部邻域，包括计算距离矩阵，选取k-neighbor个邻居，得到
+
+E_idx:每个残基的邻居索引
+
+D_neighbors:对应距离
+
+构造5*5=25种径向基函数，每对距离16维度，一共16\*25=400维度
+
+再进行相对位置与链信息编码，concat，layernorm
+
+这样就得到和h_E，h_V是初始化为零向量
+
 - **Encoder（结构编码器）**
 
 输入：
 
 - 节点初始特征 `h_V = zeros([B,L,128])`
 - 边特征线性映射 `h_E = W_e(E)` → `[B,L,K,128]`
-
-#### EncLayer 内部结构：
 
 - 输入：
   - 节点：`h_V [B,L,128]`
@@ -199,8 +211,8 @@ ProteinMPNN 的实验设计成功率高，加上计算效率高、几乎适用�
 
 == 模型结构信息 == 
 模块: features, 类型: ProteinFeatures
-模块: W_e, 类型: Linear
-模块: W_s, 类型: Embedding
+模块: W_e, 类型: Linear #编码结构特征到Encoder
+模块: W_s, 类型: Embedding #编码序列特征到Decoder
 模块: encoder_layers, 类型: ModuleList
 模块: decoder_layers, 类型: ModuleList
 模块: W_out, 类型: Linear
