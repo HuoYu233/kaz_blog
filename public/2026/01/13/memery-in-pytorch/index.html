@@ -11,7 +11,7 @@
   <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-  <title>archives | Kaz&#39;s Blog</title>
+  <title>在PyTorch中可视化和理解GPU内存 | Kaz&#39;s Blog</title>
 
   <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/img/favicon.ico">
   <link rel="stylesheet" href="https://at.alicdn.com/t/font_1911880_c1nvbyezg17.css">
@@ -324,253 +324,566 @@
   
 </header>
         <!-- 内容区域 -->
-        <div class="bg-dark-floor" style="position: fixed;left: 0;top: 0;width: 100%;height: 100%;z-index: -2;"></div>
-<div class="bg-light-floor-archive" style="position: fixed;left: 0;top: 0;width: 100%;height: 100%;z-index: -3;"></div>
-<div class="archive-header" style="background-image:url('/img/bg.jpg')">
-  <div class="archive-header-title">
-    archive
-  </div>
-  <div class="archive-header-desc">
+        
+<!-- prismjs 代码高亮 -->
+
+
+
+
+<div class="bg-dark-floor" style="position: fixed;left: 0;top: 0;width: 100%;height: 100%;z-index: -1;"></div>
+
+
+  <!-- 文章详情页顶部图片和标题 -->
+
+
+
+
+<div class="post-detail-header" id="thumbnail_canvas" style="background-repeat: no-repeat; background-size: cover; 
+  background-position: center center;position: relative;background-image:url('https://d00.paixin.com/thumbs/1772227/30081205/staff_1024.jpg')">
+  <div class="post-detail-header-mask"></div>
+  <canvas id="header_canvas"style="position:absolute;bottom:0;pointer-events:none;"></canvas>
   
+  <div class="post-detail-header_info-box">
+    <div class="title-box">
       <span class="title">
-      
+        在PyTorch中可视化和理解GPU内存
       </span>
-  
-  </div>
-  <div class="mask-box"></div>
-</div>
-
-<div class="archive-video">
-  <video class="full-video" autoplay loop muted>
-      <source style="width: 100%;height: 100vh;" src="/">
-  </video>
-  <div class="video-header-title">
-    archive
-  </div>
-  <div class="video-header-desc">
-  
-          <span class="title">
-          
-          </span>
-      
-  </div>
-  <div class="mask-box"></div>
-</div>
-
-<!-- hash算法 -->
-
-
-<div class="archive-main">
-  <section class="archive">
-    <div class="archive-content">
-      <ul class="post-archive">
-        
-        
-          
-            
-            <div class="year" data-aos="zoom-in-up">
-                <div class="bullet"></div>
-                <a href="/archives/2026">2026</a>
-            </div>
-          
-          <li class="post-item" data-aos="fade-left">
-            
-            <div class="post-img-box">
-              <a href="/2026/01/21/conditionMPNN/" class="post-img " style="background-size: cover; 
-                background-position: center center;">
-                <img class="lazyload lazyload placeholder" src="https://camo.githubusercontent.com/d1a1014ab71380dccf048c2f60a54de6954ccc670f321b0ed6bf4d8af1fb3699/68747470733a2f2f646f63732e676f6f676c652e636f6d2f64726177696e67732f642f652f32504143582d317654746e4d42444f71385470484963745566474e38566c3332783549534e63504b6c786a63514a4632713730506c61483275466c6a3241633473336b686e5a71473159787070644d72306954796b2d2f7075623f773d38383926683d333538" class="lazyload placeholder" data-srcset="https://camo.githubusercontent.com/d1a1014ab71380dccf048c2f60a54de6954ccc670f321b0ed6bf4d8af1fb3699/68747470733a2f2f646f63732e676f6f676c652e636f6d2f64726177696e67732f642f652f32504143582d317654746e4d42444f71385470484963745566474e38566c3332783549534e63504b6c786a63514a4632713730506c61483275466c6a3241633473336b686e5a71473159787070644d72306954796b2d2f7075623f773d38383926683d333538" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
-              </a>
-            </div>
-            <div class="post-date-title">
-              <div>
-                <span class="post-date">01-21</span>
-              </div>
-              <a class="post-title" href="/2026/01/21/conditionMPNN/">条件-结构引导的ProteinMPNN序列设计</a>
-            </div>
-          </li>
-        
-          
-          <li class="post-item" data-aos="fade-left">
-            
-            <div class="post-img-box">
-              <a href="/2026/01/13/memery-in-pytorch/" class="post-img " style="background-size: cover; 
-                background-position: center center;">
-                <img class="lazyload lazyload placeholder" src="https://d00.paixin.com/thumbs/1772227/30081205/staff_1024.jpg" class="lazyload placeholder" data-srcset="https://d00.paixin.com/thumbs/1772227/30081205/staff_1024.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
-              </a>
-            </div>
-            <div class="post-date-title">
-              <div>
-                <span class="post-date">01-13</span>
-              </div>
-              <a class="post-title" href="/2026/01/13/memery-in-pytorch/">在PyTorch中可视化和理解GPU内存</a>
-            </div>
-          </li>
-        
-          
-            
-            <div class="year" data-aos="zoom-in-up">
-                <div class="bullet"></div>
-                <a href="/archives/2025">2025</a>
-            </div>
-          
-          <li class="post-item" data-aos="fade-left">
-            
-            <div class="post-img-box">
-              <a href="/2025/12/10/Quantification/" class="post-img " style="background-size: cover; 
-                background-position: center center;">
-                <img class="lazyload lazyload placeholder" src="https://digitaloceans.cn/wp-content/uploads/2024/07/image-8-1024x500.png" class="lazyload placeholder" data-srcset="https://digitaloceans.cn/wp-content/uploads/2024/07/image-8-1024x500.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
-              </a>
-            </div>
-            <div class="post-date-title">
-              <div>
-                <span class="post-date">12-10</span>
-              </div>
-              <a class="post-title" href="/2025/12/10/Quantification/">模型量化</a>
-            </div>
-          </li>
-        
-          
-          <li class="post-item" data-aos="fade-left">
-            
-            <div class="post-img-box">
-              <a href="/2025/11/25/hello-agent/" class="post-img " style="background-size: cover; 
-                background-position: center center;">
-                <img class="lazyload lazyload placeholder" src="https://datawhalechina.github.io/hello-agents/images/hello-agents.png" class="lazyload placeholder" data-srcset="https://datawhalechina.github.io/hello-agents/images/hello-agents.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
-              </a>
-            </div>
-            <div class="post-date-title">
-              <div>
-                <span class="post-date">11-25</span>
-              </div>
-              <a class="post-title" href="/2025/11/25/hello-agent/">DataWhale-Hello-Agent-Notes</a>
-            </div>
-          </li>
-        
-          
-          <li class="post-item" data-aos="fade-left">
-            
-            <div class="post-img-box">
-              <a href="/2025/10/27/proteinMPNN/" class="post-img " style="background-size: cover; 
-                background-position: center center;">
-                <img class="lazyload lazyload placeholder" src="https://camo.githubusercontent.com/d1a1014ab71380dccf048c2f60a54de6954ccc670f321b0ed6bf4d8af1fb3699/68747470733a2f2f646f63732e676f6f676c652e636f6d2f64726177696e67732f642f652f32504143582d317654746e4d42444f71385470484963745566474e38566c3332783549534e63504b6c786a63514a4632713730506c61483275466c6a3241633473336b686e5a71473159787070644d72306954796b2d2f7075623f773d38383926683d333538" class="lazyload placeholder" data-srcset="https://camo.githubusercontent.com/d1a1014ab71380dccf048c2f60a54de6954ccc670f321b0ed6bf4d8af1fb3699/68747470733a2f2f646f63732e676f6f676c652e636f6d2f64726177696e67732f642f652f32504143582d317654746e4d42444f71385470484963745566474e38566c3332783549534e63504b6c786a63514a4632713730506c61483275466c6a3241633473336b686e5a71473159787070644d72306954796b2d2f7075623f773d38383926683d333538" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
-              </a>
-            </div>
-            <div class="post-date-title">
-              <div>
-                <span class="post-date">10-27</span>
-              </div>
-              <a class="post-title" href="/2025/10/27/proteinMPNN/">【文献阅读】ProteinMPNN</a>
-            </div>
-          </li>
-        
-          
-          <li class="post-item" data-aos="fade-left">
-            
-            <div class="post-img-box">
-              <a href="/2025/10/23/venusREM/" class="post-img " style="background-size: cover; 
-                background-position: center center;">
-                <img class="lazyload lazyload placeholder" src="https://raw.githubusercontent.com/ai4protein/VenusREM/main/img/framework.png" class="lazyload placeholder" data-srcset="https://raw.githubusercontent.com/ai4protein/VenusREM/main/img/framework.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
-              </a>
-            </div>
-            <div class="post-date-title">
-              <div>
-                <span class="post-date">10-23</span>
-              </div>
-              <a class="post-title" href="/2025/10/23/venusREM/">【文献阅读】VenusREM</a>
-            </div>
-          </li>
-        
-          
-          <li class="post-item" data-aos="fade-left">
-            
-            <div class="post-img-box">
-              <a href="/2025/10/21/all-in-rag/" class="post-img " style="background-size: cover; 
-                background-position: center center;">
-                <img class="lazyload lazyload placeholder" src="https://datawhalechina.github.io/all-in-rag/logo.svg" class="lazyload placeholder" data-srcset="https://datawhalechina.github.io/all-in-rag/logo.svg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
-              </a>
-            </div>
-            <div class="post-date-title">
-              <div>
-                <span class="post-date">10-21</span>
-              </div>
-              <a class="post-title" href="/2025/10/21/all-in-rag/">DataWhale-all-in-Rag-Notes</a>
-            </div>
-          </li>
-        
-          
-          <li class="post-item" data-aos="fade-left">
-            
-            <div class="post-img-box">
-              <a href="/2025/09/29/prot2text/" class="post-img " style="background-size: cover; 
-                background-position: center center;">
-                <img class="lazyload lazyload placeholder" src="https://github.com/hadi-abdine/Prot2Text/raw/master/Prot2Text.drawio.png" class="lazyload placeholder" data-srcset="https://github.com/hadi-abdine/Prot2Text/raw/master/Prot2Text.drawio.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
-              </a>
-            </div>
-            <div class="post-date-title">
-              <div>
-                <span class="post-date">09-29</span>
-              </div>
-              <a class="post-title" href="/2025/09/29/prot2text/">【文献阅读】Prot2Text</a>
-            </div>
-          </li>
-        
-          
-          <li class="post-item" data-aos="fade-left">
-            
-            <div class="post-img-box">
-              <a href="/2025/09/26/protrek/" class="post-img " style="background-size: cover; 
-                background-position: center center;">
-                <img class="lazyload lazyload placeholder" src="https://cbirt.net/wp-content/uploads/2024/06/ProTrek.webp" class="lazyload placeholder" data-srcset="https://cbirt.net/wp-content/uploads/2024/06/ProTrek.webp" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
-              </a>
-            </div>
-            <div class="post-date-title">
-              <div>
-                <span class="post-date">09-26</span>
-              </div>
-              <a class="post-title" href="/2025/09/26/protrek/">【文献阅读】ProTrek</a>
-            </div>
-          </li>
-        
-          
-          <li class="post-item" data-aos="fade-left">
-            
-            <div class="post-img-box">
-              <a href="/2025/07/01/tudui-pytorch/" class="post-img " style="background-size: cover; 
-                background-position: center center;">
-                <img class="lazyload lazyload placeholder" src="https://i0.hdslb.com/bfs/archive/6bed0eae871f7232429009ad607d9b230cec6cc1.png" class="lazyload placeholder" data-srcset="https://i0.hdslb.com/bfs/archive/6bed0eae871f7232429009ad607d9b230cec6cc1.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
-              </a>
-            </div>
-            <div class="post-date-title">
-              <div>
-                <span class="post-date">07-01</span>
-              </div>
-              <a class="post-title" href="/2025/07/01/tudui-pytorch/">小土堆深度学习学习笔记</a>
-            </div>
-          </li>
-        
-      </ul>
-    </div>
-  </section>
-  <div class="w-70">
-    
-  <!-- <nav class="page-nav">
-    <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><a class="page-number" href="/archives/page/3/">3</a><a class="extend next" rel="next" href="/archives/page/2/">Next</a>
-  </nav> -->
-  <div class="page-nav">
-    
-    <div class="page-info">
-        <div class="page-info-text">1 / 3</div>
     </div>
     
-      <a href="/archives/page/2/"
-         class="page-nav-next">
-          <span class="mr-5">Next</span><i class="fas fa-angle-right"></i>
-      </a>
+    
       
+        <span class="post-detail-header_date">
+          <i class="fas fa-calendar"></i> Published in：2026-01-13 |
+        </span>
+      
+
+      
+
+      
+    
+  </div>
+  
+  
+    <script defer src="/js/bubble/bubble.js"></script>
+  
+</div>
+
+
+
+
+
+<div class="post-detail-content post-row" 
+  style="padding-top: 0px;">
+  <div class="main-content">
+    <article class="post post-detail">
+      <div class="post-content">
+        <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">RuntimeError: CUDA out of memory. Tried to allocate 20.00 MiB (GPU 0; 7.93 GiB total capacity; 6.00 GiB already allocated; 14.88 MiB free; 6.00 GiB reserved <span class="keyword">in</span> total by PyTorch)</span><br></pre></td></tr></table></figure>
+
+<p>虽然很容易看到GPU内存已经满了，但理解为什么以及如何修复它可能更具挑战性。在本教程中，我们将逐步介绍如何在训练过程中可视化和理解PyTorch中的GPU内存使用情况。我们还将了解如何估计内存需求和优化GPU内存使用。</p>
+<p>PyTorch提供了一个方便的工具来可视化GPU内存使用：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">from</span> torch <span class="keyword">import</span> nn</span><br><span class="line"></span><br><span class="line"><span class="comment"># Start recording memory snapshot history</span></span><br><span class="line">torch.cuda.memory._record_memory_history(max_entries=<span class="number">100000</span>)</span><br><span class="line"></span><br><span class="line">model = nn.Linear(<span class="number">10_000</span>, <span class="number">50_000</span>, device =<span class="string">&quot;cuda&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>):</span><br><span class="line">    inputs = torch.randn(<span class="number">5_000</span>, <span class="number">10_000</span>, device=<span class="string">&quot;cuda&quot;</span>)</span><br><span class="line">    outputs = model(inputs)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Dump memory snapshot history to a file and stop recording</span></span><br><span class="line">torch.cuda.memory._dump_snapshot(<span class="string">&quot;profile.pkl&quot;</span>)</span><br><span class="line">torch.cuda.memory._record_memory_history(enabled=<span class="literal">None</span>)</span><br></pre></td></tr></table></figure>
+
+<p>运行这段代码会生成一个<code>profile.pkl</code>文件，其中包含了执行过程中GPU内存使用的历史记录。您可以在<a target="_blank" rel="noopener" href="https://pytorch.org/memory_viz%E4%B8%8A%E5%8F%AF%E8%A7%86%E5%8C%96%E6%AD%A4%E5%8E%86%E5%8F%B2%E3%80%82">https://pytorch.org/memory_viz上可视化此历史。</a></p>
+<p>通过拖放<code>profile.pkl</code>文件，你会看到这样的图形：</p>
+<p><img src="https://hf-mirror.com/datasets/huggingface/documentation-images/resolve/main/blog/train_memory/simple_profile.png" class="lazyload placeholder" data-srcset="https://hf-mirror.com/datasets/huggingface/documentation-images/resolve/main/blog/train_memory/simple_profile.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp"></p>
+<p>让我们把这个图分解成几个关键部分：</p>
+<p><img src="https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/blog/train_memory/simple_profile_partitioned.png" class="lazyload placeholder" data-srcset="https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/blog/train_memory/simple_profile_partitioned.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp"></p>
+<ol>
+<li><p>模型创建：内存增加2 GB，对应于模型的大小：</p>
+<p>$10000 \times 50000$ weight $+ 50000$ biases in $float32(4\ bytes)$&#x3D;$5 \times 10^8 \times 4 bytes &#x3D; 2GB$​</p>
+<p>这个内存（蓝色）在整个执行过程中都保持不变。</p>
+</li>
+<li><p>创建输入张量（第一个循环）：匹配输入张量大小，内存增加200 MB：</p>
+<p>$5000 \times 10000$ elements in $float32(4\ bytes)&#x3D;0.2GB$</p>
+</li>
+<li><p>前向传递（第1个循环）：输出张量的内存增加1 GB：</p>
+<p>$5000\times50000$ elements in $float32(4\ bytes)&#x3D;(25\times10^7)\times4\ bytes&#x3D;1GB$​ </p>
+</li>
+<li><p>输入张量创建（第2个循环）：对于一个新的输入张量，内存增加200 MB。在这一点上，您可能希望从步骤2的输入张量得到释放。然而，它不是：模型保留了它的激活，因此即使张量不再分配给变量<code>inputs</code>，它仍然被模型的前向传递计算引用。模型保留了它的激活，因为这些张量是神经网络中的反向传播过程所需要的。试试<code>torch.no_grad()</code>；看看区别。</p>
+</li>
+<li><p>前向传递（第二个循环）：新输出张量的内存增加了1 GB，按步骤3计算。</p>
+</li>
+<li><p>释放第一个循环激活：在第二个循环向前传递之后，可以释放第一个循环（步骤2）的输入张量。模型的激活保存第一个输入张量，被第二个循环的输入覆盖。一旦第二个循环完成，第一个张量不再被引用，它的内存可以被释放。</p>
+<p>第二次 forward 完成</p>
+<p>计算图更新</p>
+<p>第一次 forward 的输入激活不再被引用</p>
+</li>
+<li><p>更新<code>output</code>；：将步骤3的输出张量重新分配给变量<code>output</code>；前一个张量不再被引用并被删除，释放其内存。</p>
+</li>
+<li><p>输入张量创建（第三个循环）：与步骤4相同。</p>
+</li>
+<li><p>前向传递（第三循环）：和第5步一样。</p>
+</li>
+<li><p>释放第二格循环激活：释放步骤4的输入张量。</p>
+</li>
+<li><p>再次更新<code>output</code>：从步骤5输出的张量被重新分配给变量<code>output</code>，释放之前的张量。</p>
+</li>
+<li><p>代码执行结束：释放所有内存。</p>
+</li>
+</ol>
+<p>前面的例子是简化的。在真实场景中，我们经常训练复杂的模型，而不是单个线性层。此外，前面的例子不包括训练过程。在这里，我们将研究GPU内存在一个真正的大型语言模型（LLM）的完整训练循环期间的行为。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> AutoModelForCausalLM</span><br><span class="line"></span><br><span class="line"><span class="comment"># Start recording memory snapshot history</span></span><br><span class="line">torch.cuda.memory._record_memory_history(max_entries=<span class="number">100000</span>)</span><br><span class="line"></span><br><span class="line">model = AutoModelForCausalLM.from_pretrained(<span class="string">&quot;Qwen/Qwen2.5-1.5B&quot;</span>).to(<span class="string">&quot;cuda&quot;</span>)</span><br><span class="line">optimizer = torch.optim.AdamW(model.parameters(), lr=<span class="number">1e-3</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>):</span><br><span class="line">    inputs = torch.randint(<span class="number">0</span>, <span class="number">100</span>, (<span class="number">16</span>, <span class="number">256</span>), device=<span class="string">&quot;cuda&quot;</span>)  <span class="comment"># Dummy input</span></span><br><span class="line">    loss = torch.mean(model(inputs).logits)  <span class="comment"># Dummy loss</span></span><br><span class="line">    loss.backward()</span><br><span class="line">    optimizer.step()</span><br><span class="line">    optimizer.zero_grad()</span><br><span class="line"></span><br><span class="line"><span class="comment"># Dump memory snapshot history to a file and stop recording</span></span><br><span class="line">torch.cuda.memory._dump_snapshot(<span class="string">&quot;profile.pkl&quot;</span>)</span><br><span class="line">torch.cuda.memory._record_memory_history(enabled=<span class="literal">None</span>)</span><br></pre></td></tr></table></figure>
+
+<p>提示：在分析时，限制步骤的数量。每个GPU内存事件都会被记录，文件可能会变得非常大。例如，上面的代码生成一个8 MB的文件。</p>
+<p>下面是这个例子的内存配置：</p>
+<p><img src="https://hf-mirror.com/datasets/huggingface/documentation-images/resolve/main/blog/train_memory/raw_training_profile.png" class="lazyload placeholder" data-srcset="https://hf-mirror.com/datasets/huggingface/documentation-images/resolve/main/blog/train_memory/raw_training_profile.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp"></p>
+<p>这个图比前面的例子更复杂，但我们仍然可以一步一步地分解它。注意这三个尖峰，每个尖峰都对应于训练循环的一次迭代。让我们简化图形以使其更容易解释：</p>
+<p><img src="https://hf-mirror.com/datasets/huggingface/documentation-images/resolve/main/blog/train_memory/colorized_training_profile.png" class="lazyload placeholder" data-srcset="https://hf-mirror.com/datasets/huggingface/documentation-images/resolve/main/blog/train_memory/colorized_training_profile.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp"></p>
+<ol>
+<li>模型初始化(<code>model = AutoModelForCausalLM.from_pretrained(&quot;Qwen/Qwen2.5-1.5B&quot;).to(&quot;cuda&quot;)</code>)</li>
+</ol>
+<p>第一步是将模型加载到GPU上。模型参数（蓝色）占用内存，直到训练结束。</p>
+<ol start="2">
+<li>前向传播(<code>model(inputs)</code>)</li>
+</ol>
+<p>在正向传递期间，激活（每层的中间输出）被计算并存储在内存中以进行反向传播。这些激活，用橙色表示，一层一层地增长，直到最后一层。损失在橙色区域的峰值计算。</p>
+<ol start="3">
+<li>反向传播(<code>loss.backward()</code>)</li>
+</ol>
+<p>梯度（黄色）在此阶段计算并存储。同时，由于不再需要，激活被丢弃，导致橙色区域缩小。黄色区域表示梯度计算的内存使用情况。</p>
+<ol start="4">
+<li>优化器更新(<code>optimizer.step()</code>)</li>
+</ol>
+<p>梯度用于更新模型参数。最初，优化器本身被初始化（绿色区域）。这个初始化只执行一次。之后，优化器使用梯度来更新模型参数。为了更新参数，优化器临时存储中间值（红色区域）。更新之后，梯度（黄色）和中间优化器值（红色）都被丢弃，从而释放内存。</p>
+<p>至此，一次训练迭代完成。该过程在剩余的迭代中重复，产生图中可见的三个内存峰值。</p>
+<p>这样的训练配置文件通常遵循一致的模式，这使它们有助于估计给定模型和训练循环的GPU内存需求。</p>
+<p>从上面的部分来看，估计GPU内存需求似乎很简单。所需的总内存应该对应于内存配置文件中的最高峰值，该峰值发生在正向传递期间。在这种情况下，内存需求是（蓝绿橙）： $Model Parameters+Optimizer State+Activations$</p>
+<p>就这么简单吗？实际上，有一个陷阱。根据训练设置的不同，配置文件可能看起来不同。例如，将批量大小从16减少到2会改变图片：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">- inputs = torch.randint(<span class="number">0</span>, <span class="number">100</span>, (<span class="number">16</span>, <span class="number">256</span>), device=<span class="string">&quot;cuda&quot;</span>)  <span class="comment"># Dummy input</span></span><br><span class="line">+ inputs = torch.randint(<span class="number">0</span>, <span class="number">100</span>, (<span class="number">2</span>, <span class="number">256</span>), device=<span class="string">&quot;cuda&quot;</span>)  <span class="comment"># Dummy input</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://hf-mirror.com/datasets/huggingface/documentation-images/resolve/main/blog/train_memory/colorized_training_profile_2.png" class="lazyload placeholder" data-srcset="https://hf-mirror.com/datasets/huggingface/documentation-images/resolve/main/blog/train_memory/colorized_training_profile_2.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp"></p>
+<p>现在，最高峰值出现在优化过程中，而不是前向过程中。在这种情况下，内存需求变为（蓝绿黄红）：$Model Parameters+Optimizer State+Gradients+Optimizer Intermediates$</p>
+<p>为了推广内存估计，我们需要考虑所有可能的峰值，而不管它们是发生在正向传递还是在优化器步骤中。</p>
+<ul>
+<li>模型参数是最容易估计的。</li>
+</ul>
+<p>$Model Parameters+Optimizer State+max(Gradients+Optimizer Intermediates,Activations)$</p>
+<p>现在我们有了方程，让我们看看如何估计每个分量。</p>
+<p>$Model Memory&#x3D;N×P$</p>
+<p>其中$N$是参数数量，$P$是精度（字节为单位，例如<code>float32</code>就是4）</p>
+<p>例如，一个有15亿个参数且精度为4字节的模型需要：</p>
+<p>$Model Memory&#x3D;1.5×10^9×4bytes&#x3D;6GB$</p>
+<ul>
+<li>优化器状态所需的内存取决于优化器类型和模型参数。例如，<code>AdwmW</code>；优化器为每个参数存储两个矩（第一和第二）。这使得优化器的状态大小：</li>
+</ul>
+<p>$Optimizer State Size&#x3D;2×N×P$</p>
+<ul>
+<li>激活所需的内存很难估计，因为它包括前向传递期间计算的所有中间值。为了计算激活内存，我们可以使用一个前向hook来测量输出的大小：</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> AutoModelForCausalLM</span><br><span class="line"></span><br><span class="line">model = AutoModelForCausalLM.from_pretrained(<span class="string">&quot;Qwen/Qwen2.5-1.5B&quot;</span>).to(<span class="string">&quot;cuda&quot;</span>)</span><br><span class="line"></span><br><span class="line">activation_sizes = []</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">forward_hook</span>(<span class="params">module, <span class="built_in">input</span>, output</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    Hook to calculate activation size for each module.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">isinstance</span>(output, torch.Tensor):</span><br><span class="line">        activation_sizes.append(output.numel() * output.element_size())</span><br><span class="line">    <span class="keyword">elif</span> <span class="built_in">isinstance</span>(output, (<span class="built_in">tuple</span>, <span class="built_in">list</span>)):</span><br><span class="line">        <span class="keyword">for</span> tensor <span class="keyword">in</span> output:</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">isinstance</span>(tensor, torch.Tensor):</span><br><span class="line">                activation_sizes.append(tensor.numel() * tensor.element_size())</span><br><span class="line"></span><br><span class="line"><span class="comment"># Register hooks for each submodule</span></span><br><span class="line">hooks = []</span><br><span class="line"><span class="keyword">for</span> submodule <span class="keyword">in</span> model.modules():</span><br><span class="line">    hooks.append(submodule.register_forward_hook(forward_hook))</span><br><span class="line"></span><br><span class="line"><span class="comment"># Perform a forward pass with a dummy input</span></span><br><span class="line">dummy_input = torch.zeros((<span class="number">1</span>, <span class="number">1</span>), dtype=torch.int64, device=<span class="string">&quot;cuda&quot;</span>)</span><br><span class="line">model.<span class="built_in">eval</span>()  <span class="comment"># No gradients needed for memory measurement</span></span><br><span class="line"><span class="keyword">with</span> torch.no_grad():</span><br><span class="line">    model(dummy_input)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Clean up hooks</span></span><br><span class="line"><span class="keyword">for</span> hook <span class="keyword">in</span> hooks:</span><br><span class="line">    hook.remove()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">sum</span>(activation_sizes))  <span class="comment"># Output: 5065216</span></span><br></pre></td></tr></table></figure>
+
+<p>对于Qwen2.5-1.5B模型，这为每个输入token提供了5,065,216个激活。要估计输入张量的总激活内存，使用：$ Activation Memory&#x3D;A×B×L×P$</p>
+<p>其中A是每个token的激活数量，B是批量大小，L是序列长度</p>
+<p>然而，直接使用这种方法并不总是实用的。理想情况下，我们希望在不运行模型的情况下用启发式方法估计激活内存。此外，我们可以直观地看到，更大的模型具有更多的激活。这就引出了一个问题：模型参数的数量和激活的数量之间是否存在联系？</p>
+<p>不是直接的，因为每个令牌的激活数量取决于模型架构。然而，llm往往具有相似的结构。通过分析不同的模型，我们观察到参数数量和激活数量之间大致的线性关系：</p>
+<p><img src="https://hf-mirror.com/datasets/huggingface/documentation-images/resolve/main/blog/train_memory/activation_memory_with_global_regression.png" class="lazyload placeholder" data-srcset="https://hf-mirror.com/datasets/huggingface/documentation-images/resolve/main/blog/train_memory/activation_memory_with_global_regression.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp"></p>
+<p>这种线性关系允许我们使用启发式方法来估计激活值：</p>
+<p>$A&#x3D;4.6894×10^{−4}×N+1.8494×10^6$</p>
+<p>虽然这只是一个近似值，但它提供了一种实用的方法来估计激活内存，而不需要对每个模型进行复杂的计算。</p>
+<p>梯度更容易估计。梯度所需的内存与模型参数相同：</p>
+<p>$Gradients Memory&#x3D;N×P$</p>
+<p>更新模型参数时，优化器存储中间值。这些值所需的内存与模型参数相同：</p>
+<p>$Optimizer Intermediates Memory&#x3D;N×P$</p>
+<p>总而言之，训练模型所需的总内存为：</p>
+<p>$Total Memory&#x3D;Model Memory+Optimizer State+max(Gradients,Optimizer Intermediates,Activations)$</p>
+<p>通过以下组件：</p>
+<ul>
+<li><strong>Model Memory</strong>: $N×P$</li>
+<li><strong>Optimizer State</strong>: $2×N×P$</li>
+<li><strong>Gradients</strong>: $N×P$</li>
+<li><strong>Optimizer Intermediates</strong>: $N×P$</li>
+<li><strong>Activations</strong>:$ A×B×L×P, A&#x3D;4.6894×10^{−4}×N+1.8494×10^6$</li>
+</ul>
+
+      </div>
+      <div class="post-tags-categories">
+        
+      </div>
+      
+    </article>
+    <!-- 上一篇文章和下一篇文章 -->
+    
+      <!-- 文章详情页的上一页和下一页 -->
+<div class="post-nav">
+
+
+
+  
+  <div class="post-nav-prev post-nav-item">
+    <div class="post-nav-img" style="background-size: cover; 
+      background-position: center center;">
+      <img class="lazyload lazyload placeholder" src="https://camo.githubusercontent.com/d1a1014ab71380dccf048c2f60a54de6954ccc670f321b0ed6bf4d8af1fb3699/68747470733a2f2f646f63732e676f6f676c652e636f6d2f64726177696e67732f642f652f32504143582d317654746e4d42444f71385470484963745566474e38566c3332783549534e63504b6c786a63514a4632713730506c61483275466c6a3241633473336b686e5a71473159787070644d72306954796b2d2f7075623f773d38383926683d333538" class="lazyload placeholder" data-srcset="https://camo.githubusercontent.com/d1a1014ab71380dccf048c2f60a54de6954ccc670f321b0ed6bf4d8af1fb3699/68747470733a2f2f646f63732e676f6f676c652e636f6d2f64726177696e67732f642f652f32504143582d317654746e4d42444f71385470484963745566474e38566c3332783549534e63504b6c786a63514a4632713730506c61483275466c6a3241633473336b686e5a71473159787070644d72306954796b2d2f7075623f773d38383926683d333538" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+    </div>
+    <a href="/2026/01/21/conditionMPNN/" class="post-nav-link">
+      <div class="title">
+        <i class="fas fa-angle-left"></i> Prev:
+        <div class="title-text">条件-结构引导的ProteinMPNN序列设计</div>
+      </div>
+      
+      <!-- <div class="content">
+        A. 输入特征的简化与增强早期的深度学习模型常使用二面角等特征，但 ProteinMPNN 的研究发现，使用原子间的距离
+      </div> -->
+    </a>
   </div>
 
+
+
+  
+  <div class="post-nav-next post-nav-item">
+    <div class="post-nav-img" style="background-size: cover; 
+      background-position: center center;">
+      <img class="lazyload lazyload placeholder" src="https://digitaloceans.cn/wp-content/uploads/2024/07/image-8-1024x500.png" class="lazyload placeholder" data-srcset="https://digitaloceans.cn/wp-content/uploads/2024/07/image-8-1024x500.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" src="" alt="">
+    </div>
+    <a href="/2025/12/10/Quantification/" class="post-nav-link">
+      <div class="title">
+        Next: <i class="fas fa-angle-right"></i>
+        <div class="title-text">模型量化</div>
+      </div>
+      <!-- <div class="content">
+        
+      </div> -->
+    </a>
   </div>
+
 </div>
+
+    
+    
+
+    <!-- 打赏 -->
+    
+
+    <!-- 分享 -->
+    
+    
+    <!-- 评论 -->
+    <!-- 评论 -->
+
+  <div id="myComment">
+    
+      <div id="gitment-container"></div>
+
+    
+  </div>
+
+
+<!-- 还需要在后面这个地址里设置script, comment script in themes\hexo-theme-bamboo\layout\_partial\scripts\index.ejs -->
+
+
+  </div>
+
+  <!-- 目录 -->
+  <aside id='l_side'>
+  
+    
+      <section class="widget side_blogger">
+  <div class='content'>
+    
+      
+        <a class='avatar flat-box rectangle' href='/about/index'>
+          <img src='/img/Kaz.jpg'/>
+        </a>
+      
+    
+    
+      <div class='text'>
+        
+          <h2>Kaz</h2>
+        
+        
+          <p>好戏都在烟火里</p>
+
+        
+        
+      </div>
+    
+    
+      <div class="social-wrapper">
+        
+          
+            <a href="mailto:alanluo233@gmail.com"
+              class="social fas fa-envelope flat-btn"
+              target="_blank"
+              rel="external nofollow noopener noreferrer">
+              
+            </a>
+          
+        
+          
+            <a href="https://github.com/HuoYu233"
+              class="social fab fa-github flat-btn"
+              target="_blank"
+              rel="external nofollow noopener noreferrer">
+              
+            </a>
+          
+        
+          
+            <a href="tencent://AddContact/?fromId=50&amp;fromSubId=1&amp;subcmd=all&amp;uin=1981270473"
+              class="social fab fa-qq flat-btn"
+              target="_blank"
+              rel="external nofollow noopener noreferrer">
+              
+            </a>
+          
+        
+          
+            <a href="https://space.bilibili.com/82505737"
+              class="social fab fa-bilibili flat-btn"
+              target="_blank"
+              rel="external nofollow noopener noreferrer">
+              
+            </a>
+          
+        
+      </div>
+    
+  </div>
+</section>
+
+    
+  
+  
+  
+
+  <div class="layout_sticky">    
+    
+      
+<section class="widget side_toc">
+  
+  <header>
+    
+      <i style="color: " class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name' style="color: ">本文目录</span>
+    
+  </header>
+
+
+  <div class='content'>
+    <div class="toc-main">
+      <div class="toc-content">
+        <!--  -->
+        <div class="toc"></div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- 手机端目录按钮 -->
+<div id="toc-mobile-btn">
+  <i class="fas fa-list-ul" aria-hidden="true"></i>
+</div>
+
+      
+    
+  </div>
+</aside>
+
+  <!-- 图片放大 Wrap images with fancybox support -->
+  <script defer src="/js/wrapImage.js"></script>
+</div>
+
+<!-- 文章详情页背景图 -->
+<div id="appBgSwiper" style="position: fixed;left: 0;top: 0;width: 100%;height: 100%;z-index: -2;"
+	:style="{'background-color': bgColor ? bgColor : 'transparent'}">
+	<transition-group tag="ul" :name="names">
+		<li v-for='(image,index) in img' :key='index' v-show="index === mark" class="bg-swiper-box">
+			<img :src="image" class="bg-swiper-img no-lazy">
+		</li>
+	</transition-group>
+</div>
+<script>
+	var vm = new Vue({
+		el: '#appBgSwiper',
+		data: {
+			names: '' || 'fade' || 'fade', // translate-fade fade
+			mark: 0,
+			img: [],
+			bgColor: '',
+			time: null
+		},
+		methods: {   //添加方法
+			change(i, m) {
+				if (i > m) {
+					// this.names = 'fade';
+				} else if (i < m) {
+					// this.names = 'fade';
+				} else {
+					return;
+				}
+				this.mark = i;
+			},
+			prev() {
+				// this.names = 'fade';
+				this.mark--;
+				if (this.mark === -1) {
+					this.mark = 3;
+					return
+				}
+			},
+			next() {
+				// this.names = 'fade';
+				this.mark++;
+				if (this.mark === this.img.length) {
+					this.mark = 0;
+					return
+				}
+			},
+			autoPlay() {
+				// this.names = 'fade';
+				this.mark++;
+				if (this.mark === this.img.length) {
+					this.mark = 0;
+					return
+				}
+			},
+			play() {
+				let bgImgDelay = '' || '180000'
+				let delay = parseInt(bgImgDelay) || 180000;
+				this.time = setInterval(this.autoPlay, delay);
+			},
+			enter() {
+				clearInterval(this.time);
+			},
+			leave() {
+				this.play();
+			}
+		},
+		created() {
+			this.play()
+		},
+		beforeDestroy() {
+			clearInterval(this.time);
+		},
+		mounted() {
+			let prop = '' || '';
+			let isImg = prop.includes('.bmp') || prop.includes('.jpg') || prop.includes('.png') || prop.includes('.tif') || prop.includes('.gif') || prop.includes('.pcx') || prop.includes('.tga') || prop.includes('.exif') || prop.includes('.fpx') || prop.includes('.psd') || prop.includes('.cdr') || prop.includes('.pcd') || prop.includes('.dxf') || prop.includes('.ufo') || prop.includes('.eps') || prop.includes('.ai') || prop.includes('.raw') || prop.includes('.WMF') || prop.includes('.webp') || prop.includes('.jpeg') || prop.includes('http://') || prop.includes('https://')
+			if (isImg) {
+				let img = prop.split(',');
+				let configRoot = '/'
+				let arrImg = [];
+				img.forEach(el => {
+					var Expression = /http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/;
+					var objExp = new RegExp(Expression);
+
+					if (objExp.test(el)) {
+						// http or https
+						arrImg.push(el);
+					} else {
+						// 非http or https开头
+						// 本地文件
+						let firstStr = el.charAt(0);
+						if (firstStr == '/') {
+							el = el.substr(1); // 删除第一个字符 '/',因为 configRoot最后一个字符为 /
+						}
+						el = configRoot + el;
+						arrImg.push(el);
+					}
+				})
+				this.img = arrImg;
+			} else {
+				this.bgColor = prop;
+			}
+		}
+	})
+</script>
+
+<style>
+	.bg-swiper-box {
+		position: absolute;
+		display: block;
+		width: 100%;
+		height: 100%;
+	}
+
+	.bg-swiper-img {
+		object-fit: cover;
+		width: 100%;
+		height: 100%;
+	}
+</style>
+
+
+  <script>
+  // https://github.com/theme-next/hexo-theme-next/blob/master/layout/_third-party/math/mathjax.swig
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = 'https://unpkg.com/mathjax@3.0/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    // 文章章节标题不能为 “MathJax” ，否则会报错。
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+
+
+
+  <script>
+  function loadMermaid() {
+    if (document.getElementsByClassName('mermaid').length) {
+      if (window.mermaidJsLoad) mermaid.init()
+      else {
+        loadScript('https://unpkg.com/mermaid/dist/mermaid.min.js').then(() => {
+          window.mermaidJsLoad = true
+          mermaid.initialize({
+            theme: 'default',
+          })
+          if ('true') {
+            mermaid.init();
+          }
+        })
+      }
+    }
+  };
+  document.addEventListener("DOMContentLoaded", function () {
+    loadMermaid();
+  })
+
+  document.addEventListener('pjax:complete', function () {
+    loadMermaid();
+  })
+  
+</script>
+
 
       </main>
     </div>
