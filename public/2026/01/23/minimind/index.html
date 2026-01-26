@@ -1,0 +1,1951 @@
+<!DOCTYPE html>
+<html>
+  <!-- meta/link... -->
+  
+
+
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+  <title>MiniMind复现笔记记录 | Kaz&#39;s Blog</title>
+
+  <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="https://at.alicdn.com/t/font_1911880_c1nvbyezg17.css">
+  <link href="https://unpkg.com/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+  <link href="/js/swiper/swiper@5.4.1.min.css" rel="stylesheet">
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/animate.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+    <link href="https://unpkg.com/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" rel="stylesheet">
+  
+  
+  <style>
+        @media (max-width: 992px) {
+            #waifu {
+                display: none;
+            }
+        }
+    </style>
+    <script defer src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+
+    
+    
+    <!-- 依赖于jquery和vue -->
+    <script src="https://unpkg.com/jquery@3.5.1/dist/jquery.min.js"></script>
+    <script src="https://unpkg.com/vue@2.6.11/dist/vue.min.js"></script>
+
+    <!-- import link -->
+    
+        
+            
+        
+            
+        
+    
+    <!-- import script -->
+    
+        
+            
+        
+            
+        
+    
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+  
+  <!-- 预加载动画 -->
+  
+  
+  <div class="preloader_6" id="loader">
+  <div class="loader"></div>
+</div>
+  <script>
+    var endLoading = function () {
+      document.body.style.overflow = 'auto';
+      document.getElementById('loader').classList.add("loaded");
+    }
+    window.addEventListener('DOMContentLoaded', endLoading);
+  </script>
+
+
+  <body>
+    <!-- 判断是否为暗黑风格 -->
+    <!-- 判断是否为黑夜模式 -->
+<script defer>
+  let isDark = JSON.parse(localStorage.getItem('dark')) || JSON.parse('false');
+
+  if (isDark) {
+    $(document.body).addClass('darkModel');
+  }
+</script>
+
+    <!-- 需要在上面加载的js -->
+    <script>
+  function loadScript(src, cb) {
+    return new Promise(resolve => {
+      setTimeout(function () {
+        var HEAD = document.getElementsByTagName("head")[0] || document.documentElement;
+        var script = document.createElement("script");
+        script.setAttribute("type", "text/javascript");
+        if (cb) {
+          if (JSON.stringify(cb)) {
+            for (let p in cb) {
+              if (p == "onload") {
+                script[p] = () => {
+                  cb[p]()
+                  resolve()
+                }
+              } else {
+                script[p] = cb[p]
+                script.onload = resolve
+              }
+            }
+          } else {
+            script.onload = () => {
+              cb()
+              resolve()
+            };
+          }
+        } else {
+          script.onload = resolve
+        }
+        script.setAttribute("src", src);
+        HEAD.appendChild(script);
+      });
+    });
+  }
+
+  //https://github.com/filamentgroup/loadCSS
+  var loadCSS = function (src) {
+    return new Promise(resolve => {
+      setTimeout(function () {
+        var link = document.createElement('link');
+        link.rel = "stylesheet";
+        link.href = src;
+        link.onload = resolve;
+        document.getElementsByTagName("head")[0].appendChild(link);
+      });
+    });
+  };
+
+</script> 
+
+<!-- 轮播图所需要的js -->
+<script src="/js/swiper/swiper.min.js"></script>
+<script src="/js/swiper/vue-awesome-swiper.js"></script>
+<script src="/js/swiper/swiper.animate1.0.3.min.js"></script>
+
+<script type="text/javascript">
+  Vue.use(window.VueAwesomeSwiper)
+</script>
+
+
+  <script src="/js/vue-typed-js/index.js"></script>
+
+
+<!-- 首页的公告滚动插件的js需要重新加载 -->
+<script src="/js/vue-seamless-scroll/index.js"></script>
+
+<!-- 打字机效果js -->
+<script src="https://unpkg.com/typed.js@2.0.11"></script>
+
+
+    <div id="safearea">
+      <main class="main" id="pjax-container">
+        <!-- 头部导航 -->
+        
+<header class="header  " 
+  id="navHeader"
+  style="position: fixed;
+  left: 0; top: 0; z-index: 10;width: 100%;"
+>
+  <div class="header-content">
+    <div class="bars">
+      <div id="appDrawer" class="sidebar-image">
+  <div class="drawer-box-icon">
+    <i class="fas fa-bars" aria-hidden="true" @click="showDialogDrawer"></i>
+  </div>
+  
+  <transition name="fade">
+    <div class="drawer-box_mask" v-cloak style="display: none;" v-show="visible" @click.self="cancelDialogDrawer">
+    </div>
+  </transition>
+  <div class="drawer-box" :class="{'active': visible}">
+    <div class="drawer-box-head bg-color">
+      <img class="drawer-box-head_logo lazyload placeholder" src="/img/favicon.ico" class="lazyload placeholder" data-srcset="/img/favicon.ico" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="logo">
+      <h3 class="drawer-box-head_title">Kaz&#39;s Blog</h3>
+      <h5 class="drawer-box-head_desc"></h5>
+    </div>
+    
+    <div class="drawer-box-content">
+      <ul class="drawer-box-content_menu">
+        
+          
+            <li class="drawer-box-content_item" style="position: relative;">
+              
+                <a href="/about" class="drawer-menu-item-link">
+                  
+                    <i class="fas fa-user" aria-hidden="true"></i>
+                  
+                  <span class="name">About</span>
+                </a>
+              
+            </li>
+          
+            <li class="drawer-box-content_item" style="position: relative;">
+              
+                <a href="/log" class="drawer-menu-item-link">
+                  
+                    <i class="fas fa-book" aria-hidden="true"></i>
+                  
+                  <span class="name">Log</span>
+                </a>
+              
+            </li>
+          
+        
+        
+          <li class="drawer-box-content_item">
+            <a target="_blank" rel="noopener" href="https://github.com/HuoYu233">
+              <i class="fas fa-github" aria-hidden="true"></i>
+              <span>Github</span>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+  var body = document.body || document.documentElement || window;
+  var vm = new Vue({
+    el: '#appDrawer',
+    data: {
+      visible: false,
+      top: 0,
+      openArr: [],
+    },
+    computed: {
+    },
+    mounted() {
+    },
+    methods: {
+      isOpen(index) {
+        if (this.openArr.includes(index)) {
+          return true;
+        } else {
+          return false;
+        }
+      },
+      openOrCloseMenu(curIndex) {
+        const index = this.openArr.indexOf(curIndex);
+        if (index !== -1) {
+          this.openArr.splice(index, 1);
+        } else {
+          this.openArr.push(curIndex);
+        }
+      },
+      showDialogDrawer() {
+        this.visible = true;
+        // 防止页面滚动，只能让弹框滚动
+        this.top = $(document).scrollTop()
+        body.style.cssText = 'width: 100%; height: 100%;overflow: hidden;';
+      },
+      cancelDialogDrawer() {
+        this.visible = false;
+        body.removeAttribute('style');
+        $(document).scrollTop(this.top)
+      }
+    },
+    created() {}
+  })
+</script>
+
+    </div>
+    <div class="blog-title" id="author-avatar">
+      
+        <div class="avatar">
+          <img src="/img/favicon.ico" class="lazyload placeholder" data-srcset="/img/favicon.ico" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="logo">
+        </div>
+      
+      <a href="/" class="logo">Kaz&#39;s Blog</a>
+    </div>
+    <nav class="navbar">
+      <ul class="menu">
+        
+          
+            <li class="menu-item" style="position: relative;">
+              
+                <a href="/about" class="menu-item-link" title="About">
+                  
+                    <i class="fas fa-user" aria-hidden="true"></i>
+                  
+                  <span class="name">About</span>
+                </a>
+              
+            </li>
+          
+            <li class="menu-item" style="position: relative;">
+              
+                <a href="/log" class="menu-item-link" title="Log">
+                  
+                    <i class="fas fa-book" aria-hidden="true"></i>
+                  
+                  <span class="name">Log</span>
+                </a>
+              
+            </li>
+          
+        
+      </ul>
+      
+      
+
+    </nav>
+  </div>
+  
+    <a target="_blank" rel="noopener" href="https://github.com/HuoYu233" class="github-corner color-primary" aria-label="View source on GitHub"><svg width="60" height="60" viewBox="0 0 250 250" style="fill:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+  
+  
+</header>
+        <!-- 内容区域 -->
+        
+<!-- prismjs 代码高亮 -->
+
+
+
+
+<div class="bg-dark-floor" style="position: fixed;left: 0;top: 0;width: 100%;height: 100%;z-index: -1;"></div>
+
+
+  <!-- 文章详情页顶部图片和标题 -->
+
+
+
+
+<div class="post-detail-header" id="thumbnail_canvas" style="background-repeat: no-repeat; background-size: cover; 
+  background-position: center center;position: relative;background-image:url('https://raw.githubusercontent.com/jingyaogong/minimind/refs/heads/master/images/logo.png')">
+  <div class="post-detail-header-mask"></div>
+  <canvas id="header_canvas"style="position:absolute;bottom:0;pointer-events:none;"></canvas>
+  
+  <div class="post-detail-header_info-box">
+    <div class="title-box">
+      <span class="title">
+        MiniMind复现笔记记录
+      </span>
+    </div>
+    
+    
+      
+        <span class="post-detail-header_date">
+          <i class="fas fa-calendar"></i> Published in：2026-01-23 |
+        </span>
+      
+
+      
+
+      
+    
+  </div>
+  
+  
+    <script defer src="/js/bubble/bubble.js"></script>
+  
+</div>
+
+
+
+
+
+<div class="post-detail-content post-row" 
+  style="padding-top: 0px;">
+  <div class="main-content">
+    <article class="post post-detail">
+      <div class="post-content">
+        <h1 id="Minimind架构"><a href="#Minimind架构" class="headerlink" title="Minimind架构"></a>Minimind架构</h1><p>MiniMind 本质上是一个 <strong>Decoder-only Transformer</strong>。它的核心配置逻辑在 <code>MiniMindConfig</code> 中。</p>
+<ul>
+<li><strong>基础架构</strong>：类似于 LLaMA。</li>
+<li><strong>参数量级</strong>：极其轻量。<code>hidden_size=512</code>, <code>num_hidden_layers=8</code>，<code>vocab_size=6400</code>。这属于“麻雀”级别的模型，适合个人显卡甚至 CPU 快速实验和复现。</li>
+<li><strong>特殊机制</strong>：<ul>
+<li>**MoE (混合专家模型)**：可选开启。</li>
+<li>**Weight Tying (权重共享)**：Embedding 层和输出层（LM Head）共享权重，这是小模型常用的压缩手段。</li>
+</ul>
+</li>
+</ul>
+<h2 id="A-位置编码：RoPE-YaRN-Rotary-Positional-Embeddings"><a href="#A-位置编码：RoPE-YaRN-Rotary-Positional-Embeddings" class="headerlink" title="A. 位置编码：RoPE + YaRN (Rotary Positional Embeddings)"></a>A. 位置编码：RoPE + YaRN (Rotary Positional Embeddings)</h2><ul>
+<li><strong>基础 RoPE</strong>：使用旋转位置编码，这是目前主流 LLM 的标配，比绝对位置编码（如 BERT）具有更好的外推性。</li>
+</ul>
+<p>RoPE 的核心思想是将 token 的 embedding 向量看作复平面上的向量，通过<strong>旋转角度</strong>来表示位置信息。</p>
+<p>对于 $d$ 维向量 (比如 hidden_size&#x3D;512)，RoPE 将其切分成 $d&#x2F;2$ 个子空间，每个子空间是 2 维的。<br>对于第 $j$ 组 (其中 $j \in [0, d&#x2F;2)$)，我们定义不同的频率 $\theta_j$：</p>
+<p>$$\theta_j &#x3D; 10000^{-2j&#x2F;d}$$</p>
+<p>- </p>
+<ul>
+<li><p><strong>低频分量 ($j$ 很大)<strong>：$\theta_j$ 接近 1，旋转很快。负责捕捉</strong>局部信息</strong>（比如相邻的词）。</p>
+</li>
+<li><p><strong>高频分量 ($j$ 很小)<strong>：$\theta_j$ 接近 0，旋转很慢，波长很长。负责捕捉</strong>全局长距离</strong></p>
+</li>
+<li><p>**YaRN (Yet another RoPE extensioN)**：</p>
+<ul>
+<li>注意代码段 <code>if end / orig_max &gt; 1.0:</code> 及其后的逻辑。</li>
+<li>这是一个<strong>长文本外推技术</strong>。当推理长度超过训练时的最大长度（<code>original_max_position_embeddings</code>）时，它通过对频率进行插值（Ramp function），动态调整 RoPE 的缩放因子。这意味着即使你用较短的序列训练，模型也有能力处理更长的上下文。</li>
+</ul>
+</li>
+</ul>
+<p><strong>与其让模型去预测未知的长距离（外推），不如通过修改频率，把长距离“压缩”回模型熟悉的短距离范围内（内插），同时还要保护短距离的精度。</strong><br>YaRN 不改变位置索引 $m$，而是修改基频 $\theta_j$。</p>
+<p>新的频率 $\theta’_j$ 定义为：</p>
+<p>$$\theta’_j &#x3D; \theta_j \cdot (1 - \gamma(r) + \frac{\gamma(r)}{s})$$​</p>
+<p>YaRN 的精髓在于它不是“一刀切”地压缩所有维度，而是分三段处理：</p>
+<p>$$\gamma(r) &#x3D; \begin{cases} 0, &amp; \text{if } r &lt; \alpha \quad (\text{高频&#x2F;局部维度}) \ 1, &amp; \text{if } r &gt; \beta \quad (\text{低频&#x2F;全局维度}) \ \frac{r - \alpha}{\beta - \alpha}, &amp; \text{otherwise} \quad (\text{中频&#x2F;过渡维度}) \end{cases}$$</p>
+<p>除了修改频率，YaRN 还引入了一个温度系数 $\sqrt{t}$ 来修正注意力分数的幅值：</p>
+<p>$$\text{Attention}(Q, K) &#x3D; \text{softmax}(\frac{\mathbf{q}^T \mathbf{k}}{\sqrt{d} \cdot \sqrt{t}})$$</p>
+<h2 id="B-注意力机制：GQA-Grouped-Query-Attention"><a href="#B-注意力机制：GQA-Grouped-Query-Attention" class="headerlink" title="B. 注意力机制：GQA (Grouped Query Attention)"></a>B. 注意力机制：GQA (Grouped Query Attention)</h2><h3 id="MHA-Multi-Head-Attention"><a href="#MHA-Multi-Head-Attention" class="headerlink" title="MHA: Multi-Head Attention"></a>MHA: Multi-Head Attention</h3><p>每个 Query 头都有自己专属的 Key 和 Value 头。</p>
+<ul>
+<li><strong>优点</strong>：捕捉信息的能力最强，每个头都能独立“看”不同的特征。</li>
+<li><strong>缺点</strong>：推理时显存占用极大（KV Cache 很大），计算慢。</li>
+</ul>
+<h3 id="MQA-Multi-Query-Attention"><a href="#MQA-Multi-Query-Attention" class="headerlink" title="MQA: Multi-Query Attention"></a>MQA: Multi-Query Attention</h3><p>所有 Query 头，<strong>共用这唯一的一组</strong> Key 和 Value 头。</p>
+<ul>
+<li><strong>优点</strong>：KV Cache 极小，推理速度飞快。</li>
+<li><strong>缺点</strong>：效果下降明显，因为所有头都在看“同一份”上下文特征，容易导致训练不稳定。</li>
+</ul>
+<h3 id="GQA-Group-Query-Attention"><a href="#GQA-Group-Query-Attention" class="headerlink" title="GQA: Group Query Attention"></a>GQA: Group Query Attention</h3><p>将 Query 头分成几组（Group），<strong>每组</strong>内的 Query 头共享一组 Key&#x2F;Value。</p>
+<h3 id="KV-cache"><a href="#KV-cache" class="headerlink" title="KV-cache"></a>KV-cache</h3><p>KV cache 是 Transformer decoder 在自回归推理时，用显存缓存历史 token 的 Key &#x2F; Value，从而把生成复杂度从 O(T²) 降到 O(T) 的核心机制。</p>
+<p>对第$l$层：</p>
+<p>$$Q_t^{(l)} &#x3D; h_t^{(l)} W_Q^{(l)}$$$$K_t^{(l)} &#x3D; h_t^{(l)}W_K^{(l)}$$<br>$$V_t^{(l)} &#x3D; h_t^{(l)}W_V^{(l)}$$</p>
+<p>attention 输出：</p>
+<p>$$\text{Attn}_t^{(l)} &#x3D; \text{softmax}\left( \frac{Q_t^{(l)} [K_1^{(l)}, \dots, K_t^{(l)}]^T} {\sqrt{d_h}} \right) [V_1^{(l)}, \dots, V_t^{(l)}]$$</p>
+<p>$$\boxed{ \text{KVCache}^{(l)} &#x3D; \left( {K_1^{(l)}, \dots, K_{t-1}^{(l)}}, {V_1^{(l)}, \dots, V_{t-1}^{(l)}} \right) }$$</p>
+<p>第$t$步只做：</p>
+<ul>
+<li><p>计算$ Q_t, K_t, V_t$</p>
+</li>
+<li><p>append 到 cache</p>
+</li>
+<li><p>用 $Q_t$读整个 cache</p>
+</li>
+</ul>
+<p>$$\text{显存占用} &#x3D; 2 \times \text{Batch} \times \text{Seq_Len} \times \text{KV_Heads} \times \text{Head_Dim} \times \text{Byte}$$</p>
+<h3 id="Flash-Attention"><a href="#Flash-Attention" class="headerlink" title="Flash Attention"></a>Flash Attention</h3><p>在标准 Attention 计算中：</p>
+<p>$$\text{Score} &#x3D; \text{Softmax}(Q K^T)$$</p>
+<p>$$\text{Out} &#x3D; \text{Score} \cdot V$$</p>
+<p>这里有一个巨大的中间矩阵：<strong>Attention Score Matrix</strong>，大小是 $N \times N$（序列长度的平方）。<br><strong>显存读写速度 (HBM)</strong> 远慢于 **GPU 核心计算速度 (SRAM)<strong>。GPU 大部分时间都在等数据传输。<br>Flash Attention 的核心逻辑是：</strong>切块 (Tiling)**。</p>
+<ul>
+<li><p><strong>不存大矩阵</strong>：它不把完整的 $N \times N$ 矩阵写入显存。</p>
+</li>
+<li><p><strong>分块计算</strong>：它把 $Q, K, V$ 切成小块，放入 GPU 核心极快的小缓存 (SRAM) 中。</p>
+</li>
+<li><p><strong>即算即丢</strong>：在 SRAM 里算完局部的 Attention，直接更新最终结果，然后丢弃中间值。如果反向传播需要用到，宁可重新算一遍，也不去读写慢速的显存。</p>
+</li>
+</ul>
+<h2 id="C-归一化与激活函数-Norm-Activation"><a href="#C-归一化与激活函数-Norm-Activation" class="headerlink" title="C. 归一化与激活函数 (Norm &amp; Activation)"></a>C. 归一化与激活函数 (Norm &amp; Activation)</h2><h3 id="Normalization"><a href="#Normalization" class="headerlink" title="Normalization"></a>Normalization</h3><p>为什么需要归一化？ 简单的说，深度神经网络层数太多，数据经过一层层矩阵乘法，数值分布会剧烈波动（忽大忽小）。如果不加以约束，梯度就会爆炸或者消失，模型根本训练不起来。 归一化的作用就是：<strong>强行把每一层的数据拉回到一个标准的分布（比如均值为0，方差为1）</strong>，让训练更稳定。</p>
+<h4 id="BatchNorm"><a href="#BatchNorm" class="headerlink" title="BatchNorm"></a>BatchNorm</h4><p>它是在 <strong>Batch（批次）</strong> 维度上做归一化。</p>
+<ul>
+<li><p><strong>依赖 Batch Size</strong>：如果 Batch Size 太小（比如小显存训练），BN 估算的统计量就不准，导致效果极差。</p>
+</li>
+<li><p><strong>序列变长</strong>：NLP 里的句子有长有短，用 Padding 补齐。BN 很难处理这种变长数据（Padding 里的 0 会污染统计值）。</p>
+</li>
+<li><p><strong>RNN&#x2F;Transformer 特性</strong>：文本是生成的，推理时每次只进来一个 Token，没有 Batch 的概念，BN 在推理时非常别扭。</p>
+</li>
+</ul>
+<h4 id="LayerNorm"><a href="#LayerNorm" class="headerlink" title="LayerNorm"></a>LayerNorm</h4><p>它是在 <strong>Feature（特征）</strong> 维度上做归一化。<br><strong>不管 Batch Size 是多少</strong>，哪怕只有一句话。它只看这句话里的某一个 Token，把这个 Token 的 512 维向量（Hidden Size）拿来算均值和方差，自己归一化自己。</p>
+<p>公式：</p>
+<p>$$y &#x3D; \frac{x - \mu}{\sigma + \epsilon} \cdot \gamma + \beta$$</p>
+<ul>
+<li><p>$\mu$：均值 (Center)。</p>
+</li>
+<li><p>$\sigma$：标准差 (Scale)。</p>
+</li>
+<li><p><strong>直觉</strong>：把数据平移（减均值）到 0 附近，再缩放（除标准差）到 1 附近。</p>
+</li>
+</ul>
+<p>推理&#x2F;训练一致性：BS可能不一致，LN完全一致</p>
+<h4 id="RMSNorm"><a href="#RMSNorm" class="headerlink" title="RMSNorm"></a>RMSNorm</h4><ul>
+<li><p>原理：它是 LayerNorm 的简化版。</p>
+<p>  作者发现，LayerNorm 中“减去均值 $\mu$”这一步其实没啥大用，真正起作用的是“除以标准差”这一步（控制幅值）。于是干脆把减均值去掉了。</p>
+</li>
+<li><p>公式：<br>  $$y &#x3D; \frac{x}{\text{RMS}(x)} \cdot \gamma$$$$\text{RMS}(x) &#x3D; \sqrt{\frac{1}{d} \sum x_i^2}$$</p>
+</li>
+</ul>
+<p>RMSNorm 去掉了 Bias ($\beta$)，只保留了缩放参数 Weight ($\gamma$)。</p>
+<h3 id="Activation-Function"><a href="#Activation-Function" class="headerlink" title="Activation Function"></a>Activation Function</h3><h4 id="Sigmoid-Tanh"><a href="#Sigmoid-Tanh" class="headerlink" title="Sigmoid&#x2F;Tanh"></a>Sigmoid&#x2F;Tanh</h4><ul>
+<li><p><strong>形状</strong>：S 型曲线。</p>
+</li>
+<li><p><strong>问题</strong>：<strong>梯度消失</strong>。当输入很大或很小时，导数趋近于 0，导致深层网络无法训练。</p>
+</li>
+</ul>
+<h4 id="ReLu-Rectified-Linear-Unit"><a href="#ReLu-Rectified-Linear-Unit" class="headerlink" title="ReLu(Rectified Linear Unit)"></a>ReLu(Rectified Linear Unit)</h4><ul>
+<li><p><strong>公式</strong>：$f(x) &#x3D; \max(0, x)$</p>
+</li>
+<li><p><strong>形状</strong>：折线。小于 0 的直接砍掉变成 0，大于 0 的保持不变。</p>
+</li>
+<li><p><strong>优点</strong>：计算极快，解决了梯度消失。</p>
+</li>
+<li><p><strong>缺点</strong>：<strong>Dead ReLU</strong>。如果输入小于 0，梯度直接没了，神经元“死”了。</p>
+</li>
+</ul>
+<h4 id="GELU-Gaussian-Error-Linear-Unit-——-BERT-GPT-2-时代"><a href="#GELU-Gaussian-Error-Linear-Unit-——-BERT-GPT-2-时代" class="headerlink" title="GELU (Gaussian Error Linear Unit) —— BERT&#x2F;GPT-2 时代"></a>GELU (Gaussian Error Linear Unit) —— BERT&#x2F;GPT-2 时代</h4><ul>
+<li><p><strong>直觉</strong>：它是 ReLU 的平滑版本。ReLU 在 0 处有个尖角，GELU 把这个角磨圆了。</p>
+</li>
+<li><p><strong>原理</strong>：引入了概率的思想（高斯分布累积分布函数），使得负值不是直接变成 0，而是有一个平滑的过渡。<br>$$GELU(x)&#x3D;x\cdot \Phi(x)$$</p>
+</li>
+</ul>
+<p>其中：</p>
+<p>$$\Phi(x) &#x3D; P(Z \le x), \quad Z \sim \mathcal{N}(0,1)$$</p>
+<table>
+<thead>
+<tr>
+<th>区域</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>x ≪ 0</td>
+<td>近似 0，但不是硬 0</td>
+</tr>
+<tr>
+<td>x ≈ 0</td>
+<td>平滑过渡</td>
+</tr>
+<tr>
+<td>x ≫ 0</td>
+<td>近似线性（≈ x）</td>
+</tr>
+</tbody></table>
+<h4 id="SiLU-Sigmoid-Linear-Unit-Swish——Llama时代"><a href="#SiLU-Sigmoid-Linear-Unit-Swish——Llama时代" class="headerlink" title="SiLU(Sigmoid Linear Unit)&#x2F;Swish——Llama时代"></a>SiLU(Sigmoid Linear Unit)&#x2F;Swish——Llama时代</h4><ul>
+<li><p><strong>公式</strong>：$f(x) &#x3D; x \cdot \text{sigmoid}(x)$</p>
+</li>
+<li><p><strong>形状</strong>：和 GELU 非常像，长得几乎一样。</p>
+</li>
+<li><p><strong>特点</strong>：</p>
+<ul>
+<li><p><strong>平滑</strong>：处处可导。</p>
+</li>
+<li><p><strong>非单调</strong>：在 $x$ 为负值的小区间内（约 -2 到 0），它会输出一个微小的负数，而不是像 ReLU 那样直接归零。这意味着它能保留一点点负区间的梯度信息。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>为什么选它？</strong>：Google 的搜索实验发现它比 ReLU 和 GELU 效果略好一点点。对于大模型来说，能好一点点也是好的。</p>
+</li>
+</ul>
+<h2 id="FFN层"><a href="#FFN层" class="headerlink" title="FFN层"></a>FFN层</h2><h3 id="传统Transformer"><a href="#传统Transformer" class="headerlink" title="传统Transformer"></a>传统Transformer</h3><p>是 Up -&gt; Activation -&gt; Down 的结构：</p>
+<p>$$y &#x3D; \text{Down}(\text{ReLU}(\text{Up}(x)))$$</p>
+<p>这里只有两个矩阵：Up 和 Down。</p>
+<h3 id="SwiGLU-FFN"><a href="#SwiGLU-FFN" class="headerlink" title="SwiGLU FFN"></a>SwiGLU FFN</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">self</span>.gate_proj = nn.Linear(...) <span class="comment"># 门控层 </span></span><br><span class="line"><span class="variable language_">self</span>.up_proj = nn.Linear(...) <span class="comment"># 信号层 </span></span><br><span class="line"><span class="variable language_">self</span>.down_proj = nn.Linear(...) <span class="comment"># 输出层 </span></span><br><span class="line"><span class="comment"># forward 函数 </span></span><br><span class="line"><span class="keyword">return</span> <span class="variable language_">self</span>.down_proj(<span class="variable language_">self</span>.act_fn(<span class="variable language_">self</span>.gate_proj(x)) * <span class="variable language_">self</span>.up_proj(x))</span><br></pre></td></tr></table></figure>
+<p>公式为：</p>
+<p>$$y &#x3D; \text{Down}(\text{SiLU}(\text{Gate}(x)) \times \text{Up}(x))$$</p>
+<p>什么GLU就看他的激活函数<br>实践中：<strong>SwiGLU ≈ GeGLU &gt; ReGLU</strong><br>SiLU 门控特点：</p>
+<ul>
+<li><p>小值 → 抑制</p>
+</li>
+<li><p>大值 → 放行</p>
+</li>
+<li><p>连续可微</p>
+</li>
+</ul>
+<h2 id="MoE-Mixture-of-Experts-实现"><a href="#MoE-Mixture-of-Experts-实现" class="headerlink" title="MoE(Mixture of Experts)实现"></a>MoE(Mixture of Experts)实现</h2><h3 id="混合专家结构-Shared-Routed"><a href="#混合专家结构-Shared-Routed" class="headerlink" title="混合专家结构 (Shared + Routed)"></a>混合专家结构 (Shared + Routed)</h3><p><strong>Routed Experts</strong>：根据输入 Token 的不同，动态选择激活其中的某几个。</p>
+<p><strong>Shared Experts</strong>：无论输入是什么，<strong>总是被激活</strong>。</p>
+<p><strong>设计意图</strong>：共享专家负责捕获通用的、基础的知识，而路由专家负责捕获专门的、细分的知识。这比传统的纯路由 MoE 更稳定。</p>
+<h3 id="门控机制-Gating"><a href="#门控机制-Gating" class="headerlink" title="门控机制 (Gating)"></a>门控机制 (Gating)</h3><p>在 <code>MoEGate</code> 中：</p>
+<ul>
+<li><strong>Top-K 路由</strong>：使用 <code>softmax</code> 计算分数，选出得分最高的 K 个专家 (<code>num_experts_per_tok</code>)。</li>
+<li><strong>权重归一化</strong>：<code>norm_topk_prob</code>，确保选出的专家权重之和为 1。</li>
+</ul>
+<h3 id="负载均衡-Load-Balancing"><a href="#负载均衡-Load-Balancing" class="headerlink" title="负载均衡 (Load Balancing)"></a>负载均衡 (Load Balancing)</h3><p>为了防止“专家坍塌”（即某些专家一直被选中，而其他的饿死），代码计算了 <code>aux_loss</code>（辅助损失）。</p>
+<p>它强迫门控网络尽可能均匀地将 Token 分配给不同的专家。</p>
+<h2 id="训练和推理差异"><a href="#训练和推理差异" class="headerlink" title="训练和推理差异"></a>训练和推理差异</h2><p><strong>Training</strong>：使用 <code>repeat_interleave</code>。简单来说，就是把数据复制扩展，并行地喂给所有专家，然后用掩码（Mask）把不属于该专家的计算结果过滤掉。这种方法对 GPU 并行计算友好，但显存开销大。</p>
+<p><strong>Inference</strong>：调用 <code>moe_infer</code>。这是一个优化的推理路径。它不对数据进行复制，而是根据索引对 Token 进行排序 (<code>argsort</code>)，将属于专家 A 的 Token 聚在一起一次性计算，再把结果写回原位。这大大减少了推理时的计算量。</p>
+<h1 id="Tokenizer"><a href="#Tokenizer" class="headerlink" title="Tokenizer"></a>Tokenizer</h1><p><strong>读数据</strong>：从 JSONL 语料中读取文本。</p>
+<p><strong>造字典</strong>：使用 <strong>BPE (Byte-Pair Encoding)</strong> 算法，统计高频词汇，生成一个只有 6400 个词的词表。</p>
+<p><strong>定规则</strong>：定义“特殊符号”（如 <code>&lt;|im_start|&gt;</code>）和“对话模板”（Chat Template），并保存为 HuggingFace 兼容的格式。</p>
+<ul>
+<li>VOCAB_SIZE &#x3D; 6400</li>
+</ul>
+<p><strong>优点</strong>：Embedding 层和最后的 LM Head 层参数量极小（$6400 \times Hidden_Dim$），极大降低显存占用。</p>
+<p><strong>缺点</strong>：单个 Token 包含的信息量变少，同样的句子会被切成更多的 Token，推理速度变慢（因为生成的步数变多了）。</p>
+<ul>
+<li>BPE+ByteLevel</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tokenizer = Tokenizer(models.BPE())</span><br><span class="line">tokenizer.pre_tokenizer = pre_tokenizers.ByteLevel(add_prefix_space=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+
+<p>**BPE (字节对编码)**：这是目前最主流的分词算法（GPT-2&#x2F;3&#x2F;4, Llama 都在用）。它通过不断合并出现频率最高的字符对来构建词表。</p>
+<p><strong>ByteLevel</strong>：这是关键。它不直接处理 Unicode 字符（如“中”），而是先把所有文本转成 <strong>UTF-8 字节流</strong>。</p>
+<p>例如：“中” -&gt; <code>0xE4 0xB8 0xAD</code> (3个字节)。</p>
+<p><strong>优势</strong>：彻底解决了 <strong>OOV (Out of Vocabulary)</strong> 问题。无论遇到多生僻的字，甚至 Emoji，最差的情况就是退化成单个字节，绝对不会出现 <code>&lt;UNK&gt;</code>（未知字符）。</p>
+<ul>
+<li>chat_template</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;chat_template&quot;</span>: <span class="string">&quot;&#123;%- if tools %&#125;\n    &#123;&#123;- &#x27;&lt;|im_start|&gt;system\\n&#x27; &#125;&#125;\n    &#123;%- if messages[0].role == &#x27;system&#x27; %&#125;\n        &#123;&#123;- messages[0].content + &#x27;\\n\\n&#x27; &#125;&#125;\n    &#123;%- endif %&#125;\n    &#123;&#123;- \&quot;# Tools\\n\\nYou may call one or more functions to assist with the user query.\\n\\nYou are provided with function signatures within &lt;tools&gt;&lt;/tools&gt; XML tags:\\n&lt;tools&gt;\&quot; &#125;&#125;\n    &#123;%- for tool in tools %&#125;\n        &#123;&#123;- \&quot;\\n\&quot; &#125;&#125;\n        &#123;&#123;- tool | tojson &#125;&#125;\n    &#123;%- endfor %&#125;\n    &#123;&#123;- \&quot;\\n&lt;/tools&gt;\\n\\nFor each function call, return a json object with function name and arguments within &lt;tool_call&gt;&lt;/tool_call&gt; XML tags:\\n&lt;tool_call&gt;\\n&#123;\\\&quot;name\\\&quot;: &lt;function-name&gt;, \\\&quot;arguments\\\&quot;: &lt;args-json-object&gt;&#125;\\n&lt;/tool_call&gt;&lt;|im_end|&gt;\\n\&quot; &#125;&#125;\n&#123;%- else %&#125;\n &#123;%- if messages[0][&#x27;role&#x27;] == &#x27;system&#x27; -%&#125;\n        &#123;&#123;- &#x27;&lt;|im_start|&gt;system\\n&#x27; + messages[0][&#x27;content&#x27;] + &#x27;&lt;|im_end|&gt;\\n&#x27; &#125;&#125;\n    &#123;%- else -%&#125;\n        &#123;&#123;- &#x27;&lt;|im_start|&gt;system\\nYou are a helpful assistant&lt;|im_end|&gt;\\n&#x27; &#125;&#125;\n &#123;%- endif %&#125;\n&#123;%- endif %&#125;\n&#123;%- set ns = namespace(multi_step_tool=true, last_query_index=messages|length - 1) %&#125;\n&#123;%- for message in messages[::-1] %&#125;\n    &#123;%- set index = (messages|length - 1) - loop.index0 %&#125;\n    &#123;%- if ns.multi_step_tool and message.role == \&quot;user\&quot; and message.content is string and not(message.content.startswith(&#x27;&lt;tool_response&gt;&#x27;) and message.content.endswith(&#x27;&lt;/tool_response&gt;&#x27;)) %&#125;\n        &#123;%- set ns.multi_step_tool = false %&#125;\n        &#123;%- set ns.last_query_index = index %&#125;\n    &#123;%- endif %&#125;\n&#123;%- endfor %&#125;\n&#123;%- for message in messages %&#125;\n    &#123;%- if message.content is string %&#125;\n        &#123;%- set content = message.content %&#125;\n    &#123;%- else %&#125;\n        &#123;%- set content = &#x27;&#x27; %&#125;\n    &#123;%- endif %&#125;\n    &#123;%- if (message.role == \&quot;user\&quot;) or (message.role == \&quot;system\&quot; and not loop.first) %&#125;\n        &#123;&#123;- &#x27;&lt;|im_start|&gt;&#x27; + message.role + &#x27;\\n&#x27; + content + &#x27;&lt;|im_end|&gt;&#x27; + &#x27;\\n&#x27; &#125;&#125;\n    &#123;%- elif message.role == \&quot;assistant\&quot; %&#125;\n   &#123;&#123;- &#x27;&lt;|im_start|&gt;&#x27; + message.role + &#x27;\\n&#x27; + content &#125;&#125;\n  &#123;%- if message.tool_calls %&#125;\n            &#123;%- for tool_call in message.tool_calls %&#125;\n                &#123;%- if (loop.first and content) or (not loop.first) %&#125;\n                    &#123;&#123;- &#x27;\\n&#x27; &#125;&#125;\n                &#123;%- endif %&#125;\n                &#123;%- if tool_call.function %&#125;\n                    &#123;%- set tool_call = tool_call.function %&#125;\n                &#123;%- endif %&#125;\n                &#123;&#123;- &#x27;&lt;tool_call&gt;\\n&#123;\&quot;name\&quot;: \&quot;&#x27; &#125;&#125;\n                &#123;&#123;- tool_call.name &#125;&#125;\n                &#123;&#123;- &#x27;\&quot;, \&quot;arguments\&quot;: &#x27; &#125;&#125;\n                &#123;%- if tool_call.arguments is string %&#125;\n                    &#123;&#123;- tool_call.arguments &#125;&#125;\n                &#123;%- else %&#125;\n                    &#123;&#123;- tool_call.arguments | tojson &#125;&#125;\n                &#123;%- endif %&#125;\n                &#123;&#123;- &#x27;&#125;\\n&lt;/tool_call&gt;&#x27; &#125;&#125;\n            &#123;%- endfor %&#125;\n        &#123;%- endif %&#125;\n        &#123;&#123;- &#x27;&lt;|im_end|&gt;\\n&#x27; &#125;&#125;\n    &#123;%- elif message.role == \&quot;tool\&quot; %&#125;\n        &#123;%- if loop.first or (messages[loop.index0 - 1].role != \&quot;tool\&quot;) %&#125;\n            &#123;&#123;- &#x27;&lt;|im_start|&gt;user&#x27; &#125;&#125;\n        &#123;%- endif %&#125;\n        &#123;&#123;- &#x27;\\n&lt;tool_response&gt;\\n&#x27; &#125;&#125;\n        &#123;&#123;- content &#125;&#125;\n        &#123;&#123;- &#x27;\\n&lt;/tool_response&gt;&#x27; &#125;&#125;\n        &#123;%- if loop.last or (messages[loop.index0 + 1].role != \&quot;tool\&quot;) %&#125;\n            &#123;&#123;- &#x27;&lt;|im_end|&gt;\\n&#x27; &#125;&#125;\n        &#123;%- endif %&#125;\n    &#123;%- endif %&#125;\n&#123;%- endfor %&#125;\n&#123;%- if add_generation_prompt %&#125;\n    &#123;&#123;- &#x27;&lt;|im_start|&gt;assistant\\n&#x27; &#125;&#125;\n    &#123;%- if enable_thinking is defined and enable_thinking is false %&#125;\n        &#123;&#123;- &#x27;&lt;think&gt;\\n\\n&lt;/think&gt;\\n\\n&#x27; &#125;&#125;\n    &#123;%- endif %&#125;\n&#123;%- endif %&#125;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>这是 Jinja2 模板</strong>。它的作用是告诉 HuggingFace 的 <code>tokenizer.apply_chat_template</code> 函数：<strong>如何把一个 Python 的对话列表（List of Dicts）转换成模型能读懂的字符串。 Tokenizer 层面就原生支持了</strong>System Prompt<strong>、</strong>多轮对话<strong>甚至</strong>工具调用（Tools）<strong>。</strong></p>
+<ul>
+<li>流式解码</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 流式解码（字节缓冲）测试</span></span><br><span class="line"><span class="keyword">for</span> tid <span class="keyword">in</span> input_ids:</span><br><span class="line">    token_cache.append(tid)</span><br><span class="line">    current_decode = tokenizer.decode(token_cache)</span><br><span class="line">    <span class="keyword">if</span> current_decode <span class="keyword">and</span> <span class="string">&#x27;\ufffd&#x27;</span> <span class="keyword">not</span> <span class="keyword">in</span> current_decode:</span><br><span class="line">        <span class="comment"># ... 打印 ...</span></span><br><span class="line">        token_cache = []</span><br></pre></td></tr></table></figure>
+
+<p>中文在 UTF-8 中通常占 <strong>3个字节</strong>。</p>
+<p>当模型生成 Token A (<code>E6</code>) 时，你立即 Decode，解码器发现 <code>E6</code> 是个残缺的字节，无法显示成汉字，就会显示&#96;&#96; (即代码里的 \ufffd, Replacement Character)。</p>
+<p><strong>代码逻辑</strong>：它维护一个 <code>token_cache</code>。如果解码结果里有 <code>\ufffd</code>，说明当前的字节流拼不出一个完整的字，那就<strong>先存着不打印</strong>。等到 Token B (<code>88 91</code>) 来了，拼成 <code>E6 88 91</code>，<code>\ufffd</code> 消失了，再打印。</p>
+<h1 id="Pretrain"><a href="#Pretrain" class="headerlink" title="Pretrain"></a>Pretrain</h1><p>LLM首先要学习的并非直接与人交流，而是让网络参数中充满知识的墨水，“墨水” 理论上喝的越饱越好，产生大量的对世界的知识积累。 预训练就是让Model先埋头苦学大量基本的知识，例如从Wiki百科、新闻、书籍整理大规模的高质量训练数据。 这个过程是“无监督”的，即人类不需要在过程中做任何“有监督”的校正，而是由模型自己从大量文本中总结规律学习知识点。 模型此阶段目的只有一个：<strong>学会词语接龙</strong>。</p>
+<h2 id="Dataloader定义"><a href="#Dataloader定义" class="headerlink" title="Dataloader定义"></a>Dataloader定义</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">PretrainDataset</span>(<span class="title class_ inherited__">Dataset</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, data_path, tokenizer, max_length=<span class="number">512</span></span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        <span class="variable language_">self</span>.tokenizer = tokenizer</span><br><span class="line">        <span class="variable language_">self</span>.max_length = max_length</span><br><span class="line">        <span class="comment"># 1. 加载纯文本数据</span></span><br><span class="line">        <span class="variable language_">self</span>.samples = load_dataset(<span class="string">&#x27;json&#x27;</span>, data_files=data_path, split=<span class="string">&#x27;train&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__len__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">len</span>(<span class="variable language_">self</span>.samples)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__getitem__</span>(<span class="params">self, index</span>):</span><br><span class="line">        sample = <span class="variable language_">self</span>.samples[index]</span><br><span class="line">        <span class="comment"># 2. 分词 (Tokenization)</span></span><br><span class="line">        encoding = <span class="variable language_">self</span>.tokenizer(</span><br><span class="line">            <span class="built_in">str</span>(sample[<span class="string">&#x27;text&#x27;</span>]),</span><br><span class="line">            max_length=<span class="variable language_">self</span>.max_length,</span><br><span class="line">            padding=<span class="string">&#x27;max_length&#x27;</span>,</span><br><span class="line">            truncation=<span class="literal">True</span>,</span><br><span class="line">            return_tensors=<span class="string">&#x27;pt&#x27;</span></span><br><span class="line">        )</span><br><span class="line">        <span class="comment"># 3. 构造 Labels (关键点)</span></span><br><span class="line">        input_ids = encoding.input_ids.squeeze()</span><br><span class="line">        labels = input_ids.clone()</span><br><span class="line">        <span class="comment"># 4. Masking Padding</span></span><br><span class="line">		<span class="comment"># 把所有补齐的 Pad Token 对应的 Label 设为 -100</span></span><br><span class="line">		<span class="comment"># PyTorch 的 CrossEntropyLoss 会自动忽略 -100，不计算梯度</span></span><br><span class="line">        labels[input_ids == <span class="variable language_">self</span>.tokenizer.pad_token_id] = -<span class="number">100</span></span><br><span class="line">        <span class="keyword">return</span> input_ids, labels</span><br></pre></td></tr></table></figure>
+
+<h2 id="核心Epoch"><a href="#核心Epoch" class="headerlink" title="核心Epoch"></a>核心Epoch</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">train_epoch</span>(<span class="params">epoch, loader, iters, start_step=<span class="number">0</span>, wandb=<span class="literal">None</span></span>):</span><br><span class="line">    <span class="keyword">for</span> step, (input_ids, labels) <span class="keyword">in</span> <span class="built_in">enumerate</span>(loader, start=start_step + <span class="number">1</span>):</span><br><span class="line">        <span class="comment">#【断点续训】</span></span><br><span class="line">        input_ids = input_ids.to(args.device)</span><br><span class="line">        labels = labels.to(args.device)</span><br><span class="line">        <span class="comment"># 根据当前进度，计算出这一步应该用的学习率。通常是余弦退火 Cosine Decay，强行赋值给优化器</span></span><br><span class="line">        lr = get_lr(epoch * iters + step, args.epochs * iters, args.learning_rate)</span><br><span class="line">        <span class="keyword">for</span> param_group <span class="keyword">in</span> optimizer.param_groups:</span><br><span class="line">            param_group[<span class="string">&#x27;lr&#x27;</span>] = lr</span><br><span class="line">		<span class="comment"># autocast_ctx 是混合精度的上下文管理器。</span></span><br><span class="line">        <span class="comment"># 在这个范围内，模型的运算（如卷积、矩阵乘法）会自动转为 float16 或 bfloat16 以节省显存并加速。</span></span><br><span class="line">        <span class="keyword">with</span> autocast_ctx:</span><br><span class="line">            res = model(input_ids, labels=labels)</span><br><span class="line">            <span class="comment"># res.loss 是语言模型的主 Loss（预测下一个词准不准）。</span></span><br><span class="line">            <span class="comment"># res.aux_loss 是 MoE 的辅助 Loss（专家有没有负载均衡）</span></span><br><span class="line">            loss = res.loss + res.aux_loss</span><br><span class="line">            <span class="comment"># 梯度累积标准化，平均梯度</span></span><br><span class="line">            loss = loss / args.accumulation_steps</span><br><span class="line">		<span class="comment"># scaler 是 GradScaler（梯度缩放器），专用于 float16 混合精度训练。</span></span><br><span class="line">        <span class="comment"># 为什么要 scale？因为 float16 精度低，Loss 经常很小（比如 0.00001），</span></span><br><span class="line">        <span class="comment"># 算出的梯度可能下溢出变成 0。scaler 先把 Loss 放大（比如乘 65536），</span></span><br><span class="line">        <span class="comment"># 算出放大的梯度，后面更新时再缩放回来。</span></span><br><span class="line">        scaler.scale(loss).backward()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (step + <span class="number">1</span>) % args.accumulation_steps == <span class="number">0</span>:</span><br><span class="line">            <span class="comment"># 1. Unscale：把之前放大的梯度缩放回正常大小。</span></span><br><span class="line">            <span class="comment"># 必须在 clip_grad_norm 之前做，否则裁剪的阈值就不准了。</span></span><br><span class="line">            scaler.unscale_(optimizer)</span><br><span class="line">            <span class="comment"># 2. 梯度裁剪 (Gradient Clipping)：</span></span><br><span class="line">            <span class="comment"># 限制梯度的最大范数为 args.grad_clip (通常是 1.0)。</span></span><br><span class="line">            <span class="comment"># 防止“梯度爆炸”，这是训练 LLM 稳定性的关键保险丝。</span></span><br><span class="line">            torch.nn.utils.clip_grad_norm_(model.parameters(), args.grad_clip)</span><br><span class="line">			<span class="comment"># scaler.step 内部会检查梯度是否有 Inf/NaN。如果有，这步就跳过不更新，防止模型崩坏。</span></span><br><span class="line">            scaler.step(optimizer)</span><br><span class="line">            <span class="comment"># 4. 更新缩放因子：根据这步有没有溢出，动态调整下一次的缩放倍数。</span></span><br><span class="line">            scaler.update()</span><br><span class="line">			<span class="comment"># 5. 清空梯度：准备下一轮累积。</span></span><br><span class="line">            <span class="comment"># set_to_none=True 比 =0 稍微快一点点（节省显存操作）。</span></span><br><span class="line">            optimizer.zero_grad(set_to_none=<span class="literal">True</span>)</span><br><span class="line">		<span class="comment">##打印日志.....</span></span><br><span class="line">		</span><br><span class="line">        <span class="comment"># 只有主进程（Rank 0）负责保存，避免多个进程同时写文件导致损坏。</span></span><br><span class="line">        <span class="keyword">if</span> (step % args.save_interval == <span class="number">0</span> <span class="keyword">or</span> step == iters - <span class="number">1</span>) <span class="keyword">and</span> is_main_process():</span><br><span class="line">            model.<span class="built_in">eval</span>()</span><br><span class="line">            moe_suffix = <span class="string">&#x27;_moe&#x27;</span> <span class="keyword">if</span> lm_config.use_moe <span class="keyword">else</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line">            ckp = <span class="string">f&#x27;<span class="subst">&#123;args.save_dir&#125;</span>/<span class="subst">&#123;args.save_weight&#125;</span>_<span class="subst">&#123;lm_config.hidden_size&#125;</span><span class="subst">&#123;moe_suffix&#125;</span>.pth&#x27;</span></span><br><span class="line">            <span class="comment"># 如果用了 DDP，模型被包了一层 .module</span></span><br><span class="line">            raw_model = model.module <span class="keyword">if</span> <span class="built_in">isinstance</span>(model, DistributedDataParallel) <span class="keyword">else</span> model</span><br><span class="line">            <span class="comment"># 如果用了 torch.compile，模型被包了一层 _orig_mod</span></span><br><span class="line">            raw_model = <span class="built_in">getattr</span>(raw_model, <span class="string">&#x27;_orig_mod&#x27;</span>, raw_model)</span><br><span class="line">            state_dict = raw_model.state_dict()</span><br><span class="line">            <span class="comment"># 1. 保存权重文件 (.pth)：</span></span><br><span class="line">            <span class="comment"># .half()：转成 float16 保存，文件体积减半。</span></span><br><span class="line">            <span class="comment"># .cpu()：搬到 CPU，防止爆显存。</span></span><br><span class="line">            torch.save(&#123;k: v.half().cpu() <span class="keyword">for</span> k, v <span class="keyword">in</span> state_dict.items()&#125;, ckp)</span><br><span class="line">            <span class="comment"># 2. 保存训练状态 (Checkpoint)：</span></span><br><span class="line">            <span class="comment"># 这是一个单独的文件，存了 optimizer、scaler、当前 epoch 和 step。</span></span><br><span class="line">            <span class="comment"># 这是为了万一训练中断，下次能完美恢复现场（Resume）用的。</span></span><br><span class="line">            lm_checkpoint(lm_config, weight=args.save_weight, model=model, optimizer=optimizer, scaler=scaler, epoch=epoch, step=step, wandb=wandb, save_dir=<span class="string">&#x27;../checkpoints&#x27;</span>)</span><br><span class="line">            model.train()</span><br><span class="line">            <span class="keyword">del</span> state_dict</span><br><span class="line"></span><br><span class="line">        <span class="keyword">del</span> input_ids, labels, res, loss</span><br></pre></td></tr></table></figure>
+
+<h2 id="主程序"><a href="#主程序" class="headerlink" title="主程序"></a>主程序</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">   <span class="comment"># ========== 1. 初始化环境和随机种子 ==========</span></span><br><span class="line">   local_rank = init_distributed_mode()</span><br><span class="line">   <span class="keyword">if</span> dist.is_initialized(): args.device = <span class="string">f&quot;cuda:<span class="subst">&#123;local_rank&#125;</span>&quot;</span></span><br><span class="line">   setup_seed(<span class="number">42</span> + (dist.get_rank() <span class="keyword">if</span> dist.is_initialized() <span class="keyword">else</span> <span class="number">0</span>))</span><br><span class="line">   <span class="comment"># 每个进程种子不一样，保证每个进程的数据增强（如果有）和 Dropout 行为不完全一样，增加随机性。</span></span><br><span class="line">   </span><br><span class="line">   <span class="comment"># ========== 2. 配置目录、模型参数、检查ckp ==========</span></span><br><span class="line">   os.makedirs(args.save_dir, exist_ok=<span class="literal">True</span>)</span><br><span class="line">   lm_config = MiniMindConfig(hidden_size=args.hidden_size, num_hidden_layers=args.num_hidden_layers, use_moe=<span class="built_in">bool</span>(args.use_moe))</span><br><span class="line">   <span class="comment"># lm_checkpoint 不仅仅是加载，它会去 ../checkpoints 目录下找，有没有 args.save_weight 前缀的文件。</span></span><br><span class="line"><span class="comment"># 如果找到了，就会把文件的路径、epoch、step 等信息读出来放到 ckp_data 字典里。</span></span><br><span class="line">   ckp_data = lm_checkpoint(lm_config, weight=args.save_weight, save_dir=<span class="string">&#x27;../checkpoints&#x27;</span>) <span class="keyword">if</span> args.from_resume==<span class="number">1</span> <span class="keyword">else</span> <span class="literal">None</span></span><br><span class="line">   </span><br><span class="line">   <span class="comment"># ========== 3. 设置混合精度 ==========</span></span><br><span class="line">   device_type = <span class="string">&quot;cuda&quot;</span> <span class="keyword">if</span> <span class="string">&quot;cuda&quot;</span> <span class="keyword">in</span> args.device <span class="keyword">else</span> <span class="string">&quot;cpu&quot;</span></span><br><span class="line">   dtype = torch.bfloat16 <span class="keyword">if</span> args.dtype == <span class="string">&quot;bfloat16&quot;</span> <span class="keyword">else</span> torch.float16</span><br><span class="line">   <span class="comment"># 创建上下文管理器，后面传给 train_epoch 用</span></span><br><span class="line">   autocast_ctx = nullcontext() <span class="keyword">if</span> device_type == <span class="string">&quot;cpu&quot;</span> <span class="keyword">else</span> torch.cuda.amp.autocast(dtype=dtype)</span><br><span class="line">   </span><br><span class="line">   <span class="comment"># ========== 4. 配wandb ==========</span></span><br><span class="line"><span class="comment"># 略</span></span><br><span class="line">   </span><br><span class="line">   <span class="comment"># ========== 5. 定义模型、数据、优化器 ==========</span></span><br><span class="line">   model, tokenizer = init_model(lm_config, args.from_weight, device=args.device)</span><br><span class="line">   <span class="keyword">if</span> args.use_compile == <span class="number">1</span>:</span><br><span class="line">       model = torch.<span class="built_in">compile</span>(model)</span><br><span class="line">       Logger(<span class="string">&#x27;torch.compile enabled&#x27;</span>)</span><br><span class="line">   train_ds = PretrainDataset(args.data_path, tokenizer, max_length=args.max_seq_len)</span><br><span class="line">   <span class="comment"># 在 DDP 模式下，它负责把整个数据集切成 N 份（N=显卡数）。</span></span><br><span class="line">   train_sampler = DistributedSampler(train_ds) <span class="keyword">if</span> dist.is_initialized() <span class="keyword">else</span> <span class="literal">None</span></span><br><span class="line">   <span class="comment"># GradScaler：只有 float16 需要。</span></span><br><span class="line"><span class="comment"># 如果是 bfloat16，enabled=False，它就什么都不做（空转）。</span></span><br><span class="line">   scaler = torch.cuda.amp.GradScaler(enabled=(args.dtype == <span class="string">&#x27;float16&#x27;</span>))</span><br><span class="line">   optimizer = optim.AdamW(model.parameters(), lr=args.learning_rate)</span><br><span class="line">   </span><br><span class="line">   <span class="comment"># ========== 6. 从ckp恢复状态 ==========</span></span><br><span class="line">   start_epoch, start_step = <span class="number">0</span>, <span class="number">0</span></span><br><span class="line">   <span class="keyword">if</span> ckp_data:</span><br><span class="line">       model.load_state_dict(ckp_data[<span class="string">&#x27;model&#x27;</span>])</span><br><span class="line">       optimizer.load_state_dict(ckp_data[<span class="string">&#x27;optimizer&#x27;</span>])</span><br><span class="line">       scaler.load_state_dict(ckp_data[<span class="string">&#x27;scaler&#x27;</span>])</span><br><span class="line">       start_epoch = ckp_data[<span class="string">&#x27;epoch&#x27;</span>]</span><br><span class="line">       start_step = ckp_data.get(<span class="string">&#x27;step&#x27;</span>, <span class="number">0</span>)</span><br><span class="line">   </span><br><span class="line">   <span class="comment"># ========== 7. DDP包模型 ==========</span></span><br><span class="line">   <span class="keyword">if</span> dist.is_initialized():</span><br><span class="line">       model._ddp_params_and_buffers_to_ignore = &#123;<span class="string">&quot;freqs_cos&quot;</span>, <span class="string">&quot;freqs_sin&quot;</span>&#125;</span><br><span class="line">       model = DistributedDataParallel(model, device_ids=[local_rank])</span><br><span class="line">   </span><br><span class="line">   <span class="comment"># ========== 8. 开始训练 ==========</span></span><br><span class="line">   <span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(start_epoch, args.epochs):</span><br><span class="line">       train_sampler <span class="keyword">and</span> train_sampler.set_epoch(epoch)</span><br><span class="line">       <span class="keyword">if</span> epoch == start_epoch <span class="keyword">and</span> start_step &gt; <span class="number">0</span>: <span class="comment"># 第一个epoch且存在检查点</span></span><br><span class="line">           <span class="comment"># SkipBatchSampler 是自定义类。</span></span><br><span class="line">       	<span class="comment"># 它的作用是：快速跳过前 1000 个 batch，只生成 index，不读硬盘数据。</span></span><br><span class="line">       	<span class="comment"># 如果不用这个，Dataloader 傻傻地读前 1000 个数据然后丢掉，启动会巨慢无比。</span></span><br><span class="line">           batch_sampler = SkipBatchSampler(train_sampler <span class="keyword">or</span> <span class="built_in">range</span>(<span class="built_in">len</span>(train_ds)), args.batch_size, start_step + <span class="number">1</span>)</span><br><span class="line">           loader = DataLoader(train_ds, batch_sampler=batch_sampler, num_workers=args.num_workers, pin_memory=<span class="literal">True</span>)</span><br><span class="line">           Logger(<span class="string">f&#x27;Epoch [<span class="subst">&#123;epoch + <span class="number">1</span>&#125;</span>/<span class="subst">&#123;args.epochs&#125;</span>]: 跳过前<span class="subst">&#123;start_step&#125;</span>个step，从step <span class="subst">&#123;start_step + <span class="number">1</span>&#125;</span>开始&#x27;</span>)</span><br><span class="line">           train_epoch(epoch, loader, <span class="built_in">len</span>(loader) + start_step + <span class="number">1</span>, start_step, wandb)</span><br><span class="line">       <span class="keyword">else</span>: <span class="comment"># 默认从头开始</span></span><br><span class="line">           loader = DataLoader(train_ds, batch_size=args.batch_size, shuffle=(train_sampler <span class="keyword">is</span> <span class="literal">None</span>), sampler=train_sampler, num_workers=args.num_workers, pin_memory=<span class="literal">True</span>)</span><br><span class="line">           train_epoch(epoch, loader, <span class="built_in">len</span>(loader), <span class="number">0</span>, wandb)</span><br><span class="line">   </span><br><span class="line">   <span class="comment"># ========== 9. 清理分布进程 ==========</span></span><br><span class="line">   <span class="keyword">if</span> dist.is_initialized(): dist.destroy_process_group()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">torchrun --nproc_per_node 1 train_pretrain.py <span class="comment"># 1即为单卡训练，可根据硬件情况自行调整 (设置&gt;=2)</span></span><br><span class="line"><span class="comment"># or</span></span><br><span class="line">python train_pretrain.py</span><br></pre></td></tr></table></figure>
+
+<p>把<a target="_blank" rel="noopener" href="https://www.modelscope.cn/datasets/deepctrl/deepctrl-sft-data">匠数大模型数据集</a>的中文部分提取出来， 清洗出字符<code>&lt;512</code>长度的大约1.6GB的语料直接拼接成预训练数据 <code>pretrain_hq.jsonl</code>，hq即为high quality</p>
+<p>文件<code>pretrain_hq.jsonl</code> 数据格式为</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;text&quot;: &quot;如何才能摆脱拖延症？ 治愈拖延症并不容易，但以下建议可能有所帮助...&quot;&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="SFT"><a href="#SFT" class="headerlink" title="SFT"></a>SFT</h1><p>经过预训练，LLM此时已经掌握了大量知识，然而此时它只会无脑地词语接龙，还不会与人聊天。 SFT阶段就需要把半成品LLM施加一个自定义的聊天模板进行微调。 例如模型遇到这样的模板【问题-&gt;回答，问题-&gt;回答】后不再无脑接龙，而是意识到这是一段完整的对话结束。 称这个过程为指令微调。 在训练时，MiniMind的指令和回答长度被截断在512，是为了节省显存空间。就像学习写作时，会先从短的文章开始，当学会写作200字作文后，800字文章也可以手到擒来。 在需要长度拓展时，只需要准备少量的2k&#x2F;4k&#x2F;8k长度对话数据进行进一步微调即可（此时最好配合RoPE-NTK的基准差值）。</p>
+<h2 id="DataLoader定义"><a href="#DataLoader定义" class="headerlink" title="DataLoader定义"></a>DataLoader定义</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SFTDataset</span>(<span class="title class_ inherited__">Dataset</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, jsonl_path, tokenizer, max_length=<span class="number">1024</span></span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        <span class="variable language_">self</span>.tokenizer = tokenizer</span><br><span class="line">        <span class="variable language_">self</span>.max_length = max_length</span><br><span class="line">        <span class="variable language_">self</span>.samples = load_dataset(<span class="string">&#x27;json&#x27;</span>, data_files=jsonl_path, split=<span class="string">&#x27;train&#x27;</span>)</span><br><span class="line">        <span class="variable language_">self</span>.bos_id = tokenizer(<span class="string">f&#x27;<span class="subst">&#123;tokenizer.bos_token&#125;</span>assistant\n&#x27;</span>, add_special_tokens=<span class="literal">False</span>).input_ids</span><br><span class="line">        <span class="variable language_">self</span>.eos_id = tokenizer(<span class="string">f&#x27;<span class="subst">&#123;tokenizer.eos_token&#125;</span>\n&#x27;</span>, add_special_tokens=<span class="literal">False</span>).input_ids</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__len__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">len</span>(<span class="variable language_">self</span>.samples)</span><br><span class="line">    </span><br><span class="line">	<span class="comment">#根据模型 tokenizer 自带的 chat template，把多轮对话拼成 prompt</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">create_chat_prompt</span>(<span class="params">self, cs</span>):</span><br><span class="line">        messages = cs.copy()</span><br><span class="line">        tools = cs[<span class="number">0</span>][<span class="string">&quot;functions&quot;</span>] <span class="keyword">if</span> (cs <span class="keyword">and</span> cs[<span class="number">0</span>][<span class="string">&quot;role&quot;</span>] == <span class="string">&quot;system&quot;</span> <span class="keyword">and</span> cs[<span class="number">0</span>].get(<span class="string">&quot;functions&quot;</span>)) <span class="keyword">else</span> <span class="literal">None</span></span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>.tokenizer.apply_chat_template(</span><br><span class="line">            messages,</span><br><span class="line">            tokenize=<span class="literal">False</span>,</span><br><span class="line">            add_generation_prompt=<span class="literal">False</span>,</span><br><span class="line">            tools=tools</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">generate_labels</span>(<span class="params">self, input_ids</span>):</span><br><span class="line">        <span class="comment"># 1. 初始化：假设全都不需要学 (-100)</span></span><br><span class="line">        labels = [-<span class="number">100</span>] * <span class="built_in">len</span>(input_ids)</span><br><span class="line">        <span class="comment"># 2. 扫描 input_ids 序列</span></span><br><span class="line">        i = <span class="number">0</span></span><br><span class="line">        <span class="keyword">while</span> i &lt; <span class="built_in">len</span>(input_ids):</span><br><span class="line">            <span class="comment"># 3. 发现 Assistant 开始说话的特征序列 (self.bos_id)</span></span><br><span class="line">            <span class="keyword">if</span> input_ids[i:i + <span class="built_in">len</span>(<span class="variable language_">self</span>.bos_id)] == <span class="variable language_">self</span>.bos_id:</span><br><span class="line">                start = i + <span class="built_in">len</span>(<span class="variable language_">self</span>.bos_id)</span><br><span class="line">                <span class="comment"># 4. 寻找 Assistant 说话结束的地方 (self.eos_id)</span></span><br><span class="line">                end = start</span><br><span class="line">                <span class="keyword">while</span> end &lt; <span class="built_in">len</span>(input_ids):</span><br><span class="line">                    <span class="keyword">if</span> input_ids[end:end + <span class="built_in">len</span>(<span class="variable language_">self</span>.eos_id)] == <span class="variable language_">self</span>.eos_id:</span><br><span class="line">                        <span class="keyword">break</span></span><br><span class="line">                    end += <span class="number">1</span></span><br><span class="line">                <span class="comment"># 5. 【关键】解除 Mask</span></span><br><span class="line">            	<span class="comment"># 只把 [start, end] 这段区间的 labels 设为 input_ids 的值</span></span><br><span class="line">            	<span class="comment"># 这意味着模型只会在这一段计算 Loss</span></span><br><span class="line">                <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(start, <span class="built_in">min</span>(end + <span class="built_in">len</span>(<span class="variable language_">self</span>.eos_id), <span class="variable language_">self</span>.max_length)):</span><br><span class="line">                    labels[j] = input_ids[j]</span><br><span class="line">                i = end + <span class="built_in">len</span>(<span class="variable language_">self</span>.eos_id) <span class="keyword">if</span> end &lt; <span class="built_in">len</span>(input_ids) <span class="keyword">else</span> <span class="built_in">len</span>(input_ids)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                i += <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> labels</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__getitem__</span>(<span class="params">self, index</span>):</span><br><span class="line">        sample = <span class="variable language_">self</span>.samples[index]</span><br><span class="line">        prompt = <span class="variable language_">self</span>.create_chat_prompt(sample[<span class="string">&#x27;conversations&#x27;</span>])</span><br><span class="line">        input_ids = <span class="variable language_">self</span>.tokenizer(prompt).input_ids[:<span class="variable language_">self</span>.max_length]</span><br><span class="line">        input_ids += [<span class="variable language_">self</span>.tokenizer.pad_token_id] * (<span class="variable language_">self</span>.max_length - <span class="built_in">len</span>(input_ids))</span><br><span class="line">        labels = <span class="variable language_">self</span>.generate_labels(input_ids)</span><br><span class="line">        <span class="comment"># # === 调试打印 ===</span></span><br><span class="line">        <span class="comment"># print(f&quot;\n--- Sample &#123;index&#125; ---&quot;)</span></span><br><span class="line">        <span class="comment"># for i, (x, y) in enumerate(zip(input_ids[:-1], labels[1:])):</span></span><br><span class="line">        <span class="comment">#     print(f&quot;&#123;i:3d&#125;: X=&#123;self.tokenizer.decode([x])!r:16s&#125; ---&gt; Y=&#123;self.tokenizer.decode([input_ids[i+1]])!r:16s&#125; label=&#123;y&#125;&quot;)</span></span><br><span class="line">        <span class="comment"># # ================</span></span><br><span class="line">        <span class="keyword">return</span> torch.tensor(input_ids, dtype=torch.long), torch.tensor(labels, dtype=torch.long)</span><br></pre></td></tr></table></figure>
+
+<h2 id="核心Epoch-1"><a href="#核心Epoch-1" class="headerlink" title="核心Epoch"></a>核心Epoch</h2><p>和pretrain差不多，唯一差在SFT把非回答部分labels设置为-100（PyTorch 的 <code>CrossEntropyLoss</code> 有一个隐藏机制：<strong>它会自动忽略值为 -100 的 Label</strong>）</p>
+<p>所以只会计算答案部分的loss</p>
+<h2 id="主程序-1"><a href="#主程序-1" class="headerlink" title="主程序"></a>主程序</h2><p>和pretrain一样</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">torchrun --nproc_per_node <span class="number">1</span> train_full_sft.py</span><br><span class="line"><span class="comment"># or</span></span><br><span class="line">python train_full_sft.py</span><br></pre></td></tr></table></figure>
+
+<h1 id="知识蒸馏KD"><a href="#知识蒸馏KD" class="headerlink" title="知识蒸馏KD"></a>知识蒸馏KD</h1><p>在前面的所有训练步骤中，模型已经完全具备了基本能力，通常可以学成出师了。 而知识蒸馏可以进一步优化模型的性能和效率，所谓知识蒸馏，即学生模型面向教师模型学习。 教师模型通常是经过充分训练的大模型，具有较高的准确性和泛化能力。 学生模型是一个较小的模型，目标是学习教师模型的行为，而不是直接从原始数据中学习。 在SFT学习中，模型的目标是拟合词Token分类硬标签（hard labels），即真实的类别标签（如 0 或 6400）。 在知识蒸馏中，教师模型的softmax概率分布被用作软标签（soft labels）。小模型仅学习软标签，并使用KL-Loss来优化模型的参数。 通俗地说，SFT直接学习老师给的解题答案。而KD过程相当于“打开”老师聪明的大脑，尽可能地模仿老师“大脑”思考问题的神经元状态。 例如，当老师模型计算<code>1+1=2</code>这个问题的时候，最后一层神经元a状态为0，神经元b状态为100，神经元c状态为-99… 学生模型通过大量数据，学习教师模型大脑内部的运转规律。这个过程即称之为：知识蒸馏。 知识蒸馏的目的只有一个：让小模型体积更小的同时效果更好。 然而随着LLM诞生和发展，模型蒸馏一词被广泛滥用，从而产生了“白盒&#x2F;黑盒”知识蒸馏两个派别。 GPT-4这种闭源模型，由于无法获取其内部结构，因此只能面向它所输出的数据学习，这个过程称之为黑盒蒸馏，也是大模型时代最普遍的做法。 黑盒蒸馏与SFT过程完全一致，只不过数据是从大模型的输出收集，因此只需要准备数据并且进一步FT即可。 </p>
+<p>损失，一部分跟着硬标签学，一部分跟着老师（软标签）学</p>
+<ul>
+<li>蒸馏损失 (<code>distillation_loss</code>)</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">distillation_loss</span>(<span class="params">student_logits, teacher_logits, temperature=<span class="number">1.0</span>, reduction=<span class="string">&#x27;batchmean&#x27;</span></span>):</span><br><span class="line">    <span class="keyword">with</span> torch.no_grad():</span><br><span class="line">        <span class="comment"># 1. 教师的软标签 (Soft Targets)</span></span><br><span class="line">        <span class="comment"># 温度 T (temperature) 越高，概率分布越平滑，包含的“暗知识”越多。</span></span><br><span class="line">        teacher_probs = F.softmax(teacher_logits / temperature, dim=-<span class="number">1</span>).detach()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 2. 学生的 Log 概率</span></span><br><span class="line">    student_log_probs = F.log_softmax(student_logits / temperature, dim=-<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 3. 计算 KL 散度 (Kullback-Leibler Divergence)</span></span><br><span class="line">    <span class="comment"># 衡量两个概率分布的差异。我们要让学生的分布尽可能靠近老师。</span></span><br><span class="line">    kl = F.kl_div(student_log_probs, teacher_probs, reduction=reduction)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 4. 梯度缩放</span></span><br><span class="line">    <span class="comment"># 为什么要乘 T^2？因为除以 T 后，梯度的幅值会变小 1/T^2，为了保持梯度量级，必须乘回去。</span></span><br><span class="line">    <span class="keyword">return</span> (temperature ** <span class="number">2</span>) * kl</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>训练循环的双重前向传播 (<code>train_epoch</code>)</p>
+</li>
+<li><p>损失函数$$Loss_{total} &#x3D; \alpha \cdot Loss_{CE} + (1 - \alpha) \cdot Loss_{Distill}$$​</p>
+</li>
+<li><p>Masking 策略的复用，蒸馏训练依然遵循 SFT 的原则：<strong>只蒸馏回答部分</strong>。</p>
+</li>
+<li><p>显存与性能的挑战：虽然 Teacher 不需要存梯度（Gradients）和优化器状态（Optimizer States），但它的 <strong>参数 (Weights)</strong> 和 <strong>中间激活值 (Activations)</strong> 依然占用大量显存。</p>
+</li>
+</ul>
+<h1 id="LoRA"><a href="#LoRA" class="headerlink" title="LoRA"></a>LoRA</h1><p>LoRA是一种高效的参数高效微调（Parameter-Efficient Fine-Tuning, PEFT）方法，旨在通过低秩分解的方式对预训练模型进行微调。 相比于全参数微调（Full Fine-Tuning），LoRA 只需要更新少量的参数。 LoRA 的核心思想是：在模型的权重矩阵中引入低秩分解，仅对低秩部分进行更新，而保持原始预训练权重不变。</p>
+<ul>
+<li>定义Lora层</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">LoRA</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, in_features, out_features, rank</span>):</span><br><span class="line">        <span class="comment"># rank: 秩。比如 in=512, out=512, rank=8。</span></span><br><span class="line">        <span class="comment"># 原矩阵参数量：512*512 = 26万</span></span><br><span class="line">        <span class="comment"># LoRA参数量：512*8 + 8*512 = 8千。参数量压缩了 32 倍。</span></span><br><span class="line">        <span class="variable language_">self</span>.rank = rank</span><br><span class="line">        <span class="variable language_">self</span>.A = nn.Linear(in_features, rank, bias=<span class="literal">False</span>)  <span class="comment"># 降维矩阵</span></span><br><span class="line">        <span class="variable language_">self</span>.B = nn.Linear(rank, out_features, bias=<span class="literal">False</span>) <span class="comment"># 升维矩阵</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment"># A 矩阵：高斯分布初始化</span></span><br><span class="line">        <span class="variable language_">self</span>.A.weight.data.normal_(mean=<span class="number">0.0</span>, std=<span class="number">0.02</span>)</span><br><span class="line">        <span class="comment"># B 矩阵：全 0 初始化</span></span><br><span class="line">        <span class="variable language_">self</span>.B.weight.data.zero_()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        <span class="comment"># forward = B(A(x))</span></span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>.B(<span class="variable language_">self</span>.A(x))</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注入Lora</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">apply_lora</span>(<span class="params">model, rank=<span class="number">8</span></span>):</span><br><span class="line">    <span class="comment"># 遍历模型的所有层</span></span><br><span class="line">    <span class="keyword">for</span> name, module <span class="keyword">in</span> model.named_modules():</span><br><span class="line">        <span class="comment"># 筛选条件：必须是 Linear 层，且是方阵 (in == out)</span></span><br><span class="line">        <span class="comment"># 为什么要限制方阵？</span></span><br><span class="line">        <span class="comment"># 作者这里做了一个简化假设：只对 Attention 的 Q, K, V, O 投影层做 LoRA，</span></span><br><span class="line">        <span class="comment"># 而在 Transformer 中这些层通常是 hidden_size -&gt; hidden_size 的方阵。</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">isinstance</span>(module, nn.Linear) <span class="keyword">and</span> module.weight.shape[<span class="number">0</span>] == module.weight.shape[<span class="number">1</span>]:</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># 1. 创建一个小 LoRA 模块挂在原模块身上</span></span><br><span class="line">            lora = LoRA(..., rank=rank)</span><br><span class="line">            <span class="built_in">setattr</span>(module, <span class="string">&quot;lora&quot;</span>, lora) <span class="comment"># 相当于 module.lora = lora</span></span><br><span class="line">            </span><br><span class="line">            <span class="comment"># 2. 劫持 forward 函数</span></span><br><span class="line">            original_forward = module.forward <span class="comment"># 保存原版 forward</span></span><br><span class="line"></span><br><span class="line">            <span class="comment"># 定义一个新的 forward</span></span><br><span class="line">            <span class="keyword">def</span> <span class="title function_">forward_with_lora</span>(<span class="params">x, layer1=original_forward, layer2=lora</span>):</span><br><span class="line">                <span class="comment"># 结果 = 原版路径(x) + LoRA旁路(x)</span></span><br><span class="line">                <span class="keyword">return</span> layer1(x) + layer2(x)</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># 3. 覆盖掉原版</span></span><br><span class="line">            module.forward = forward_with_lora</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>保存与加载</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">save_lora</span>(<span class="params">model, path</span>):</span><br><span class="line">    <span class="comment"># ...</span></span><br><span class="line">    <span class="comment"># 只提取名字里带 &#x27;lora&#x27; 的参数</span></span><br><span class="line">    lora_state = &#123;<span class="string">f&#x27;<span class="subst">&#123;clean_name&#125;</span>.lora.<span class="subst">&#123;k&#125;</span>&#x27;</span>: v <span class="keyword">for</span> k, v <span class="keyword">in</span> module.lora.state_dict().items()&#125;</span><br><span class="line">    state_dict.update(lora_state)</span><br><span class="line">    <span class="comment"># 保存。生成的文件非常小（几 MB），而不是几 GB。</span></span><br><span class="line">    torch.save(state_dict, path)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>训练</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">lora_params = []</span><br><span class="line"><span class="keyword">for</span> name, param <span class="keyword">in</span> model.named_parameters():</span><br><span class="line">    <span class="keyword">if</span> <span class="string">&#x27;lora&#x27;</span> <span class="keyword">in</span> name:</span><br><span class="line">        param.requires_grad = <span class="literal">True</span>  <span class="comment"># LoRA 参数要更新</span></span><br><span class="line">        lora_params.append(param)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        param.requires_grad = <span class="literal">False</span> <span class="comment"># 原模型参数冻结</span></span><br><span class="line">optimizer = optim.AdamW(lora_params, lr=args.learning_rate)</span><br></pre></td></tr></table></figure>
+
+<p>此时【基础模型+LoRA模型】即可获得垂直场景模型增强的能力，相当于为基础模型增加了LoRA外挂，这个过程并不损失基础模型的本身能力。</p>
+<p>PS：只要有所需要的数据集，也可以full_sft全参微调（需要进行通用知识的混合配比，否则过拟合领域数据会让模型变傻，损失通用性）</p>
+<h1 id="推理模型训练（蒸馏推理）"><a href="#推理模型训练（蒸馏推理）" class="headerlink" title="推理模型训练（蒸馏推理）"></a>推理模型训练（蒸馏推理）</h1><p>DeepSeek R1论文指出<code>&gt;3B</code>的模型经历多次反复的冷启动和RL奖励训练才能获得肉眼可见的推理能力提升。 最快最稳妥最经济的做法，以及最近爆发的各种各样所谓的推理模型几乎都是直接面向数据进行蒸馏训练， 参数太小的模型直接通过冷启动SFT+GRPO几乎不可能获得任何推理效果</p>
+<p>做蒸馏需要准备的依然是和SFT阶段同样格式的数据即可</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;conversations&quot;</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>,</span><br><span class="line">      <span class="string">&quot;content&quot;</span>: <span class="string">&quot;你好，我是小芳，很高兴认识你。&quot;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">&quot;role&quot;</span>: <span class="string">&quot;assistant&quot;</span>,</span><br><span class="line">      <span class="string">&quot;content&quot;</span>: <span class="string">&quot;&lt;think&gt;\n你好！我是由中国的个人开发者独立开发的智能助手MiniMind-R1-Lite-Preview，很高兴为您提供服务！\n&lt;/think&gt;\n&lt;answer&gt;\n你好！我是由中国的个人开发者独立开发的智能助手MiniMind-R1-Lite-Preview，很高兴为您提供服务！\n&lt;/answer&gt;&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>回复模板是</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;think&gt;\n思考过程\n&lt;/think&gt;\n</span><br><span class="line">&lt;answer&gt;\n最终回答\n&lt;/answer&gt;</span><br></pre></td></tr></table></figure>
+
+<p>这在GRPO中通过设置规则奖励函数约束模型符合思考标签和回复标签（在冷启动靠前的阶段奖励值设置应该提高一些）</p>
+<ul>
+<li>特殊设计</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sp_ids = torch.isin(shift_labels.view(-<span class="number">1</span>), torch.tensor(start_of_think_ids + ...))</span><br><span class="line">loss_mask_flat[sp_ids] = <span class="number">10</span></span><br></pre></td></tr></table></figure>
+
+<p>它将 <code>&lt;think&gt;</code>, <code>&lt;/think&gt;</code>, <code>&lt;answer&gt;</code>, <code>&lt;/answer&gt;</code> 这些关键结构标记的 Loss 权重设为了 <strong>10倍</strong>。</p>
+<p><strong>目的</strong>：强制模型学会何时开始思考、何时结束思考。这是为了在 SFT 阶段更好地规范模型的推理格式，防止模型输出混乱的标签。</p>
+<p>**这段代码 (SFT)**：它的目标是 **“预测下一个字” (Next Token Prediction)**。它在学习老师（比如 DeepSeek-R1）是怎么说话的。如果老师说 “因为A所以B”，模型就死记硬背 “因为A所以B”。它并不判断 “B” 对不对，它只在乎由于老师说了 “B”，所以我也要说 “B”。</p>
+<p>**真推理 (RL - PPO&#x2F;GRPO)**：目标是 **“最大化奖励” (Maximize Reward)**。模型尝试输出 “因为A所以C”，发现奖励很低（做错了）；下次尝试 “因为A所以B”，发现奖励很高（做对了）。通过这种试错，模型才真正理解了逻辑链条的有效性。</p>
+<p><strong>格式规范</strong>：那 10 倍的 Loss 权重 (<code>loss_mask_flat[sp_ids] = 10</code>) 就是为了强迫小模型学会：“遇到问题先输出 <code>&lt;think&gt;</code>，把过程写完，再输出 <code>&lt;answer&gt;</code>”。这是一种<strong>思维链（Chain-of-Thought, CoT）的格式注入</strong>。</p>
+<p><strong>引导逻辑</strong>：虽然小模型没有自我探索，但通过模仿大模型（R1）的高质量思维过程，它能学会“拆解问题”的模式。</p>
+<ul>
+<li><em>以前的模型</em>：问题 -&gt; 瞎猜答案。</li>
+<li><em>蒸馏后的模型</em>：问题 -&gt; 模仿老师的步骤 1 -&gt; 模仿步骤 2 -&gt; 得出答案。</li>
+<li>结果是：虽然是模仿，但因为步骤对了，答案往往也变准了。</li>
+</ul>
+<h1 id="强化学习后训练"><a href="#强化学习后训练" class="headerlink" title="强化学习后训练"></a>强化学习后训练</h1><p>LLM里的强化学习方法可分两类：</p>
+<ol>
+<li><strong>基于人类反馈的强化学习 (Reinforcement Learning from Human Feedback, RLHF)</strong></li>
+</ol>
+<ul>
+<li>通过<strong>人类</strong>对模型输出的偏好进行评价来训练模型，使其生成更符合人类价值观和偏好的内容。</li>
+</ul>
+<ol>
+<li><strong>基于AI反馈的强化学习 (Reinforcement Learning from AI Feedback, RLAIF)</strong></li>
+</ol>
+<ul>
+<li>使用<strong>AI模型</strong>（通常是预训练的语言奖励模型）来提供反馈，而不直接依赖人类的人工标注。</li>
+<li>这里的“AI”也可以是某些规则奖励，例如数学答案&#x2F;代码解释器…</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>裁判</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>RLHF</td>
+<td>人类</td>
+<td>更贴近真实人类偏好</td>
+<td>成本高、效率低</td>
+</tr>
+<tr>
+<td>RLAIF</td>
+<td>模型</td>
+<td>自动化、可扩展性强</td>
+<td>可能偏离人类真实偏好</td>
+</tr>
+</tbody></table>
+<p>二者本质上是一样的，都是通过<strong>强化学习的方式</strong>，利用某种形式的”<strong>反馈</strong>“来优化模型的行为。</p>
+<p>除了<strong>反馈</strong>的来源不同，其他并无任何区别。</p>
+<h2 id="基于人类反馈的强化学习-Reinforcement-Learning-from-Human-Feedback-RLHF"><a href="#基于人类反馈的强化学习-Reinforcement-Learning-from-Human-Feedback-RLHF" class="headerlink" title="基于人类反馈的强化学习 (Reinforcement Learning from Human Feedback, RLHF)"></a><strong>基于人类反馈的强化学习 (Reinforcement Learning from Human Feedback, RLHF)</strong></h2><h3 id="DPO-Direct-Preference-Optimization"><a href="#DPO-Direct-Preference-Optimization" class="headerlink" title="DPO(Direct Preference Optimization)"></a>DPO(Direct Preference Optimization)</h3><p>直接偏好优化（DPO）算法，损失为：</p>
+<p>其中：</p>
+<ul>
+<li><strong>策略项</strong>: f(rt)&#x3D;log⁡rw−log⁡rl (对比chosen vs rejected的概率比)</li>
+<li><strong>优势项</strong>: g(At) &#x3D; &#x2F; (通过偏好对比，无需显式计算优势)</li>
+<li><strong>正则项</strong>: h(KLt) &#x3D; 隐含在 β 中 (控制偏离参考模型程度)</li>
+</ul>
+<p>特别地，</p>
+<ul>
+<li>DPO从PPO带KL约束的目标推导出对偏好对的解析训练目标，直接最大化”chosen优于rejected”的对数几率；无需同步训练Reward&#x2F;Value模型。DPO只需跑<code>actor</code>与<code>ref</code>两个模型，显存占用低、收敛稳定、实现简单。</li>
+<li>训练范式：off‑policy，使用静态偏好数据集，可反复多轮epoch；Ref模型固定（预先缓存输出）。</li>
+<li>DPO的局限在于不做在线探索，更多用于”偏好&#x2F;安全”的人类价值对齐；对”能不能做对题”的智力能力提升有限（当然这也取决于数据集，大规模收集正反样本并人类评估很困难）。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">torchrun --nproc_per_node <span class="number">1</span> train_dpo.py</span><br><span class="line"><span class="comment"># or</span></span><br><span class="line">python train_dpo.py</span><br></pre></td></tr></table></figure>
+
+<h2 id="基于AI反馈的强化学习-Reinforcement-Learning-from-AI-Feedback-RLAIF"><a href="#基于AI反馈的强化学习-Reinforcement-Learning-from-AI-Feedback-RLAIF" class="headerlink" title="基于AI反馈的强化学习 (Reinforcement Learning from AI Feedback, RLAIF)"></a><strong>基于AI反馈的强化学习 (Reinforcement Learning from AI Feedback, RLAIF)</strong></h2>
+      </div>
+      <div class="post-tags-categories">
+        
+      </div>
+      
+    </article>
+    <!-- 上一篇文章和下一篇文章 -->
+    
+      <!-- 文章详情页的上一页和下一页 -->
+<div class="post-nav">
+
+
+
+
+
+  
+  <div class="post-nav-next post-nav-item">
+    <div class="post-nav-img" style="background-size: cover; 
+      background-position: center center;">
+      <img class="lazyload lazyload placeholder" src="https://www.researchgate.net/publication/363608659/figure/fig1/AS:11431281127577573@1679077202382/ProteinMPNN-architecture.jpg" class="lazyload placeholder" data-srcset="https://www.researchgate.net/publication/363608659/figure/fig1/AS:11431281127577573@1679077202382/ProteinMPNN-architecture.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" src="" alt="">
+    </div>
+    <a href="/2026/01/21/conditionMPNN/" class="post-nav-link">
+      <div class="title">
+        Next: <i class="fas fa-angle-right"></i>
+        <div class="title-text">条件-结构引导的ProteinMPNN序列设计</div>
+      </div>
+      <!-- <div class="content">
+        A. 输入特征的简化与增强早期的深度学习模型常使用二面角等特征，但 ProteinMPNN 的研究发现，使用原子间的距离
+      </div> -->
+    </a>
+  </div>
+
+</div>
+
+    
+    
+
+    <!-- 打赏 -->
+    
+
+    <!-- 分享 -->
+    
+    
+    <!-- 评论 -->
+    <!-- 评论 -->
+
+  <div id="myComment">
+    
+      <div id="gitment-container"></div>
+
+    
+  </div>
+
+
+<!-- 还需要在后面这个地址里设置script, comment script in themes\hexo-theme-bamboo\layout\_partial\scripts\index.ejs -->
+
+
+  </div>
+
+  <!-- 目录 -->
+  <aside id='l_side'>
+  
+    
+      <section class="widget side_blogger">
+  <div class='content'>
+    
+      
+        <a class='avatar flat-box rectangle' href='/about/index'>
+          <img src='/img/Kaz.jpg'/>
+        </a>
+      
+    
+    
+      <div class='text'>
+        
+          <h2>Kaz</h2>
+        
+        
+          <p>好戏都在烟火里</p>
+
+        
+        
+      </div>
+    
+    
+      <div class="social-wrapper">
+        
+          
+            <a href="mailto:alanluo233@gmail.com"
+              class="social fas fa-envelope flat-btn"
+              target="_blank"
+              rel="external nofollow noopener noreferrer">
+              
+            </a>
+          
+        
+          
+            <a href="https://github.com/HuoYu233"
+              class="social fab fa-github flat-btn"
+              target="_blank"
+              rel="external nofollow noopener noreferrer">
+              
+            </a>
+          
+        
+          
+            <a href="tencent://AddContact/?fromId=50&amp;fromSubId=1&amp;subcmd=all&amp;uin=1981270473"
+              class="social fab fa-qq flat-btn"
+              target="_blank"
+              rel="external nofollow noopener noreferrer">
+              
+            </a>
+          
+        
+          
+            <a href="https://space.bilibili.com/82505737"
+              class="social fab fa-bilibili flat-btn"
+              target="_blank"
+              rel="external nofollow noopener noreferrer">
+              
+            </a>
+          
+        
+      </div>
+    
+  </div>
+</section>
+
+    
+  
+  
+  
+
+  <div class="layout_sticky">    
+    
+      
+<section class="widget side_toc">
+  
+  <header>
+    
+      <i style="color: " class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name' style="color: ">本文目录</span>
+    
+  </header>
+
+
+  <div class='content'>
+    <div class="toc-main">
+      <div class="toc-content">
+        <!-- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Minimind%E6%9E%B6%E6%9E%84"><span class="toc-text">Minimind架构</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#A-%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81%EF%BC%9ARoPE-YaRN-Rotary-Positional-Embeddings"><span class="toc-text">A. 位置编码：RoPE + YaRN (Rotary Positional Embeddings)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#B-%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6%EF%BC%9AGQA-Grouped-Query-Attention"><span class="toc-text">B. 注意力机制：GQA (Grouped Query Attention)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#MHA-Multi-Head-Attention"><span class="toc-text">MHA: Multi-Head Attention</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MQA-Multi-Query-Attention"><span class="toc-text">MQA: Multi-Query Attention</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GQA-Group-Query-Attention"><span class="toc-text">GQA: Group Query Attention</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#KV-cache"><span class="toc-text">KV-cache</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Flash-Attention"><span class="toc-text">Flash Attention</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#C-%E5%BD%92%E4%B8%80%E5%8C%96%E4%B8%8E%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0-Norm-Activation"><span class="toc-text">C. 归一化与激活函数 (Norm &amp; Activation)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Normalization"><span class="toc-text">Normalization</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#BatchNorm"><span class="toc-text">BatchNorm</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#LayerNorm"><span class="toc-text">LayerNorm</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#RMSNorm"><span class="toc-text">RMSNorm</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Activation-Function"><span class="toc-text">Activation Function</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Sigmoid-Tanh"><span class="toc-text">Sigmoid&#x2F;Tanh</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ReLu-Rectified-Linear-Unit"><span class="toc-text">ReLu(Rectified Linear Unit)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#GELU-Gaussian-Error-Linear-Unit-%E2%80%94%E2%80%94-BERT-GPT-2-%E6%97%B6%E4%BB%A3"><span class="toc-text">GELU (Gaussian Error Linear Unit) —— BERT&#x2F;GPT-2 时代</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SiLU-Sigmoid-Linear-Unit-Swish%E2%80%94%E2%80%94Llama%E6%97%B6%E4%BB%A3"><span class="toc-text">SiLU(Sigmoid Linear Unit)&#x2F;Swish——Llama时代</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#FFN%E5%B1%82"><span class="toc-text">FFN层</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%A0%E7%BB%9FTransformer"><span class="toc-text">传统Transformer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SwiGLU-FFN"><span class="toc-text">SwiGLU FFN</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MoE-Mixture-of-Experts-%E5%AE%9E%E7%8E%B0"><span class="toc-text">MoE(Mixture of Experts)实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%B7%E5%90%88%E4%B8%93%E5%AE%B6%E7%BB%93%E6%9E%84-Shared-Routed"><span class="toc-text">混合专家结构 (Shared + Routed)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%A8%E6%8E%A7%E6%9C%BA%E5%88%B6-Gating"><span class="toc-text">门控机制 (Gating)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1-Load-Balancing"><span class="toc-text">负载均衡 (Load Balancing)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%AD%E7%BB%83%E5%92%8C%E6%8E%A8%E7%90%86%E5%B7%AE%E5%BC%82"><span class="toc-text">训练和推理差异</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Tokenizer"><span class="toc-text">Tokenizer</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Pretrain"><span class="toc-text">Pretrain</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Dataloader%E5%AE%9A%E4%B9%89"><span class="toc-text">Dataloader定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83Epoch"><span class="toc-text">核心Epoch</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E7%A8%8B%E5%BA%8F"><span class="toc-text">主程序</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SFT"><span class="toc-text">SFT</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#DataLoader%E5%AE%9A%E4%B9%89"><span class="toc-text">DataLoader定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83Epoch-1"><span class="toc-text">核心Epoch</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E7%A8%8B%E5%BA%8F-1"><span class="toc-text">主程序</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%9F%A5%E8%AF%86%E8%92%B8%E9%A6%8FKD"><span class="toc-text">知识蒸馏KD</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#LoRA"><span class="toc-text">LoRA</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8E%A8%E7%90%86%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%EF%BC%88%E8%92%B8%E9%A6%8F%E6%8E%A8%E7%90%86%EF%BC%89"><span class="toc-text">推理模型训练（蒸馏推理）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%90%8E%E8%AE%AD%E7%BB%83"><span class="toc-text">强化学习后训练</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E4%BA%BA%E7%B1%BB%E5%8F%8D%E9%A6%88%E7%9A%84%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0-Reinforcement-Learning-from-Human-Feedback-RLHF"><span class="toc-text">基于人类反馈的强化学习 (Reinforcement Learning from Human Feedback, RLHF)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#DPO-Direct-Preference-Optimization"><span class="toc-text">DPO(Direct Preference Optimization)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8EAI%E5%8F%8D%E9%A6%88%E7%9A%84%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0-Reinforcement-Learning-from-AI-Feedback-RLAIF"><span class="toc-text">基于AI反馈的强化学习 (Reinforcement Learning from AI Feedback, RLAIF)</span></a></li></ol></li></ol> -->
+        <div class="toc"></div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- 手机端目录按钮 -->
+<div id="toc-mobile-btn">
+  <i class="fas fa-list-ul" aria-hidden="true"></i>
+</div>
+
+      
+    
+  </div>
+</aside>
+
+  <!-- 图片放大 Wrap images with fancybox support -->
+  <script defer src="/js/wrapImage.js"></script>
+</div>
+
+<!-- 文章详情页背景图 -->
+<div id="appBgSwiper" style="position: fixed;left: 0;top: 0;width: 100%;height: 100%;z-index: -2;"
+	:style="{'background-color': bgColor ? bgColor : 'transparent'}">
+	<transition-group tag="ul" :name="names">
+		<li v-for='(image,index) in img' :key='index' v-show="index === mark" class="bg-swiper-box">
+			<img :src="image" class="bg-swiper-img no-lazy">
+		</li>
+	</transition-group>
+</div>
+<script>
+	var vm = new Vue({
+		el: '#appBgSwiper',
+		data: {
+			names: '' || 'fade' || 'fade', // translate-fade fade
+			mark: 0,
+			img: [],
+			bgColor: '',
+			time: null
+		},
+		methods: {   //添加方法
+			change(i, m) {
+				if (i > m) {
+					// this.names = 'fade';
+				} else if (i < m) {
+					// this.names = 'fade';
+				} else {
+					return;
+				}
+				this.mark = i;
+			},
+			prev() {
+				// this.names = 'fade';
+				this.mark--;
+				if (this.mark === -1) {
+					this.mark = 3;
+					return
+				}
+			},
+			next() {
+				// this.names = 'fade';
+				this.mark++;
+				if (this.mark === this.img.length) {
+					this.mark = 0;
+					return
+				}
+			},
+			autoPlay() {
+				// this.names = 'fade';
+				this.mark++;
+				if (this.mark === this.img.length) {
+					this.mark = 0;
+					return
+				}
+			},
+			play() {
+				let bgImgDelay = '' || '180000'
+				let delay = parseInt(bgImgDelay) || 180000;
+				this.time = setInterval(this.autoPlay, delay);
+			},
+			enter() {
+				clearInterval(this.time);
+			},
+			leave() {
+				this.play();
+			}
+		},
+		created() {
+			this.play()
+		},
+		beforeDestroy() {
+			clearInterval(this.time);
+		},
+		mounted() {
+			let prop = '' || '';
+			let isImg = prop.includes('.bmp') || prop.includes('.jpg') || prop.includes('.png') || prop.includes('.tif') || prop.includes('.gif') || prop.includes('.pcx') || prop.includes('.tga') || prop.includes('.exif') || prop.includes('.fpx') || prop.includes('.psd') || prop.includes('.cdr') || prop.includes('.pcd') || prop.includes('.dxf') || prop.includes('.ufo') || prop.includes('.eps') || prop.includes('.ai') || prop.includes('.raw') || prop.includes('.WMF') || prop.includes('.webp') || prop.includes('.jpeg') || prop.includes('http://') || prop.includes('https://')
+			if (isImg) {
+				let img = prop.split(',');
+				let configRoot = '/'
+				let arrImg = [];
+				img.forEach(el => {
+					var Expression = /http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/;
+					var objExp = new RegExp(Expression);
+
+					if (objExp.test(el)) {
+						// http or https
+						arrImg.push(el);
+					} else {
+						// 非http or https开头
+						// 本地文件
+						let firstStr = el.charAt(0);
+						if (firstStr == '/') {
+							el = el.substr(1); // 删除第一个字符 '/',因为 configRoot最后一个字符为 /
+						}
+						el = configRoot + el;
+						arrImg.push(el);
+					}
+				})
+				this.img = arrImg;
+			} else {
+				this.bgColor = prop;
+			}
+		}
+	})
+</script>
+
+<style>
+	.bg-swiper-box {
+		position: absolute;
+		display: block;
+		width: 100%;
+		height: 100%;
+	}
+
+	.bg-swiper-img {
+		object-fit: cover;
+		width: 100%;
+		height: 100%;
+	}
+</style>
+
+
+  <script>
+  // https://github.com/theme-next/hexo-theme-next/blob/master/layout/_third-party/math/mathjax.swig
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = 'https://unpkg.com/mathjax@3.0/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    // 文章章节标题不能为 “MathJax” ，否则会报错。
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+
+
+
+  <script>
+  function loadMermaid() {
+    if (document.getElementsByClassName('mermaid').length) {
+      if (window.mermaidJsLoad) mermaid.init()
+      else {
+        loadScript('https://unpkg.com/mermaid/dist/mermaid.min.js').then(() => {
+          window.mermaidJsLoad = true
+          mermaid.initialize({
+            theme: 'default',
+          })
+          if ('true') {
+            mermaid.init();
+          }
+        })
+      }
+    }
+  };
+  document.addEventListener("DOMContentLoaded", function () {
+    loadMermaid();
+  })
+
+  document.addEventListener('pjax:complete', function () {
+    loadMermaid();
+  })
+  
+</script>
+
+
+      </main>
+    </div>
+
+    <!-- 页脚 -->
+    
+  
+  
+    <!-- 底部鱼儿跳动效果，依赖于jquery-->
+<div id="j-fish-skip" style=" position: relative;height: 153px;width: auto;"></div>
+<script defer>
+  var RENDERER = {
+    POINT_INTERVAL: 5,
+    FISH_COUNT: 3,
+    MAX_INTERVAL_COUNT: 50,
+    INIT_HEIGHT_RATE: .5,
+    THRESHOLD: 50,
+    FISH_COLOR: '',
+    init: function () {
+      this.setFishColor(); this.setParameters(), this.reconstructMethods(), this.setup(), this.bindEvent(), this.render()
+    },
+    setFishColor: function () {
+      let isDark = JSON.parse(localStorage.getItem('dark')) || JSON.parse('false');
+      if (isDark) {
+        this.FISH_COLOR = '#222'; // 暗黑色，有时间把这整成一个变量
+      } else {
+        this.FISH_COLOR = '' || 'rgba(173, 216, 230, 0.8)';
+      }
+    },
+    setParameters: function () {
+      this.$window = $(window), this.$container = $("#j-fish-skip"), this.$canvas = $("<canvas />"), this.context = this.$canvas.appendTo(this.$container).get(0).getContext("2d"), this.points = [], this.fishes = [], this.watchIds = []
+    },
+    createSurfacePoints: function () {
+      var t = Math.round(this.width / this.POINT_INTERVAL);
+      this.pointInterval = this.width / (t - 1), this.points.push(new SURFACE_POINT(this, 0));
+      for (var i = 1; i < t; i++) {
+        var e = new SURFACE_POINT(this, i * this.pointInterval),
+          h = this.points[i - 1];
+        e.setPreviousPoint(h), h.setNextPoint(e), this.points.push(e)
+      }
+    },
+    reconstructMethods: function () {
+      this.watchWindowSize = this.watchWindowSize.bind(this), this.jdugeToStopResize = this.jdugeToStopResize.bind(this), this.startEpicenter = this.startEpicenter.bind(this), this.moveEpicenter = this.moveEpicenter.bind(this), this.reverseVertical = this.reverseVertical.bind(this), this.render = this.render.bind(this)
+    },
+    setup: function () {
+      this.points.length = 0, this.fishes.length = 0, this.watchIds.length = 0, this.intervalCount = this.MAX_INTERVAL_COUNT, this.width = this.$container.width(), this.height = this.$container.height(), this.fishCount = this.FISH_COUNT * this.width / 500 * this.height / 500, this.$canvas.attr({
+        width: this.width,
+        height: this.height
+      }), this.reverse = !1, this.fishes.push(new FISH(this)), this.createSurfacePoints()
+    },
+    watchWindowSize: function () {
+      this.clearTimer(), this.tmpWidth = this.$window.width(), this.tmpHeight = this.$window.height(), this.watchIds.push(setTimeout(this.jdugeToStopResize, this.WATCH_INTERVAL))
+    },
+    clearTimer: function () {
+      for (; this.watchIds.length > 0;) clearTimeout(this.watchIds.pop())
+    },
+    jdugeToStopResize: function () {
+      var t = this.$window.width(),
+        i = this.$window.height(),
+        e = t == this.tmpWidth && i == this.tmpHeight;
+      this.tmpWidth = t, this.tmpHeight = i, e && this.setup()
+    },
+    bindEvent: function () {
+      this.$window.on("resize", this.watchWindowSize), this.$container.on("mouseenter", this.startEpicenter), this.$container.on("mousemove", this.moveEpicenter)
+    },
+    getAxis: function (t) {
+      var i = this.$container.offset();
+      return {
+        x: t.clientX - i.left + this.$window.scrollLeft(),
+        y: t.clientY - i.top + this.$window.scrollTop()
+      }
+    },
+    startEpicenter: function (t) {
+      this.axis = this.getAxis(t)
+    },
+    moveEpicenter: function (t) {
+      var i = this.getAxis(t);
+      this.axis || (this.axis = i), this.generateEpicenter(i.x, i.y, i.y - this.axis.y), this.axis = i
+    },
+    generateEpicenter: function (t, i, e) {
+      if (!(i < this.height / 2 - this.THRESHOLD || i > this.height / 2 + this.THRESHOLD)) {
+        var h = Math.round(t / this.pointInterval);
+        h < 0 || h >= this.points.length || this.points[h].interfere(i, e)
+      }
+    },
+    reverseVertical: function () {
+      this.reverse = !this.reverse;
+      for (var t = 0, i = this.fishes.length; t < i; t++) this.fishes[t].reverseVertical()
+    },
+    controlStatus: function () {
+      for (var t = 0, i = this.points.length; t < i; t++) this.points[t].updateSelf();
+      for (t = 0, i = this.points.length; t < i; t++) this.points[t].updateNeighbors();
+      this.fishes.length < this.fishCount && 0 == --this.intervalCount && (this.intervalCount = this.MAX_INTERVAL_COUNT, this.fishes.push(new FISH(this)))
+    },
+    render: function () {
+      requestAnimationFrame(this.render), this.controlStatus(), this.context.clearRect(0, 0, this.width, this.height), this.context.fillStyle = this.FISH_COLOR;
+      for (var t = 0, i = this.fishes.length; t < i; t++) this.fishes[t].render(this.context);
+      this.context.save(), this.context.globalCompositeOperation = "xor", this.context.beginPath(), this.context.moveTo(0, this.reverse ? 0 : this.height);
+      for (t = 0, i = this.points.length; t < i; t++) this.points[t].render(this.context);
+      this.context.lineTo(this.width, this.reverse ? 0 : this.height), this.context.closePath(), this.context.fill(), this.context.restore()
+    }
+  },
+  SURFACE_POINT = function (t, i) {
+    this.renderer = t, this.x = i, this.init()
+  };
+  SURFACE_POINT.prototype = {
+    SPRING_CONSTANT: .03,
+    SPRING_FRICTION: .9,
+    WAVE_SPREAD: .3,
+    ACCELARATION_RATE: .01,
+    init: function () {
+      this.initHeight = this.renderer.height * this.renderer.INIT_HEIGHT_RATE, this.height = this.initHeight, this.fy = 0, this.force = {
+        previous: 0,
+        next: 0
+      }
+    },
+    setPreviousPoint: function (t) {
+      this.previous = t
+    },
+    setNextPoint: function (t) {
+      this.next = t
+    },
+    interfere: function (t, i) {
+      this.fy = this.renderer.height * this.ACCELARATION_RATE * (this.renderer.height - this.height - t >= 0 ? -1 : 1) * Math.abs(i)
+    },
+    updateSelf: function () {
+      this.fy += this.SPRING_CONSTANT * (this.initHeight - this.height), this.fy *= this.SPRING_FRICTION, this.height += this.fy
+    },
+    updateNeighbors: function () {
+      this.previous && (this.force.previous = this.WAVE_SPREAD * (this.height - this.previous.height)), this.next && (this.force.next = this.WAVE_SPREAD * (this.height - this.next.height))
+    },
+    render: function (t) {
+      this.previous && (this.previous.height += this.force.previous, this.previous.fy += this.force.previous), this.next && (this.next.height += this.force.next, this.next.fy += this.force.next), t.lineTo(this.x, this.renderer.height - this.height)
+    }
+  };
+  var FISH = function (t) {
+    this.renderer = t, this.init()
+  };
+  FISH.prototype = {
+    GRAVITY: .4,
+    init: function () {
+      this.direction = Math.random() < .5, this.x = this.direction ? this.renderer.width + this.renderer.THRESHOLD : -this.renderer.THRESHOLD, this.previousY = this.y, this.vx = this.getRandomValue(4, 10) * (this.direction ? -1 : 1), this.renderer.reverse ? (this.y = this.getRandomValue(1 * this.renderer.height / 10, 4 * this.renderer.height / 10), this.vy = this.getRandomValue(2, 5), this.ay = this.getRandomValue(.05, .2)) : (this.y = this.getRandomValue(6 * this.renderer.height / 10, 9 * this.renderer.height / 10), this.vy = this.getRandomValue(-5, -2), this.ay = this.getRandomValue(-.2, -.05)), this.isOut = !1, this.theta = 0, this.phi = 0
+    },
+    getRandomValue: function (t, i) {
+      return t + (i - t) * Math.random()
+    },
+    reverseVertical: function () {
+      this.isOut = !this.isOut, this.ay *= -1
+    },
+    controlStatus: function (t) {
+      this.previousY = this.y, this.x += this.vx, this.y += this.vy, this.vy += this.ay, this.renderer.reverse ? this.y > this.renderer.height * this.renderer.INIT_HEIGHT_RATE ? (this.vy -= this.GRAVITY, this.isOut = !0) : (this.isOut && (this.ay = this.getRandomValue(.05, .2)), this.isOut = !1) : this.y < this.renderer.height * this.renderer.INIT_HEIGHT_RATE ? (this.vy += this.GRAVITY, this.isOut = !0) : (this.isOut && (this.ay = this.getRandomValue(-.2, -.05)), this.isOut = !1), this.isOut || (this.theta += Math.PI / 20, this.theta %= 2 * Math.PI, this.phi += Math.PI / 30, this.phi %= 2 * Math.PI), this.renderer.generateEpicenter(this.x + (this.direction ? -1 : 1) * this.renderer.THRESHOLD, this.y, this.y - this.previousY), (this.vx > 0 && this.x > this.renderer.width + this.renderer.THRESHOLD || this.vx < 0 && this.x < -this.renderer.THRESHOLD) && this.init()
+    },
+    render: function (t) {
+      t.save(), t.translate(this.x, this.y), t.rotate(Math.PI + Math.atan2(this.vy, this.vx)), t.scale(1, this.direction ? 1 : -1), t.beginPath(), t.moveTo(-30, 0), t.bezierCurveTo(-20, 15, 15, 10, 40, 0), t.bezierCurveTo(15, -10, -20, -15, -30, 0), t.fill(), t.save(), t.translate(40, 0), t.scale(.9 + .2 * Math.sin(this.theta), 1), t.beginPath(), t.moveTo(0, 0), t.quadraticCurveTo(5, 10, 20, 8), t.quadraticCurveTo(12, 5, 10, 0), t.quadraticCurveTo(12, -5, 20, -8), t.quadraticCurveTo(5, -10, 0, 0), t.fill(), t.restore(), t.save(), t.translate(-3, 0), t.rotate((Math.PI / 3 + Math.PI / 10 * Math.sin(this.phi)) * (this.renderer.reverse ? -1 : 1)), t.beginPath(), this.renderer.reverse ? (t.moveTo(5, 0), t.bezierCurveTo(10, 10, 10, 30, 0, 40), t.bezierCurveTo(-12, 25, -8, 10, 0, 0)) : (t.moveTo(-5, 0), t.bezierCurveTo(-10, -10, -10, -30, 0, -40), t.bezierCurveTo(12, -25, 8, -10, 0, 0)), t.closePath(), t.fill(), t.restore(), t.restore(), this.controlStatus(t)
+    }
+  }, $(function () {
+    RENDERER.init()
+    $('.dark').click(function () {
+      setTimeout(() => {
+        RENDERER.setFishColor();
+        RENDERER.context.fill();
+      });
+    })
+  });
+</script>
+  
+  <div class="footer bg-color">
+    <div class="footer-main">
+      
+        
+          <div class="link">
+            
+          </div>
+        
+      
+        
+          <div class="footer-copyright">
+            <p>Copyright © 2023 - 2025 <a target="_blank" rel="noopener" href="https://github.com/HuoYu233">Kaz</a> | Powered by <a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/">Hexo</a> | Theme <a target="_blank" rel="noopener" href="https://github.com/yuang01/theme">Bamboo</a> </p>
+
+          </div>
+        
+      
+        
+          <div class="footer-custom">
+            
+          </div>
+        
+      
+    </div>
+  </div>
+
+
+
+    <!-- 渲染暗黑按钮 -->
+    
+      <div class="dark" onclick="toggleDarkMode()">
+  <div class="dark-content">
+    <i class="fas" id="darkIcon" aria-hidden="true"></i>
+  </div>
+</div>
+
+<script defer>
+  $(function() {
+    // 初始化暗黑模式状态
+    let isDark = JSON.parse(localStorage.getItem('dark')) || JSON.parse('false');
+    updateDarkModeIcon(isDark);
+  });
+
+  function toggleDarkMode() {
+    const isDark = $(document.body).hasClass('darkModel');
+    $(document.body).toggleClass('darkModel');
+    localStorage.setItem('dark', !isDark);
+    updateDarkModeIcon(!isDark);
+  }
+
+  function updateDarkModeIcon(isDark) {
+    const iconElement = document.getElementById('darkIcon');
+    if (isDark) {
+      iconElement.classList.remove('fa-moon');
+      iconElement.classList.add('fa-lightbulb');
+    } else {
+      iconElement.classList.remove('fa-lightbulb');
+      iconElement.classList.add('fa-moon');
+    }
+  }
+</script>
+
+    
+    <!-- 渲染回到顶部按钮 -->
+    
+      <div class="goTop top-btn-color" pointer>
+  <i class="fas fa-arrow-up" aria-hidden="true"></i>
+</div>
+<script defer src="/js/goTop.js"></script>
+
+    
+    <!-- 渲染左下角音乐播放器 -->
+    
+
+    <!-- 图片放大 -->
+    
+      <script src="https://unpkg.com/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+    
+
+    <!-- 百度解析 -->
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script async>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <!-- 背景彩带 -->
+    
+
+    <script src="/js/utils/index.js"></script>
+    <script src="/js/app.js"></script>
+    
+    <!-- 文章目录所需js -->
+<!-- <link href="/js/tocbot/tocbot.css" rel="stylesheet">
+<script src="/js/tocbot/tocbot.min.js"></script> -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.18.2/tocbot.min.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.18.2/tocbot.css">
+
+<script>
+  var headerEl = 'h2, h3, h4',  //headers 
+    content = '.post-detail',//文章容器
+    idArr = {};  //标题数组以确定是否增加索引id
+  //add #id
+  var option = {
+    // Where to render the table of contents.
+    tocSelector: '.toc',
+    // Where to grab the headings to build the table of contents.
+    contentSelector: content,
+    // Which headings to grab inside of the contentSelector element.
+    headingSelector: headerEl,
+    scrollSmooth: true,
+    scrollSmoothOffset: -70,
+    // headingsOffset: -($(window).height() * 0.4 - 45),
+    headingsOffset: -($(window).height() * 0.4 - 70),
+    // positionFixedSelector: '.toc-main',
+    // positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto',
+    activeLinkClass: 'is-active-link',
+    orderedList: true,
+    collapseDepth: 20,
+    // onClick: function (e) {},
+  }
+  if ($('.toc').length > 0) {
+
+    $(content).children(headerEl).each(function () {
+      //去除空格以及多余标点
+      var headerId = $(this).text().replace(/[\s|\~|`|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\_|\+|\=|\||\|\[|\]|\{|\}|\;|\:|\"|\'|\,|\<|\.|\>|\/|\?|\：|\，|\。]/g, '');
+
+      headerId = headerId.toLowerCase();
+      if (idArr[headerId]) {
+        //id已经存在
+        $(this).attr('id', headerId + '-' + idArr[headerId]);
+        idArr[headerId]++;
+      }
+      else {
+        //id未存在
+        idArr[headerId] = 1;
+        $(this).attr('id', headerId);
+      }
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+      tocbot.init(option);
+      mobileTocClick();
+    });
+
+  }
+
+  window.tocScrollFn = function () {
+    return bamboo.throttle(function () {
+      findHeadPosition();
+    }, 100)()
+  }
+  window.addEventListener('scroll', tocScrollFn);
+
+  const findHeadPosition = function (top) {
+    if ($('.toc-list').length <= 0) {
+      return false;
+    }
+    setTimeout(() => {  // or DOMContentLoaded 
+      autoScrollToc();
+    }, 0);
+  }
+
+  const autoScrollToc = function () {
+    const $activeItem = document.querySelector('.is-active-link');
+    const $cardToc = document.querySelector('.toc-content');
+    const activePosition = $activeItem.getBoundingClientRect().top
+    const sidebarScrollTop = $cardToc.scrollTop
+    if (activePosition > (document.documentElement.clientHeight - 100)) {
+      $cardToc.scrollTop = sidebarScrollTop + 150
+    }
+    if (activePosition < 150) {
+      $cardToc.scrollTop = sidebarScrollTop - 150
+    }
+  }
+
+  document.addEventListener('pjax:send', function () {
+    if ($('.toc').length) {
+      tocbot.destroy();
+    }
+  });
+
+  document.addEventListener('pjax:complete', function () {
+    if ($('.toc').length) {
+      tocbot.init(option);
+      mobileTocClick();
+    }
+  });
+  
+  // 手机端toc按钮点击出现目录
+  const mobileTocClick = function () {
+    const $cardTocLayout = document.getElementsByClassName('side_toc')[0];
+    const $cardToc = $cardTocLayout.getElementsByClassName('toc-content')[0];
+    let right = '45px';
+    if (window.innerWidth >= 551 && window.innerWidth <= 992) {
+      right = '100px'
+    }
+    const mobileToc = {
+      open: () => {
+        $cardTocLayout.style.cssText = 'animation: toc-open .3s; opacity: 1; right: ' + right
+      },
+
+      close: () => {
+        $cardTocLayout.style.animation = 'toc-close .2s'
+        setTimeout(() => {
+          $cardTocLayout.style.cssText = "opacity:''; animation: ''; right: ''"
+        }, 100)
+      }
+    }
+    document.getElementById('toc-mobile-btn').addEventListener('click', () => {
+      if (window.getComputedStyle($cardTocLayout).getPropertyValue('opacity') === '0') mobileToc.open()
+      else mobileToc.close()
+    })
+
+    $cardToc.addEventListener('click', (e) => {
+      if (window.innerWidth < 992) { // 小于992px的时候
+        mobileToc.close()
+      }
+    })
+  }
+</script>
+
+<style>
+  /* .is-position-fixed {
+    position: sticky !important;
+    top: 74px;
+  }
+
+  .toc-main ul {
+    counter-reset: show-list;
+  }
+
+  .toc-main ul li::before {
+    content: counter(item)".";
+    display: block;
+    position: absolute;
+    left: 12px;
+    top: 0;
+  } */
+</style>
+ 
+
+<!-- 设置导航背景 -->
+<script>
+  let setHeaderClass = () => {
+    const nav = $('#navHeader');
+    const navTop = nav.outerHeight();
+    const winTop = $(window).scrollTop();
+    if(winTop > navTop) {
+      nav.addClass('header-bg-color');
+    }
+    else {
+      nav.removeClass('header-bg-color');
+    }
+  };
+
+  let scrollCollect = () => {
+    return bamboo.throttle(function (e) {
+      setHeaderClass();
+    }, 200)()
+  }
+
+  let initHeaderBg = () => {
+    setHeaderClass();
+  }
+
+  setHeaderClass();
+  window.addEventListener('scroll', scrollCollect);
+
+  document.addEventListener('pjax:send', function () {
+    window.removeEventListener('scroll', scrollCollect)
+  })
+  document.addEventListener('pjax:complete', function () {
+    window.addEventListener('scroll', scrollCollect);
+    setHeaderClass();
+  })
+</script> 
+
+<!-- 渲染issues标签里的内容 -->
+<script>
+  function loadIssuesJS() {
+    if ($(".post-detail").find(".issues-api").length == 0) {
+      return;
+    } 
+    loadScript('/js/issues/index.js');
+  };
+  $(function () {
+    loadIssuesJS();
+  });
+  document.addEventListener('pjax:complete', function () {
+    if (typeof IssuesAPI == "undefined") {
+      loadIssuesJS();
+    }
+  })
+</script>
+
+<!-- 渲染远程json加载的图片标签(getPhotoOnline)里的内容 -->
+<script>
+  function loadPhotoOnlineJS() {
+    if ($(".post-detail").find(".getJsonPhoto-api").length == 0) {
+      return;
+    } 
+    loadScript('/js/getPhotoOnline/index.js');
+  };
+  $(function () {
+    loadPhotoOnlineJS();
+  });
+  document.addEventListener('pjax:complete', function () {
+    if (typeof getPhotoJson == "undefined") {
+      loadPhotoOnlineJS();
+    }
+  })
+</script>
+
+<!-- 渲染远程json加载的talk标签(getTalkOnline)里的内容 -->
+<script>
+  function loadTalkOnlineJS() {
+    if ($(".post-detail").find(".getJsonTalk-api").length == 0) {
+      return;
+    } 
+    loadScript('https://cdnjs.cloudflare.com/ajax/libs/waterfall.js/1.0.2/waterfall.min.js'); // 瀑布流插件，https://raphamorim.io/waterfall.js/
+    loadScript('/js/getTalkOnline/index.js');
+  };
+  $(function () {
+    loadTalkOnlineJS();
+  });
+  document.addEventListener('pjax:complete', function () {
+    if (typeof getTalkJson == "undefined") {
+      loadTalkOnlineJS();
+    }
+  })
+</script>
+
+<!-- 渲染远程json加载的site-card标签(getSiteOnline)里的内容 -->
+<script>
+  function loadSiteOnlineJS() {
+    if ($(".post-detail").find(".getJsonSite-api").length == 0) {
+      return;
+    } 
+    loadScript('/js/getSiteOnline/index.js');
+  };
+  $(function () {
+    loadSiteOnlineJS();
+  });
+  document.addEventListener('pjax:complete', function () {
+    if (typeof getSiteJson == "undefined") {
+      loadSiteOnlineJS();
+    }
+  })
+</script>
+
+<!-- 输入框打字特效 -->
+<!-- 输入框打字特效 -->
+
+
+<!-- markdown代码一键复制功能 -->
+
+  <link rel="stylesheet" href="https://unpkg.com/v-plugs-ayu/lib/ayu.css">
+  <script src="https://unpkg.com/v-plugs-ayu/lib/ayu.umd.min.js"></script>
+  <script src="/js/clipboard/clipboard.min.js"></script>
+  <div id="appCopy">
+  </div>
+  <script data-pjax>
+    var vm = new Vue({
+      el: '#appCopy',
+      data: {
+      },
+      computed: {
+      },
+      mounted() {
+        const that = this;
+        var copy = 'copy';
+        /* code */
+        var initCopyCode = function () {
+          var copyHtml = '';
+          copyHtml += '<button class="btn-copy" data-clipboard-snippet="" style="position:absolute;top:0;right:0;z-index:1;">';
+          copyHtml += '<i class="fas fa-copy"></i><span>' + copy + '</span>';
+          copyHtml += '</button>';
+          $(".post-detail pre").not('.gutter pre').wrap("<div class='codeBox' style='position:relative;width:100%;'></div>")
+          $(".post-detail pre").not('.gutter pre').before(copyHtml);
+          new ClipboardJS('.btn-copy', {
+            target: function (trigger) {
+              return trigger.nextElementSibling;
+            }
+          });
+        }
+        initCopyCode();
+        $('.btn-copy').unbind('click').bind('click', function () {
+          doSomething();
+        })
+        $(document).unbind('keypress').bind('keypress', function (e) {
+          if (e.ctrlKey && e.keyCode == 67) {
+            doSomething();
+          }
+        })
+
+        function doSomething() {
+          that.$notify({
+            title: "成功",
+            content: "代码已复制，请遵守相关授权协议。",
+            type: 'success'
+          })
+        }
+      },
+      methods: {
+      },
+      created() { }
+    })
+  </script>
+  
+
+<!-- 图片懒加载 -->
+<script defer src="https://unpkg.com/vanilla-lazyload@17.1.0/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazyload",
+    threshold: 0
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    lazyLoadInstance.update();
+  });
+  document.addEventListener('pjax:complete', function () {
+    lazyLoadInstance.update();
+  });
+</script>
+
+
+<!-- 卡片滚动动画 -->
+   
+
+<!-- 评论所需js -->
+
+  
+        <script type="text/javascript">
+  var utteranceComment = {};
+
+  function check_utterance() {
+    let isDark = JSON.parse(localStorage.getItem('dark')) || JSON.parse('false');
+    if (isDark) {
+      utteranceComment.Theme = 'github-dark';
+    } else {
+      utteranceComment.Theme = 'github-light';
+    }
+
+    return document.getElementById("gitment-container");
+  }
+  comment_el = '#gitment-container';
+  load_utterance = function () {
+    if ($(comment_el).length) {
+      // 匿名函数，防止污染全局变量
+      const HEAD = check_utterance();
+
+      var utterances = document.createElement('script');
+      utterances.type = 'text/javascript';
+      utterances.async = true;
+      utterances.setAttribute('issue-term', 'pathname')
+      utterances.setAttribute('theme', utteranceComment.Theme)
+      utterances.setAttribute('repo', '')
+      utterances.crossorigin = 'anonymous';
+      utterances.src = 'https://utteranc.es/client.js';
+      // content 是要插入评论的地方
+      document.getElementById('gitment-container').appendChild(utterances);
+
+    }
+  }
+
+  function dark_utterance() {
+    const HEAD = check_utterance();
+    if (!HEAD) return;
+    const message = {
+      type: 'set-theme',
+      theme: utteranceComment.Theme
+    };
+    const utteranceIframe = document.querySelector('iframe');
+    utteranceIframe.contentWindow.postMessage(message, 'https://utteranc.es');
+  }
+
+  $(document).ready(load_utterance);
+  document.addEventListener('pjax:complete', function () {
+    load_utterance();
+  });
+
+  $('.dark').click(function () {
+    setTimeout(() => {
+      dark_utterance();
+    });
+  })
+
+</script>
+
+<style>
+  .utterances {
+    max-width: inherit !important;
+  }
+</style>
+      
+
+
+<!-- 鼠标点击特效 -->
+<!-- 爱心点击 -->
+
+
+
+
+
+<!-- 轮播图标签 -->
+<script>
+  var bambooSwiperTag = {};
+  function load_swiper() {
+    if (!document.querySelectorAll(".post-swiper-container")[0]) return;
+    loadCSS("https://unpkg.com/swiper@6/swiper-bundle.min.css")
+    loadScript("https://unpkg.com/swiper@6/swiper-bundle.min.js").then(() => {
+      pjax_swiper();
+    });
+  }
+
+  load_swiper();
+
+  function pjax_swiper() {
+    bambooSwiperTag.swiper = new Swiper('.post-swiper-container', {
+      slidesPerView: 'auto',
+      spaceBetween: 8,
+      centeredSlides: true,
+      loop: true,
+      autoplay: true ? {
+        delay: 3000,
+        stopOnLastSlide: false,
+        disableOnInteraction: false,
+      } : false,
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      on:{
+        init: function(){
+          swiperAnimateCache(this); //隐藏动画元素 
+          swiperAnimate(this); //初始化完成开始动画
+        }, 
+        slideChangeTransitionEnd: function(){ 
+          swiperAnimate(this); //每个slide切换结束时也运行当前slide动画
+          //this.slides.eq(this.activeIndex).find('.ani').removeClass('ani'); 动画只展现一次，去除ani类名
+        } 
+      }
+    });
+  }
+
+  document.addEventListener('pjax:complete', function () {
+    if (!document.querySelectorAll(".post-swiper-container")[0]) return;
+    if (typeof bambooSwiperTag.swiper === "undefined") {
+      load_swiper();
+    } else {
+      pjax_swiper();
+    }
+  });
+</script>
+    <!-- pjax -->
+    
+
+<!-- pjax -->
+
+
+  <script src="/js/pjax@0.2.8/index.js"></script>
+  
+    <div class="pjax-animate">
+  
+    <div class="loading-circle"><div id="loader-circle"></div></div>
+    <script>
+      window.ShowLoading = function() {
+        $(".loading-circle").css("display", "block");
+      };
+      window.HideLoading = function() {
+        $(".loading-circle").css("display", "none");
+      }
+    </script>
+  
+	<script>
+    document.addEventListener('pjax:complete', function () {
+      window.HideLoading();
+    })
+    document.addEventListener('pjax:send', function () {
+      window.ShowLoading();
+    })
+    document.addEventListener('pjax:error', function () {
+      window.HideLoading();
+    })
+	</script>
+</div>
+
+  
+
+  <script>
+    var pjax = new Pjax({
+      elements: 'a[href]:not([href^="#"]):not([href="javascript:void(0)"]):not([no-pjax])',   // 拦截正常带链接的 a 标签
+      selectors: ["#pjax-container","title"],                                   // 根据实际需要确认重载区域
+      cacheBust: false,   // url 地址追加时间戳，用以避免浏览器缓存
+      timeout: 5000
+    });
+
+    document.addEventListener('pjax:send', function (e) {
+
+      try {
+        var currentUrl = window.location.pathname;
+        var targetUrl = e.triggerElement.href;
+        var banUrl = [""];
+        if (banUrl[0] != "") {
+          banUrl.forEach(item => {
+            if(currentUrl.indexOf(item) != -1 || targetUrl.indexOf(item) != -1) {
+              window.location.href = targetUrl;
+            }
+          });
+        }
+      } catch (error) {}
+
+      $(window).unbind('resize');
+      $(window).unbind('scroll');
+      $(document).unbind('scroll');
+      $(document).unbind('click');
+      $('body').unbind('click');
+
+    })
+    
+    document.addEventListener('pjax:complete', function () {
+      $('script[data-pjax], .pjax-reload script').each(function () {
+        $(this).parent().append($(this).remove());
+      });
+    });
+
+    document.addEventListener('pjax:error', function (e) {
+      window.location.href = e.triggerElement.href;
+    })
+    
+    // 刷新不从顶部开始
+    document.addEventListener("DOMContentLoaded", function () {
+      history.scrollRestoration = 'auto';
+    })
+  </script>
+
+
+
+  </body>
+</html>

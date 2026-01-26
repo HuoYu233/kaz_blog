@@ -339,7 +339,7 @@
 
 
 <div class="post-detail-header" id="thumbnail_canvas" style="background-repeat: no-repeat; background-size: cover; 
-  background-position: center center;position: relative;background-image:url('https://camo.githubusercontent.com/d1a1014ab71380dccf048c2f60a54de6954ccc670f321b0ed6bf4d8af1fb3699/68747470733a2f2f646f63732e676f6f676c652e636f6d2f64726177696e67732f642f652f32504143582d317654746e4d42444f71385470484963745566474e38566c3332783549534e63504b6c786a63514a4632713730506c61483275466c6a3241633473336b686e5a71473159787070644d72306954796b2d2f7075623f773d38383926683d333538')">
+  background-position: center center;position: relative;background-image:url('https://www.researchgate.net/publication/363608659/figure/fig1/AS:11431281127577573@1679077202382/ProteinMPNN-architecture.jpg')">
   <div class="post-detail-header-mask"></div>
   <canvas id="header_canvas"style="position:absolute;bottom:0;pointer-events:none;"></canvas>
   
@@ -596,38 +596,32 @@
 </li>
 </ul>
 <h3 id="6-主模型-ProteinMPNN-类"><a href="#6-主模型-ProteinMPNN-类" class="headerlink" title="6. 主模型 (ProteinMPNN 类)"></a>6. 主模型 (<code>ProteinMPNN</code> 类)</h3><p>将上述部分串联起来。</p>
-<h4 id="A-初始化与特征提取"><a href="#A-初始化与特征提取" class="headerlink" title="A. 初始化与特征提取"></a>A. 初始化与特征提取</h4><p>Python</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">E, E_idx = self.features(X, mask, residue_idx, chain_encoding_all)</span><br><span class="line">h_V = torch.zeros(...) # 初始节点特征全为0</span><br><span class="line">h_E = self.W_e(E)      # 边特征投影</span><br></pre></td></tr></table></figure>
+<h4 id="A-初始化与特征提取"><a href="#A-初始化与特征提取" class="headerlink" title="A. 初始化与特征提取"></a>A. 初始化与特征提取</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">E, E_idx = <span class="variable language_">self</span>.features(X, mask, residue_idx, chain_encoding_all)</span><br><span class="line">h_V = torch.zeros(...) <span class="comment"># 初始节点特征全为0</span></span><br><span class="line">h_E = <span class="variable language_">self</span>.W_e(E)      <span class="comment"># 边特征投影</span></span><br></pre></td></tr></table></figure>
 
 <ul>
 <li><code>E</code>: <code>[B, L, K, C]</code></li>
 <li><code>h_V</code>: <code>[B, L, C]</code></li>
 </ul>
-<h4 id="B-编码器循环-Encoder-Loop"><a href="#B-编码器循环-Encoder-Loop" class="headerlink" title="B. 编码器循环 (Encoder Loop)"></a>B. 编码器循环 (Encoder Loop)</h4><p>Python</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">for layer in self.encoder_layers:</span><br><span class="line">    h_V, h_E = layer(h_V, h_E, E_idx, ...)</span><br></pre></td></tr></table></figure>
+<h4 id="B-编码器循环-Encoder-Loop"><a href="#B-编码器循环-Encoder-Loop" class="headerlink" title="B. 编码器循环 (Encoder Loop)"></a>B. 编码器循环 (Encoder Loop)</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> layer <span class="keyword">in</span> <span class="variable language_">self</span>.encoder_layers:</span><br><span class="line">    h_V, h_E = layer(h_V, h_E, E_idx, ...)</span><br></pre></td></tr></table></figure>
 
 <p>通过3层 <code>EncLayer</code>，让几何信息在图上充分传播。此时模型“理解”了蛋白质的 3D 骨架结构。</p>
-<h4 id="C-随机解码顺序-Random-Decoding-Order-核心创新点"><a href="#C-随机解码顺序-Random-Decoding-Order-核心创新点" class="headerlink" title="C. 随机解码顺序 (Random Decoding Order) - 核心创新点"></a>C. 随机解码顺序 (Random Decoding Order) - <strong>核心创新点</strong></h4><p>Python</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">decoding_order = torch.argsort(...) </span><br><span class="line">permutation_matrix_reverse = ...</span><br><span class="line">order_mask_backward = ...</span><br></pre></td></tr></table></figure>
+<h4 id="C-随机解码顺序-Random-Decoding-Order-核心创新点"><a href="#C-随机解码顺序-Random-Decoding-Order-核心创新点" class="headerlink" title="C. 随机解码顺序 (Random Decoding Order) - 核心创新点"></a>C. 随机解码顺序 (Random Decoding Order) - <strong>核心创新点</strong></h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">decoding_order = torch.argsort(...) </span><br><span class="line">permutation_matrix_reverse = ...</span><br><span class="line">order_mask_backward = ...</span><br></pre></td></tr></table></figure>
 
 <p>ProteinMPNN 的一大特点是不按照 N端-&gt;C端 的固定顺序解码，而是<strong>随机顺序</strong>。</p>
 <ul>
 <li>生成一个随机排列。</li>
 <li>构建 <code>mask_attend</code>：形状 <code>[B, L, K, 1]</code>。用于在 Decoder 中屏蔽掉“未来”的邻居节点，只允许聚合“过去”（已生成序列）的邻居信息。</li>
 </ul>
-<h4 id="D-解码器准备"><a href="#D-解码器准备" class="headerlink" title="D. 解码器准备"></a>D. 解码器准备</h4><p>Python</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">h_S = self.W_s(S) # 真实序列的 Embedding [B, L, C]</span><br><span class="line">h_ES = cat_neighbors_nodes(h_S, h_E, E_idx) # 将序列信息拼接到边上</span><br></pre></td></tr></table></figure>
+<h4 id="D-解码器准备"><a href="#D-解码器准备" class="headerlink" title="D. 解码器准备"></a>D. 解码器准备</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">h_S = <span class="variable language_">self</span>.W_s(S) <span class="comment"># 真实序列的 Embedding [B, L, C]</span></span><br><span class="line">h_ES = cat_neighbors_nodes(h_S, h_E, E_idx) <span class="comment"># 将序列信息拼接到边上</span></span><br></pre></td></tr></table></figure>
 
 <p>这里使用了 <strong>Teacher Forcing</strong>：在训练时，我们将真实的序列 <code>S</code> 作为输入，但在 Decoder 内部通过 mask 确保预测第 <code>i</code> 个氨基酸时，看不到 <code>i</code> 及其之后的真实氨基酸。</p>
-<h4 id="E-解码器循环-Decoder-Loop"><a href="#E-解码器循环-Decoder-Loop" class="headerlink" title="E. 解码器循环 (Decoder Loop)"></a>E. 解码器循环 (Decoder Loop)</h4><p>Python</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">for layer in self.decoder_layers:</span><br><span class="line">    h_V = layer(h_V, h_ESV, mask)</span><br></pre></td></tr></table></figure>
+<h4 id="E-解码器循环-Decoder-Loop"><a href="#E-解码器循环-Decoder-Loop" class="headerlink" title="E. 解码器循环 (Decoder Loop)"></a>E. 解码器循环 (Decoder Loop)</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> layer <span class="keyword">in</span> <span class="variable language_">self</span>.decoder_layers:</span><br><span class="line">    h_V = layer(h_V, h_ESV, mask)</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li><code>h_ESV</code> 融合了：几何信息(<code>h_E</code>) + 已知序列信息(<code>h_S</code>)。</li>
 <li>通过 <code>mask_bw</code> (backward mask) 过滤，确保只能看到解码顺序中之前的序列信息。</li>
 </ul>
-<h4 id="F-输出"><a href="#F-输出" class="headerlink" title="F. 输出"></a>F. 输出</h4><p>Python</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">logits = self.W_out(h_V) # [B, L, 21]</span><br><span class="line">log_probs = F.log_softmax(logits, dim=-1)</span><br></pre></td></tr></table></figure>
+<h4 id="F-输出"><a href="#F-输出" class="headerlink" title="F. 输出"></a>F. 输出</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">logits = <span class="variable language_">self</span>.W_out(h_V) <span class="comment"># [B, L, 21]</span></span><br><span class="line">log_probs = F.log_softmax(logits, dim=-<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
 
 <p>最终输出每个位置上 21 种氨基酸的对数概率。</p>
 <h3 id="数据流与形状变化"><a href="#数据流与形状变化" class="headerlink" title="数据流与形状变化"></a>数据流与形状变化</h3><ol>
@@ -663,6 +657,24 @@
 <div class="post-nav">
 
 
+
+  
+  <div class="post-nav-prev post-nav-item">
+    <div class="post-nav-img" style="background-size: cover; 
+      background-position: center center;">
+      <img class="lazyload lazyload placeholder" src="https://raw.githubusercontent.com/jingyaogong/minimind/refs/heads/master/images/logo.png" class="lazyload placeholder" data-srcset="https://raw.githubusercontent.com/jingyaogong/minimind/refs/heads/master/images/logo.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+    </div>
+    <a href="/2026/01/23/minimind/" class="post-nav-link">
+      <div class="title">
+        <i class="fas fa-angle-left"></i> Prev:
+        <div class="title-text">MiniMind复现笔记记录</div>
+      </div>
+      
+      <!-- <div class="content">
+        Minimind架构MiniMind 本质上是一个 Decoder-only Transformer。它的核心配置逻辑在
+      </div> -->
+    </a>
+  </div>
 
 
 

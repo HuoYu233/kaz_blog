@@ -2,7 +2,7 @@
 title: 条件-结构引导的ProteinMPNN序列设计
 mathjax: true
 date: 2026/01/21 20:46:25
-img: https://camo.githubusercontent.com/d1a1014ab71380dccf048c2f60a54de6954ccc670f321b0ed6bf4d8af1fb3699/68747470733a2f2f646f63732e676f6f676c652e636f6d2f64726177696e67732f642f652f32504143582d317654746e4d42444f71385470484963745566474e38566c3332783549534e63504b6c786a63514a4632713730506c61483275466c6a3241633473336b686e5a71473159787070644d72306954796b2d2f7075623f773d38383926683d333538
+img: https://www.researchgate.net/publication/363608659/figure/fig1/AS:11431281127577573@1679077202382/ProteinMPNN-architecture.jpg
 excerpt: SF-MPNN-RL
 ---
 
@@ -181,9 +181,7 @@ ProteinMPNN 采用了**编码器-解码器（Encoder-Decoder）**架构 。
 
 #### A. 初始化与特征提取
 
-Python
-
-```
+```python
 E, E_idx = self.features(X, mask, residue_idx, chain_encoding_all)
 h_V = torch.zeros(...) # 初始节点特征全为0
 h_E = self.W_e(E)      # 边特征投影
@@ -194,9 +192,7 @@ h_E = self.W_e(E)      # 边特征投影
 
 #### B. 编码器循环 (Encoder Loop)
 
-Python
-
-```
+```python
 for layer in self.encoder_layers:
     h_V, h_E = layer(h_V, h_E, E_idx, ...)
 ```
@@ -205,9 +201,7 @@ for layer in self.encoder_layers:
 
 #### C. 随机解码顺序 (Random Decoding Order) - **核心创新点**
 
-Python
-
-```
+```python
 decoding_order = torch.argsort(...) 
 permutation_matrix_reverse = ...
 order_mask_backward = ...
@@ -220,9 +214,7 @@ ProteinMPNN 的一大特点是不按照 N端->C端 的固定顺序解码，而�
 
 #### D. 解码器准备
 
-Python
-
-```
+```python
 h_S = self.W_s(S) # 真实序列的 Embedding [B, L, C]
 h_ES = cat_neighbors_nodes(h_S, h_E, E_idx) # 将序列信息拼接到边上
 ```
@@ -231,9 +223,7 @@ h_ES = cat_neighbors_nodes(h_S, h_E, E_idx) # 将序列信息拼接到边上
 
 #### E. 解码器循环 (Decoder Loop)
 
-Python
-
-```
+```python
 for layer in self.decoder_layers:
     h_V = layer(h_V, h_ESV, mask)
 ```
@@ -243,9 +233,7 @@ for layer in self.decoder_layers:
 
 #### F. 输出
 
-Python
-
-```
+```python
 logits = self.W_out(h_V) # [B, L, 21]
 log_probs = F.log_softmax(logits, dim=-1)
 ```
