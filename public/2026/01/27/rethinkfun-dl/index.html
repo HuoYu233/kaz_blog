@@ -11,7 +11,7 @@
   <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-  <title>Kaz&#39;s Blog</title>
+  <title>RethinkFun-DL | Kaz&#39;s Blog</title>
 
   <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/img/favicon.ico">
   <link rel="stylesheet" href="https://at.alicdn.com/t/font_1911880_c1nvbyezg17.css">
@@ -339,17 +339,27 @@
 
 
 <div class="post-detail-header" id="thumbnail_canvas" style="background-repeat: no-repeat; background-size: cover; 
-  background-position: center center;position: relative;background-image:url('https://pic1.zhimg.com/80/v2-03a22891ccba9bccf6424dfd7cbf4be7_1440w.webp')">
+  background-position: center center;position: relative;background-image:url('http://rethink.fun/imgs/catdog.jpg')">
   <div class="post-detail-header-mask"></div>
   <canvas id="header_canvas"style="position:absolute;bottom:0;pointer-events:none;"></canvas>
   
   <div class="post-detail-header_info-box">
     <div class="title-box">
       <span class="title">
-        
+        RethinkFun-DL
       </span>
     </div>
     
+    
+      
+        <span class="post-detail-header_date">
+          <i class="fas fa-calendar"></i> Published in：2026-01-27 |
+        </span>
+      
+
+      
+
+      
     
   </div>
   
@@ -367,57 +377,224 @@
   <div class="main-content">
     <article class="post post-detail">
       <div class="post-content">
-        <ul>
-<li>编译语言&amp;解释语言</li>
-</ul>
-<p>编译语言要整个文件通过编译，只需一次编译之后就能转化成机器码运行，例如cpp，Rust</p>
-<p>解释语言逐行读取并执行代码，没有可生成可执行文件，例如Python，JS，PHP</p>
-<p>还有混合型语言，采用字节码编译+虚拟机解释，例如Java，C#，Lua</p>
-<ul>
-<li><p>C++是静态类型语言，变量类型不可变。</p>
-</li>
-<li><p>using关键词解决很长的类型表达，auto自动选择类型，仍然是静态类型</p>
-</li>
-</ul>
-<p>初始化</p>
+        <h1 id="线性变换和矩阵"><a href="#线性变换和矩阵" class="headerlink" title="线性变换和矩阵"></a>线性变换和矩阵</h1><p>你可以将线性变换理解成对向量的一个函数，输入是一个向量，输出还是一个向量。但是这个函数必须满足对数乘和向量加法的封闭性：</p>
+<p><strong>加法封闭性</strong>：对于任意两个向量<strong>u</strong>和<strong>v</strong>，线性变换<strong>T</strong>满足:</p>
+<p>$T(u+v)&#x3D;T(u)+T(v)$</p>
+<p><strong>数乘封闭性</strong>：对于任意向量<strong>v</strong>和标量<strong>c</strong>，线性变换<strong>T</strong>满足：</p>
+<p>$T(cv)&#x3D;cT(v)$</p>
+<p>线性变换有两个非常好的性质：</p>
+<p><strong>直线保持</strong>：线性变换前多个终点在一条线上的向量，经过线性变换后，这些向量的终点仍在一条直线上。</p>
+<p><strong>原点不变</strong>：线性变换后原点仍然在原点位置。</p>
+<p>一个向量可以理解为用它的各个分量对标准基里的对应向量进行缩放，再将缩放后的基向量相加。 我们只需要记录标准基里的向量$(i,j)$经过线性变换后的向量$(i’,j’)$​。原始向量各个分量对变换后的基向量的线性组合就是对该向量的线性变换后的向量。按照这样规则生成的向量就保证了线性变换对向量加法和数乘的封闭性。</p>
+<p>不是方阵的矩阵$C \in R ^{n \times m}$，可以将一个$m$维向量映射成$n$维向量</p>
+<p>矩阵A代表线性变换，类似函数。矩阵B是一组列向量的组合，类似函数的输入。矩阵乘法的结果就是函数的输出。这种理解就是用B里的列向量的分量对A里的列向量进行线性组合。也就是从列向量的角度去理解矩阵乘法。</p>
+<p>另一种不同的视角是行向量视角。在深度学习行向量视角更常用。行向量视角下，A是待变换的行向量的集合，B是线性变换的函数。用A里行向量的每个维度的分量，对B里的行向量进行线性组合</p>
+<h1 id="点乘和叉乘"><a href="#点乘和叉乘" class="headerlink" title="点乘和叉乘"></a>点乘和叉乘</h1><h2 id="点乘"><a href="#点乘" class="headerlink" title="点乘"></a>点乘</h2><p>两个向量<strong>a</strong>和<strong>b</strong>。它们在同一个向量空间，也就说它们的分量个数相同。它们两个的点乘为：</p>
+<p>$a⋅b&#x3D;∣a∣∣b∣cosθ$</p>
+<p><strong>交换律</strong></p>
+<p>$a⋅b&#x3D;b⋅a$</p>
+<p><strong>数乘结合率</strong></p>
+<p>$(λa)⋅b&#x3D;a⋅(λb)&#x3D;λ(a⋅b)$</p>
+<p>对于$a⋅b$的结果等于<strong>a</strong>的模长乘以<strong>b</strong>的模长再乘以$cosθ$。当<strong>b</strong>变为原来的$ λ$倍后，它的模长变为原来的$ λ$倍，而<strong>a</strong>的模长和$cosθ$都不变，所以$a⋅(λb)&#x3D;λ(a⋅b)&#x3D;(λa)⋅b$</p>
+<p><strong>分配率</strong> 点乘的分配率公式为：</p>
+<p>$(a+b)⋅c&#x3D;a⋅c+b⋅c$</p>
+<p><img src="http://rethink.fun/imgs/0213.png" class="lazyload placeholder" data-srcset="http://rethink.fun/imgs/0213.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp"></p>
+<p>对于<strong>a+b</strong>与<strong>c</strong>的点乘，等于<strong>a+b</strong>在<strong>c</strong>上的投影长度，乘以<strong>c</strong>的长度。而<strong>a+b</strong>在<strong>c</strong>上的投影的长度就等于<strong>a</strong>在<strong>c</strong>上投影的长度加上<strong>b</strong>在<strong>c</strong>上投影的长度。而<strong>a</strong>在<strong>c</strong>上投影的长度乘以<strong>c</strong>的长度就是<strong>a</strong>与<strong>c</strong>的点乘，对于<strong>b</strong>也同理。所以上式成立。</p>
+<p>有了以上几个向量点乘的计算法则，我们就可以来推导点乘的计算公式了。</p>
+<p>以三维向量a⋅b<em>a</em>⋅<em>b</em>为例： 将向量<strong>a，b</strong>用标准基向量<strong>i,j,k</strong>表示。比如对于<strong>a</strong>来说，它在x，y，z轴的分量分别为$a_x,a_y,a——z$,则：</p>
+<p>$a⋅b&#x3D;(a_xi+a_yj+a_zk)⋅(b_xi+b_yj+b_zk)$</p>
+<p>根据分配率和数乘结合律有：</p>
+<p>$a⋅b&#x3D;a_xb_x(i⋅i)+a_xb_y(i⋅j)+a_xb_z(i⋅k)+a_yb_x(j⋅i)+a_yb_y(j⋅j)+a_yb_z(j⋅k)+a_zb_x(k⋅i)+a_zb_y(k⋅j)+a_zb_z(k⋅k)$</p>
+<p>上式中$ax,ay,az,bx,by,bz$都为标量，$i,j,k$为标准基向量。 接下来我们计算上式中括号内的标准基向量之间的点乘。因为标准基向量的模长为1，又加之它们与自身夹角为0度，cos值为1，所以它们与自身的点乘为1。</p>
+<p>又因为标准基向量之间都互相垂直，cos值为0，所以只要是不同标准基向量的点乘都为0。</p>
+<p>带入上边式中有：</p>
+<p>$a⋅b&#x3D;a_xb_x+a_yb_y+a_zb_z$</p>
+<p>可以看到点乘有一个非常简单的计算规则，就是两个向量的点乘等于两个向量各个分量的值相乘再加和，这个规则可以推广到任意维度的向量点乘上,即：</p>
+<p>$a\cdot b &#x3D; \sum_{i &#x3D; 1}^{n} a_i b_i$</p>
+<p>为什么深度学习会用Cos相似度来衡量向量之间的相似性呢？而不用欧式距离呢？</p>
+<p>一是因为点乘计算简单，效率高。</p>
+<p>二是不同维度向量之间的Cos相似度有可比性，不论两个向量的维度为多少，只要两个向量方向完全一样，Cos相似度的值就是1; 两个向量垂直，也就是完全无关，值为0；两个向量方向相反，也就是负相关，值为-1。但是欧式距离不同维度向量之间的距离可能相差很远，没有可比性。</p>
+<h2 id="叉乘"><a href="#叉乘" class="headerlink" title="叉乘"></a>叉乘</h2><p><img src="http://rethink.fun/imgs/0215.png" class="lazyload placeholder" data-srcset="http://rethink.fun/imgs/0215.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp"></p>
+<p>在线性代数里，我们把类似于力矩这种运算叫做叉乘（叉积，向量积）。用符号××表示。</p>
+<p>$a×b&#x3D;∣a∣∣b∣sinθ$</p>
+<p><strong>叉乘的方向</strong> 力矩是一个向量，它不光有大小，还有方向。因为力矩描述的是使物体旋转的容易程度。但是旋转有可能是顺指针方向，也有可能是逆时针方向。叉乘也是一个向量，有自己的方向。怎么确定这个方向呢？这就要用的右手法则了。</p>
+<p><img src="http://rethink.fun/imgs/0216.png" class="lazyload placeholder" data-srcset="http://rethink.fun/imgs/0216.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp"></p>
+<p>根据右手法则，$a×b$和$b×a$的方向是不同的。所以叉乘不满足交换律</p>
+<p><strong>分配率</strong></p>
+<p>$(a+b)×c&#x3D;a×c+b×c$</p>
+<p>$c×(a+b)&#x3D;c×a+c×b$</p>
+<p><strong>数乘结合率</strong></p>
+<p>$(λa)×b&#x3D;a×(λb)&#x3D;λ(a×b)$</p>
+<p>$a×b&#x3D;(a_yb_z−a_zb_y)i+(a_zb_x−a_xb_z)j+(a_xb_y−a_yb_x)k$</p>
+<p>可以看到，最终的结果为一个向量。</p>
+<h1 id="方向导数和梯度"><a href="#方向导数和梯度" class="headerlink" title="方向导数和梯度"></a>方向导数和梯度</h1><p>函数$z&#x3D;f(x,y)$在$(x_0,y_0)$点可以分别对x和y求偏导。对x求偏导时，保持y不变，$y&#x3D;y_0$，只考虑x变化时，对z的影响。对y求偏导时，保持x不变，$x&#x3D;x_0$，只考虑y变化时，对z的影响。</p>
+<p>但现实情况是自变量在点$(x_0,y_0)$处不光可以沿着平行于x轴（x的偏导），或者沿着平行于y轴（y的偏导）变化，它是可以沿着各个方向进行运动变化的，我们想要研究当自变量沿着不同方向进行变化时，因变量的变化率，这就是方向导数需要研究的内容。</p>
+<p>最终可以得到函数$z&#x3D;f(x,y)$在$(x_0,y_0)$点，沿单位方向向量$e_u$的方向导数为：</p>
+<p>$f_x(x_0,y_0)cos⁡α+f_y(x_0,y_0)cos⁡β$</p>
+<p>这个式子可以看做是向量$[fx(x0,y0),fy(x0,y0)]$和向量$[cos⁡α,cos⁡β]$的点乘。</p>
+<p>方向导数研究的是自变量沿着不同方向变化时，因变量的变化率。那么我们自然就关心自变量沿着哪个方向变化，因变量增加最快。根据上边对方向导数的推导，方向导数的值等于方向向量与函数对不同自变量求偏导形成的向量之间的点乘。我们之前介绍过向量点乘的结果是个标量，它的值就等于两个向量的模长乘以它们之间夹角的cos值。方向向量的模长为1，偏导数向量的模长固定，那么能改动的就是这两个向量之间的夹角了，只有让两个向量之间的夹角为0，cos值为1，可以让方向导数取到最大值。也就是让单位方向向量的方向与偏导数向量的方向一致，这时函数变化率最大。</p>
+<p>看来用函数在某点，不同维度偏导数作为向量元素，构成的偏导数向量是个特殊的向量，沿着它的方向，可以让函数在此点变化率最大。我们就把这个向量叫做梯度。</p>
+<p>如果有一个函数$f(x_1,x_2,…,x_n)$,它的梯度记作$∇f$或者$grad f,$表示为：</p>
+<p>$∇f&#x3D;(f_{x1},f_{x2},…,f_{xn})$</p>
+<p>其中$f_{xi}$是$f$关于$x_i$的偏导数。</p>
+<p>梯度在深度学习中起着至关重要的作用，是优化和训练过程中的核心工具。深度学习的本质是通过不断调整模型的参数，使其在输入数据上表现得更好，而实现这一目标的关键方法就是利用梯度信息。</p>
+<p>梯度是损失函数（通常用来衡量模型预测值和真实值之间的差异）对模型参数的偏导数。它提供了两个重要的信息：</p>
 <ol>
-<li>直接初始化</li>
+<li>方向：梯度的方向指向使损失函数值增长最快的方向，沿着负梯度方向移动，则可以使损失函数值最快的减少。</li>
+<li>速率：梯度的模长反映了参数变化对损失函数变化的影响程度，模长越大，参数的变化对损失的影响越大。</li>
 </ol>
-<p>不会检查类型，会强转（例如double -&gt; int）</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> num1 = <span class="number">12.0</span>;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">num2</span><span class="params">(<span class="number">12.0</span>)</span></span>;</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>统一初始化（C++11）</li>
-</ol>
-<p>使用花括号，会检查类型，报错</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> num&#123;<span class="number">12.0</span>&#125;; <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
-
-<p>安全，适用范围广（vector，map，自定义类）</p>
-<ol start="3">
-<li>结构化绑定（C++17）</li>
-</ol>
-<p>一种在编译时从固定大小的数据结构中初始化某些变量的方法，能访问函数返回的多个值</p>
-<p>注：<code>std::tuple</code> 是 C++11 引入的一个模板类，用于将多个不同类型的值组合成一个单一对象。它类似于结构体，但不需要预先定义类型名称</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">std::tuple&lt;std::string, std::string, std::string&gt; <span class="title">getClassInfo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    std::string className = <span class="string">&quot;CS106L&quot;</span>;</span><br><span class="line">	std::string buildingName = <span class="string">&quot;260-113&quot;</span>;</span><br><span class="line">	std::string language = <span class="string">&quot;C++&quot;</span>;</span><br><span class="line">    <span class="keyword">return</span> &#123;className, buildingName, language&#125;;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">auto</span> [className, buildingName, language] = <span class="built_in">getClassInfo</span>();</span><br><span class="line">    <span class="comment">// 或者</span></span><br><span class="line">    <span class="keyword">auto</span> classInfo = <span class="built_in">getClassInfo</span>();</span><br><span class="line">	std::string className = std::<span class="built_in">get</span>&lt;<span class="number">0</span>&gt;(classInfo);</span><br><span class="line">    std::string buildingName = std::<span class="built_in">get</span>&lt;<span class="number">1</span>&gt;(classInfo);</span><br><span class="line">    std::string language = std::<span class="built_in">get</span>&lt;<span class="number">2</span>&gt;(classInfo);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<p>在深度学习训练过程中，模型利用梯度来指导参数更新，这一过程被称为优化。通过计算损失函数相对于模型参数的梯度，优化算法可以确定如何调整参数，使得模型的损失逐步减小，从而提高模型的性能。</p>
+<h1 id="随机变量及其分布"><a href="#随机变量及其分布" class="headerlink" title="随机变量及其分布"></a>随机变量及其分布</h1><p>在随机实验E中，S是相应的样本空间，如果对S中的每一个样本点$ω$，有唯一一个实数$X(ω)$与它对应，那么就把这个定义域为S的单值实值函数：</p>
+<p>$X&#x3D;X(ω)$</p>
+<p>称为是随机变量。一般用大写字母X，Y，Z表示。</p>
+<h2 id="离散随机变量分布"><a href="#离散随机变量分布" class="headerlink" title="离散随机变量分布"></a>离散随机变量分布</h2><p><strong>概率质量函数</strong>，数学上定义为：</p>
+<p>$P(X&#x3D;x)&#x3D;p(x)$</p>
+<p><strong>累计概率分布函数</strong>的数学定义为：</p>
+<p>给定一个随机变量X，对任意实数$x∈(−∞,+∞)$称函数$F(x)&#x3D;P(X≤x)$为随机变量X的累积概率分布函数。并且对于任意满足条件$−∞&lt;a&lt;b&lt;+∞$的实数a,b，有：</p>
+<p>$P(a&lt;X&lt;b)&#x3D;F(b)−F(a)$</p>
+<p><img src="http://rethink.fun/imgs/0403.png" class="lazyload placeholder" data-srcset="http://rethink.fun/imgs/0403.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp"></p>
+<h2 id="连续随机变量分布"><a href="#连续随机变量分布" class="headerlink" title="连续随机变量分布"></a>连续随机变量分布</h2><p><strong>概率密度函数</strong></p>
+<p>我们用频率值除以每个分组的组距。这样做的目的是让所有区域的面积和为1</p>
+<p>如果随机试验的人无穷大，间隔分的无穷小，就可以得到一个分布如下：</p>
+<p><img src="http://rethink.fun/imgs/0407.png" class="lazyload placeholder" data-srcset="http://rethink.fun/imgs/0407.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp"></p>
+<p>这样我们就得到了连续性变量的概率密度曲线。它形象的刻画了在不同取值区间的概率大小。并且它的面积为1。</p>
+<p>概率密度函数（Probability Density Function, PDF）是描述连续型随机变量概率分布的重要工具。概率密度函数f(x)<em>f</em>(<em>x</em>)是一个非负函数，用来描述随机变量在某一点附近取值的“相对可能性”。</p>
+<p>连续型随机变量X，其结果取一固定值的概率为0。因为取一个固定值在概率密度曲线图上对应一条线，一条线的面积为0。</p>
+<p>对于连续型变量的概率估计，我们一般是估计某个值落在一个区间的概率，其概率为：</p>
+<p>$P(a&lt;X&lt;b)&#x3D;\int_{a}^{b}f(x)dx $</p>
+<p>与离散随机变量相同，连续型变量也有累积概率分布函数。定义也是类似：</p>
+<p>累积分布函数F(x)表示随机变量X小于或者等于某个值x的概率：</p>
+<p>$F(x)&#x3D;P(X≤x)$</p>
+<p>对于连续型随机变量，F(x) 是通过概率密度函数$f(x)$的积分来定义的：</p>
+<p>$F(x)&#x3D;\int_{-∞}^{x}f(t)dt$</p>
+<p>对于同一个随机变量X的概率密度函数f(x)<em>f</em>(<em>x</em>)与累积概率分布函数F(x)<em>F</em>(<em>x</em>)有如下关系：</p>
+<p>$f(x) &#x3D; \frac{dF(x)}{dx}$</p>
+<p><img src="http://rethink.fun/imgs/0408.png" class="lazyload placeholder" data-srcset="http://rethink.fun/imgs/0408.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp"></p>
+<h1 id="数学期望和方差"><a href="#数学期望和方差" class="headerlink" title="数学期望和方差"></a>数学期望和方差</h1><p>数学期望，简称期望，是概率论研究的内容，已经知道了概率分布，研究随机变量可能取值与其出现概率的加权平均数。它反映了随机变量分布的中心趋势，是对随机现象结果的“平均值”的一种数学描述。</p>
+<p>对于离散型随机变量X，其数学期望定义为：</p>
+<p>$E(X)&#x3D;\sum_{i}x_i P(X&#x3D;x_i)$</p>
+<p>其中：</p>
 <ul>
-<li>&amp;引用，可以看成是原来变量的别名，对应同一内存地址</li>
+<li>$x_i$：随机变量X的可能取值。</li>
+<li>$P(X&#x3D;x_i)$: 对应取值$x_i$的概率。</li>
 </ul>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">shift</span><span class="params">(std::vector&lt;std::pair&lt;<span class="type">int</span>, <span class="type">int</span>&gt;&gt; &amp;nums)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">auto</span> &amp;[num1, num2] : nums) &#123;</span><br><span class="line">        num1++;</span><br><span class="line">        num2++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//或者</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">shift</span><span class="params">(std::vector&lt;std::pair&lt;<span class="type">int</span>, <span class="type">int</span>&gt;&gt; &amp;nums)</span> </span>&#123;</span><br><span class="line">     <span class="keyword">for</span> (<span class="type">size_t</span> i = <span class="number">0</span>; i &lt; nums.<span class="built_in">size</span>(); i++) &#123;</span><br><span class="line">         nums[i].first++;</span><br><span class="line">         nums[i].second++;</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对于连续型随机变量X，其数学期望定义为：</p>
+<p>$E(x) &#x3D; \int_{-\infty}^{+\infty}xf(x)dx$</p>
+<p>其中：</p>
+<ul>
+<li>$f(x)$: 随机变量X的概率密度函数。</li>
+</ul>
+<p>方差是用来衡量随机变量取值偏离其期望程度的重要指标。在概率论里它表示随机变量与其期望值之间差的平方的期望，因为随机变量与其期望的差值有正有负，直接相加会互相抵消，所以这里用随机变量与其期望差的平方来衡量差异大小。方差可以看作是随机变量“波动”的大小。</p>
+<p>方差通常用$Var(X)$或$σ^2$表示，其数学表达式为：</p>
+<p>$Var(X)&#x3D;E[(X−E[X])^2]]&#x3D;E[X^2] - (E[X])^2$</p>
+<p>其中：</p>
+<ul>
+<li>X是随机变量。</li>
+<li>$E[X]$是随机变量X的数学期望。</li>
+<li>$E[(X−E[X])^2]]$是X偏离期望的平方的期望。</li>
+</ul>
+<p><strong>总体方差和样本方差</strong></p>
+<p><strong>总体方差</strong> 总体方差和样本方差是统计学中衡量数据分布离散程度的重要概念。</p>
+<p>如果你采集了一个分布的所有样本。那么你可以计算总体方差。总体方差描述整个总体中数据的分布离散程度。它反映总体中每个数据点与总体均值的偏差平方的平均值。</p>
+<p>设总体中的数据点为$x_1,x_2,…,x_n$，总体均值为$μ$，总体方差$σ^2$定义为：</p>
+<p>$σ^2&#x3D;\frac{1}{n} \sum_{i&#x3D;1}^{n}(x_i−μ)^2$</p>
+<p><strong>样本方差</strong></p>
+<p>当我们进行一项统计实验，无法获取所有样本时，只是对一些样本采样进行统计。比如你要对一批灯泡做预期寿命测试，你只能抽样进行测试寿命，不可能对所有灯泡进行寿命测试。这时候你只能计算样本方差，它的公式和总体方差不同。</p>
+<p>设样本中的数据点为$x_1,x_2,…,x_n$，样本均值为$\bar{x}$，样本方差$s^2$定义为：</p>
+<p>$s^2&#x3D;\frac{1}{n-1} \sum_{i&#x3D;1}^{n}(x_i−\bar{x})^2$</p>
+<p>因为样本方差只采集了部分样本，不是整体样本，利用部分样本来评估总体方差，如果除以n是会产生偏差的，需要通过除以n-1来对偏差进行纠正。</p>
+<p>首先，如果采样的样本数为1，采样值为x，那么均值还是x, 如果除以n&#x3D;1的话，那么方差为0。因为分子部分x和均值相等。这显然是不合理的。用一个数来评估均值是有偏的。如果公式定义分母部分为n-1，那么采样数为1计算样本方差就无效，这样更合理。</p>
+<p>另外通过采样样本计算均值，然后用样本值减去这个均值得到的值，总是小于样本值减去整体分布的均值。</p>
+<p>标准差（Standard Deviation）是方差的平方根，用来衡量数据偏离均值的程度，反映数据的离散程度或波动性。相比方差，标准差与数据的原始单位相同，更直观、更容易理解。</p>
+<h1 id="大数定律"><a href="#大数定律" class="headerlink" title="大数定律"></a>大数定律</h1><p>描述了大量独立随机变量的平均值在重复实验中表现出的统计规律性。通俗来说，大数定律表明，当试验次数足够多时，随机变量的平均值会趋近于理论期望值。</p>
+<p>$X_1,X_2,…,X_n$为来自总体$X$的随机样本，$X$的数学期望为E[X]，<br>$\bar{X}&#x3D;\frac{X_1+X_2+…+X_n}{n}$</p>
+<p>则有：</p>
+<p>$\lim_{n-&gt;\infty}\bar{X}&#x3D;E[X]$</p>
+<h1 id="中心极限定理"><a href="#中心极限定理" class="headerlink" title="中心极限定理"></a>中心极限定理</h1><p>无论单个随机变量的原始分布是什么样的，只要随机变量是独立同分布的，且具有有限的均值和方差，那么这些随机变量的和（或均值）在样本量足够大的情况下，其分布将趋近于正态分布。</p>
+<h1 id="极大似然估计"><a href="#极大似然估计" class="headerlink" title="极大似然估计"></a>极大似然估计</h1><p>概率与似然的区别</p>
+<ul>
+<li>概率：固定概率分布参数θ<em>θ</em>，研究随机变量 X<em>X</em>的分布。</li>
+<li>似然：固定观测数据 x<em>x</em>，研究概率分布参数θ<em>θ</em>的可能性。</li>
+</ul>
+<p>似然函数就是把概率分布的参数作为未知变量，描述事件发生可能性的函数。</p>
+<p>事件已经发生了，似然函数表达了不同的分布参数让这个事件发生的可能性。自然我们会想到，最有可能的参数必然是让事件发生可能性最大的那个参数。</p>
+<p>因为似然函数一般都是多个概率相乘，多个数值相乘在进行极大值计算时不方便，一般会对似然函数取对数。因为对数运算时一个单增函数，不会改变原函数的极值。同时，对数运算和将多个数相乘，变化为多个数相加。这就大大简化了求极值的过程。</p>
+<p>极大似然估计（Maximum Likelihood Estimation，简称 MLE）是一种统计方法，用于估计模型参数，使得在已知数据样本的情况下，模型生成这些数据的概率最大。</p>
+<p><strong>核心思想</strong></p>
+<p>假设我们有一个参数化的概率模型，其参数为θ，观测到的数据为$X&#x3D;{x_1,x_2,…,x_n}$。极大似然估计的目标是找到一个参数θ，使得这些观测数据在这个概率模型下出现的可能性最大，即最大化似然函数：</p>
+<p>$L(θ∣X)&#x3D;P(X∣θ)&#x3D;\prod_{i&#x3D;1}^{n}P(x_i∣θ)$</p>
+<p>其中：</p>
+<ul>
+<li>$P(X∣θ)$:样本数据X在参数θ下的联合概率。</li>
+<li>$P(x_i∣θ)$:单个数据点$x_i$在参数θ下的概率。</li>
+</ul>
+<p>为了计算方便，通常取对数，将似然函数转换为对数似然函数：</p>
+<p>$ℓ(θ∣X)&#x3D;logL(θ∣X)&#x3D;\sum_{i&#x3D;1}^{n}P(x_i∣θ)$</p>
+<p>极大似然估计的目标就变为最大化对数似然函数$ℓ(θ∣X)$。</p>
+<h1 id="Normalization"><a href="#Normalization" class="headerlink" title="Normalization"></a>Normalization</h1><p><strong>归一化</strong></p>
+<p>除以最大值</p>
+<p><strong>标准化</strong></p>
+<p>实际上在深度学习里，更常用的是对特征进行标准化处理。也就是对每个feature减去自己的均值，再除以自己的标准差。这样就把这个feature转化为均值为0，标准差为1的分布了。在归一化操作里，是对每个feature除以这个feature所有样本中绝对值最大的值。只有这一个值决定缩放大小。但这个值有可能是个异常值。相比之下标准化处理会考虑所有样本的分布情况，避免缩放受异常值的影响，训练起来会更稳定。</p>
+<p>为归一化仅对参数空间进行了可逆的线性变换，模型的理论表达能力不变，不改变数据的本质关系。这一现象类似于“换单位不会影响物理规律”。 归一化不会影响深度学习模型的训练结果，因为它只是数据的线性变换，保留了所有必要的信息，模型可以通过权重调整完全补偿这种变换。</p>
+<p>严格来说，归一化指的是将数据变化调整到[-1,1]或者[0,1]之间。标准化是将数据减去均值除以标准差。但是在机器学习里，由于历史原因，都是用Normalization来表示。如果有人说他对数据进行了归一化，但是实际代码里是做了标准化，你也不用感到奇怪。</p>
+<h1 id="正则化"><a href="#正则化" class="headerlink" title="正则化"></a>正则化</h1><h2 id="L1正则化"><a href="#L1正则化" class="headerlink" title="L1正则化"></a>L1正则化</h2><p>L1正则化的思想是在损失函数中额外加入模型所有参数的绝对值之和作为惩罚项。这样模型在训练过程中，会尽可能的让参数变小来降低Loss值，直到让某些参数为0。如果一个参数降为0，则等价于这个参数消失，起到了降低模型复杂度的作用。同样减小参数的值也是降低模型复杂度的一种方式。L1正则化的公式为：</p>
+<p>$Loss_{L1}&#x3D;Loss(θ)+λ \sum_{i}|θ_i|$</p>
+<p>其中θ是模型参数，λ是控制正则化强度的参数，一般初始设置为1e-3或者1e-4。设置过大会导致模型欠拟合。在训练过程中可以进根据实际情况进行调整，调整原则为如果数据量越少，模型越复杂，输入特征越多，那么λ就越大。因为这些情况都更容易出现过拟合。反之则可以减小λ。</p>
+<h2 id="L2正则化"><a href="#L2正则化" class="headerlink" title="L2正则化"></a>L2正则化</h2><p>L2正则化与L1正则化非常类似，它在损失函数中加入模型参数的平方和作为惩罚项。同样可以达到控制模型复杂度的效果。它的公式为：</p>
+<p>$Loss_{L2}&#x3D;Loss(θ)+λ \sum_{i}θ_i^2$</p>
+<h1 id="指数加权平均"><a href="#指数加权平均" class="headerlink" title="指数加权平均"></a>指数加权平均</h1><p>每天指数加权平均的值我们用$V_i$表示，每天实际值用$θ_i$表示。</p>
+<p>$V_i &#x3D; \beta V_{i-1} + (1-\beta)\theta_i$</p>
+<p>越老数据的系数β的指数越大，因为β小于1，所以指数越大，权重越小</p>
+<p>这样我们就可以用前t天的指数加权平均值来作为对t+1天预测。</p>
+<p>我们发现对于前几天的指数加权平均，得到的值非常小，和实际值偏差较大，这是由于初始设置V0&#x3D;0导致的。如果你计算的序列很长，越到后边的指数加权平均计算，V0的影响就会越小，结果自然得到修正。如果你计算的序列短的话，有什么办法解决吗？ 办法是对V进行修正，在我们计算完V后，让它除以$1-\beta^t$。t表示第几天。</p>
+<p>$V_0&#x3D;0$</p>
+<p>$V_t&#x3D;βV_{t−1}+(1−β)θ_t$</p>
+<p>$V_t^{correct}&#x3D;\frac{V_t}{1-\beta^t}$</p>
+<h1 id="动量梯度下降"><a href="#动量梯度下降" class="headerlink" title="动量梯度下降"></a>动量梯度下降</h1><p>动量梯度下降的做法是每次不用当前每个参数的梯度值来更新参数，而是用梯度值的<strong>指数加权平均</strong>来更新参数。它可以很好的解决训练振荡和局部最优</p>
+<p>以对w参数的更新为例，首先计算w的梯度：</p>
+<p>$g_w &#x3D; \frac{\partial loss}{\partial w} $</p>
+<p>我们定义变量$V_w$, 表示$g_w$的指数加权平均值，每个batch按照下边的公式更新自身值：</p>
+<p>$V_w &#x3D; \beta V_w + (1 - \beta)g_w$</p>
+<p>更新$w$参数, $lr$是学习率：</p>
+<p>$w &#x3D; w - lrV_w$</p>
+<p>可以看到在训练过程中，对于参数w，一直需要保存一个指数加权平均值$V_w$。另外β的取值一般为0.9。</p>
+<h1 id="RMSProp优化器"><a href="#RMSProp优化器" class="headerlink" title="RMSProp优化器"></a>RMSProp优化器</h1><p>RMSProp（Root Mean Square Propagation optimizer）均方根传播优化器，也是在标准梯度下降优化器上进行了改进。</p>
+<p>我们在进行深度神经网络的训练时，所有的参数都用同一个学习率。这会导致一个问题，有的参数梯度大，有的参数梯度小。如果你设置的学习率过大，会导致梯度大的参数在最优值附近来回震荡，不能收敛。如果你设置学习率过小，导致梯度小的参数学习停滞不前。</p>
+<p>RMSProp就是让每个参数有自适应的学习率。让梯度值大的参数的学习率相对小一些，让梯度值小的参数的学习率相对大一些。这样训练过程就会稳定且快速。 RMSProp的思想是让一个参数更新的梯度值都除以一个数，如果历史上这个梯度值一直都很大，那就除一个大的数，相当于减小了学习率。如果这个梯度值一直很小，那就除一个小的数。相当于增大了学习率。</p>
+<p>RMSProp的做法是记录每个参数梯度平方的指数加权平均值$S$，更新参数时的梯度除以$\sqrt{S}$</p>
+<p>$g_w &#x3D; \frac{\partial loss}{\partial w} $</p>
+<p>计算$g_w^2$指数加权平均值：</p>
+<p>$S_w &#x3D; \beta S_w + (1 - \beta)g_w^2$</p>
+<p>更新参数, $lr$是学习率：</p>
+<p>$w &#x3D; w - \frac{lr}{S_w + \epsilon }g_w$</p>
+<p>其中β一般取0.9。ε是为了防止除0，加的一个很小的数，一般是1e-8。</p>
+<h1 id="Adam"><a href="#Adam" class="headerlink" title="Adam"></a>Adam</h1><p>Adam(Adaptive Moment Estimation)，结合了Momentum优化器和RMSProp优化器的优点，目前已经是深度学习领域默认的优化器。 Adam优化器同时利用动量来给梯度更新增加惯性和震荡阻尼，也利用历史梯度的均方根来自适应调整学习率</p>
+<p>$g_w &#x3D; \frac{\partial loss}{\partial w} $​</p>
+<p>然以后计算并更新一阶矩指数加权平均值$V_w$，和二阶矩指数加权平均值$S_w$。</p>
+<p>$V_w &#x3D; \beta V_w + (1 - \beta)g_w$</p>
+<p>$S_w &#x3D; \beta S_w + (1 - \beta)g_w^2$</p>
+<p>$\beta_1 &#x3D; 0.9;\beta_2 &#x3D; 0.999$</p>
+<p>接着对这两个值进行校正：</p>
+<p>$V_w^{correct} &#x3D; \frac{V_w}{1 - \beta_1^t}$</p>
+<p>$S_w^{correct} &#x3D; \frac{S_w}{1 - \beta_2^t}$</p>
+<p>最后更新参数：</p>
+<p>$w &#x3D; w - lr\frac{V_w^{correct}}{\sqrt{S_w^{correct}+ \epsilon}}$</p>
+<p>Adam优化器可以稳定且迅速的训练深度神经网络，但是它需要为每个参数额外在显存里保存两个值：V和S，来记录梯度的一阶和二阶指数加权平均值。这占据了大量宝贵的显存空间。</p>
+<h1 id="Weight-Decay"><a href="#Weight-Decay" class="headerlink" title="Weight Decay"></a>Weight Decay</h1><p>权重衰减（Weight Decay）是一种在模型训练过程中防止模型过拟合的技术。权重衰减的思想很简单，就是在训练的每一步用梯度更新参数时，同时缩小参数值。防止参数的绝对值过大。权重衰减的思想和L1、L2正则是类似的，都是减少参数的绝对值。不同的是L1、L2正则是在loss函数里增加额外项实现的。而权重衰减的做法更直接，直接减小参数的绝对值。</p>
+<p>它的具体做法为：</p>
+<p>$w_t&#x3D;w_t - lr \times g_w - lr \times \lambda w_t$</p>
+<p>其中$lr$是学习率，$λ$是权重衰减系数。一般取值在1e-2到1e-4。如果你的模型过拟合现象比较严重，λ<em>λ</em>就设置大一些。</p>
+<p>对标准的梯度下降算法应用权重衰减和L2正则，效果是一样的。</p>
+<p>但是对于Adam优化器来说，权重衰减和L2正则就不一样了。因为添加在Loss里的L2正则，梯度经过动量和平方根调整后，已经和直接减小参数值不一样了。</p>
+<h1 id="Dropout"><a href="#Dropout" class="headerlink" title="Dropout"></a>Dropout</h1><h2 id="训练阶段"><a href="#训练阶段" class="headerlink" title="训练阶段"></a>训练阶段</h2><p>在训练阶段，Dropout会按照超参数p的设置，随机禁用一些神经元。被禁用的神经元不接受任何输入也不为下一层的神经元提供输出。Dropout一般应用在隐藏层，不对输入和输出层应用。</p>
+<p>对于保留的神经元的输出也需要做一些调整，对于未被禁用的神经元的输出需要除以$1−p$来进行缩放。这样就确保了下一层进行线性计算时，输入加权累加值的期望不变。</p>
+<p>Dropout可以理解成每次都在训练一个简化的神经网络，让网络每个神经元都学到通用的特征，而不是过份依赖某几个神经元。</p>
+<h2 id="推理阶段"><a href="#推理阶段" class="headerlink" title="推理阶段"></a>推理阶段</h2><p>Dropout不起作用，所有神经元都起作用。因为之前在训练时对起作用的神经元做过缩放操作，它保证了推理阶段的数值稳定。</p>
+<p>p的值我们一般取0.1-0.5。p值越大，正则化效果越强。 还有一点需要注意，Dropout 在训练阶段与推理阶段的行为是不同的，所以你一定在训练前调用<code>model.train()</code>，推理前调用<code>model.eval()</code>函数。</p>
+<h1 id="Batch-Normalization"><a href="#Batch-Normalization" class="headerlink" title="Batch Normalization"></a>Batch Normalization</h1><p>标准化+线性变化</p>
+<p>初始化时，一般设置线性变化参数$γ&#x3D;1,β&#x3D;0$大多数情况下它都限制了输出的均值在零，标准差在1附近。保证了输出分布的稳定性。</p>
+<p>在推理时你可以能只有一条数据，那此时该如何获得均值和方差呢？答案是，在训练时，BatchNorm会使用当前batch的z值的均值和标准差进行归一化，并用指数加权平均的办法，更新和维护z值的均值和标准差（每一个batch更新一次指数加权平均）。在推理时，就用这个指数加权平均得到的均值和标准差来归一化推理时的z值。</p>
 
-<ul>
-<li>左值&amp;右值</li>
-</ul>
-<p>左值：由明确内存位置的表达式，可以取地址</p>
-<p>右值：临时变量，没有持久的内存地址</p>
-<ul>
-<li>const</li>
-</ul>
-<p>不能给const变量设置一个不是const的引用对象</p>
-<ul>
-<li>编译</li>
-</ul>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">g++ -std=c++23 file.cpp -o exename</span><br></pre></td></tr></table></figure>
       </div>
       <div class="post-tags-categories">
         
@@ -432,6 +609,23 @@
 
 
 
+
+  
+  <div class="post-nav-next post-nav-item">
+    <div class="post-nav-img" style="background-size: cover; 
+      background-position: center center;">
+      <img class="lazyload lazyload placeholder" src="https://raw.githubusercontent.com/jingyaogong/minimind/refs/heads/master/images/logo.png" class="lazyload placeholder" data-srcset="https://raw.githubusercontent.com/jingyaogong/minimind/refs/heads/master/images/logo.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" src="" alt="">
+    </div>
+    <a href="/2026/01/23/minimind/" class="post-nav-link">
+      <div class="title">
+        Next: <i class="fas fa-angle-right"></i>
+        <div class="title-text">MiniMind复现笔记记录</div>
+      </div>
+      <!-- <div class="content">
+        Minimind架构MiniMind 本质上是一个 Decoder-only Transformer。它的核心配置逻辑在
+      </div> -->
+    </a>
+  </div>
 
 </div>
 
@@ -537,116 +731,29 @@
   <div class="layout_sticky">    
     
       
-      
-      
-      
-  <section class="widget side_archives">
-    
-    <header><a style="color: red" href='/archives/'><i class="fas fa-archive fa-fw" aria-hidden="true"></i><span class='name'>归档</span></a></header><div class="content"><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2026/01/"><span class="card-archive-list-date">January 2026</span><span class="card-archive-list-count">4</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/12/"><span class="card-archive-list-date">December 2025</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/11/"><span class="card-archive-list-date">November 2025</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/10/"><span class="card-archive-list-date">October 2025</span><span class="card-archive-list-count">3</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/09/"><span class="card-archive-list-date">September 2025</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/07/"><span class="card-archive-list-date">July 2025</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/03/"><span class="card-archive-list-date">March 2025</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/01/"><span class="card-archive-list-date">January 2024</span><span class="card-archive-list-count">1</span></a></li></ul></div>
-  </section>
-
-      <section class="widget side_webinfo">
+<section class="widget side_toc">
   
   <header>
     
-      <i style="color: " class="fas fa-chart-line fa-fw" aria-hidden="true"></i><span class='name' style="color: ">站点信息</span>
+      <i style="color: " class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name' style="color: ">本文目录</span>
     
   </header>
 
 
   <div class='content'>
-    <div class="webinfo">
-      
-        <div class="webinfo-item">
-          <div>文章数目：</div>
-          <div>23 篇</div>
-        </div>
-      
-
-      
-        <div class="webinfo-item">
-          <div>已运行时间：</div>
-          <div id="webinfo-runtime-count" publish_date="03/24/2020 21:34:09"></div>
-        </div>
-        <script>
-          var BirthDay = new Date(new Date('2023/01/23'));
-          var today = new Date();
-          var timeold = (today.getTime() - BirthDay.getTime());
-          var daysold = Math.floor(timeold / (24 * 60 * 60 * 1000));
-          document.getElementById('webinfo-runtime-count').innerHTML = daysold + ' 天';
-        </script>
-      
-
-
-      
-
-      
-
-      
-
-      
-        <div class="webinfo-item">
-          <div>最后活动时间：</div>
-          
-            <div id="last-update" style="display: none;">Thu Feb 05 2026 15:25:13 GMT+0800 (中国标准时间)</div>
-            <div id="last-update-show">2026-02-05 日</div>
-          
-        </div>
-        
-        <script>
-          function timeago(dateTimeStamp) {
-              var minute = 1000 * 60; //把分，时，天，周，半个月，一个月用毫秒表示
-              var hour = minute * 60;
-              var day = hour * 24;
-              var week = day * 7;
-              var month = day * 30;
-              var now = new Date().getTime(); //获取当前时间毫秒
-              var diffValue = now - dateTimeStamp; //时间差
-              if (diffValue < 0) {
-                  return;
-              }
-              var minC = diffValue / minute; //计算时间差的分，时，天，周，月
-              var hourC = diffValue / hour;
-              var dayC = diffValue / day;
-              var weekC = diffValue / week;
-              var monthC = diffValue / month;
-              if (monthC >= 1 && monthC <= 3) {
-                  result = " " + parseInt(monthC) + " 月前"
-              } else if (weekC >= 1 && weekC <= 3) {
-                  result = " " + parseInt(weekC) + " 周前"
-              } else if (dayC >= 1 && dayC <= 6) {
-                  result = " " + parseInt(dayC) + " 天前"
-              } else if (hourC >= 1 && hourC <= 23) {
-                  result = " " + parseInt(hourC) + " 小时前"
-              } else if (minC >= 1 && minC <= 59) {
-                  result = " " + parseInt(minC) + " 分钟前"
-              } else if (diffValue >= 0 && diffValue <= minute) {
-                  result = "刚刚"
-              } else {
-                  var datetime = new Date();
-                  datetime.setTime(dateTimeStamp);
-                  var Nyear = datetime.getFullYear();
-                  var Nmonth = datetime.getMonth() + 1 < 10 ? "0" + (datetime.getMonth() + 1) : datetime.getMonth() + 1;
-                  var Ndate = datetime.getDate() < 10 ? "0" + datetime.getDate() : datetime.getDate();
-                  var Nhour = datetime.getHours() < 10 ? "0" + datetime.getHours() : datetime.getHours();
-                  var Nminute = datetime.getMinutes() < 10 ? "0" + datetime.getMinutes() : datetime.getMinutes();
-                  var Nsecond = datetime.getSeconds() < 10 ? "0" + datetime.getSeconds() : datetime.getSeconds();
-                  result = Nyear + "-" + Nmonth + "-" + Ndate
-              }
-              return result;
-          }
-          var lastUpDate = document.getElementById('last-update').innerHTML;
-          try {
-            document.getElementById('last-update-show').innerHTML = timeago(new Date(lastUpDate));
-          } catch (error) {
-            document.getElementById('last-update-show').innerHTML = '2026-02-05 日';
-          }
-        </script>
-        
-      
+    <div class="toc-main">
+      <div class="toc-content">
+        <!-- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BA%BF%E6%80%A7%E5%8F%98%E6%8D%A2%E5%92%8C%E7%9F%A9%E9%98%B5"><span class="toc-text">线性变换和矩阵</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%82%B9%E4%B9%98%E5%92%8C%E5%8F%89%E4%B9%98"><span class="toc-text">点乘和叉乘</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%82%B9%E4%B9%98"><span class="toc-text">点乘</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%89%E4%B9%98"><span class="toc-text">叉乘</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%96%B9%E5%90%91%E5%AF%BC%E6%95%B0%E5%92%8C%E6%A2%AF%E5%BA%A6"><span class="toc-text">方向导数和梯度</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%9A%8F%E6%9C%BA%E5%8F%98%E9%87%8F%E5%8F%8A%E5%85%B6%E5%88%86%E5%B8%83"><span class="toc-text">随机变量及其分布</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A6%BB%E6%95%A3%E9%9A%8F%E6%9C%BA%E5%8F%98%E9%87%8F%E5%88%86%E5%B8%83"><span class="toc-text">离散随机变量分布</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9E%E7%BB%AD%E9%9A%8F%E6%9C%BA%E5%8F%98%E9%87%8F%E5%88%86%E5%B8%83"><span class="toc-text">连续随机变量分布</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B0%E5%AD%A6%E6%9C%9F%E6%9C%9B%E5%92%8C%E6%96%B9%E5%B7%AE"><span class="toc-text">数学期望和方差</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%A7%E6%95%B0%E5%AE%9A%E5%BE%8B"><span class="toc-text">大数定律</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%AD%E5%BF%83%E6%9E%81%E9%99%90%E5%AE%9A%E7%90%86"><span class="toc-text">中心极限定理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9E%81%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1"><span class="toc-text">极大似然估计</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Normalization"><span class="toc-text">Normalization</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%AD%A3%E5%88%99%E5%8C%96"><span class="toc-text">正则化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#L1%E6%AD%A3%E5%88%99%E5%8C%96"><span class="toc-text">L1正则化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#L2%E6%AD%A3%E5%88%99%E5%8C%96"><span class="toc-text">L2正则化</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8C%87%E6%95%B0%E5%8A%A0%E6%9D%83%E5%B9%B3%E5%9D%87"><span class="toc-text">指数加权平均</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8A%A8%E9%87%8F%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D"><span class="toc-text">动量梯度下降</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#RMSProp%E4%BC%98%E5%8C%96%E5%99%A8"><span class="toc-text">RMSProp优化器</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Adam"><span class="toc-text">Adam</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Weight-Decay"><span class="toc-text">Weight Decay</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Dropout"><span class="toc-text">Dropout</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%AD%E7%BB%83%E9%98%B6%E6%AE%B5"><span class="toc-text">训练阶段</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%A8%E7%90%86%E9%98%B6%E6%AE%B5"><span class="toc-text">推理阶段</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Batch-Normalization"><span class="toc-text">Batch Normalization</span></a></li></ol> -->
+        <div class="toc"></div>
+      </div>
     </div>
   </div>
 </section>
+<!-- 手机端目录按钮 -->
+<div id="toc-mobile-btn">
+  <i class="fas fa-list-ul" aria-hidden="true"></i>
+</div>
+
       
     
   </div>
@@ -775,6 +882,59 @@
 		height: 100%;
 	}
 </style>
+
+
+  <script>
+  // https://github.com/theme-next/hexo-theme-next/blob/master/layout/_third-party/math/mathjax.swig
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = 'https://unpkg.com/mathjax@3.0/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    // 文章章节标题不能为 “MathJax” ，否则会报错。
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
 
 
 
