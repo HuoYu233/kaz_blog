@@ -594,6 +594,186 @@
 <h1 id="Batch-Normalization"><a href="#Batch-Normalization" class="headerlink" title="Batch Normalization"></a>Batch Normalization</h1><p>标准化+线性变化</p>
 <p>初始化时，一般设置线性变化参数$γ&#x3D;1,β&#x3D;0$大多数情况下它都限制了输出的均值在零，标准差在1附近。保证了输出分布的稳定性。</p>
 <p>在推理时你可以能只有一条数据，那此时该如何获得均值和方差呢？答案是，在训练时，BatchNorm会使用当前batch的z值的均值和标准差进行归一化，并用指数加权平均的办法，更新和维护z值的均值和标准差（每一个batch更新一次指数加权平均）。在推理时，就用这个指数加权平均得到的均值和标准差来归一化推理时的z值。</p>
+<h1 id="卷积"><a href="#卷积" class="headerlink" title="卷积"></a>卷积</h1><p>卷积操作完美解决了视觉问题的三个痛点。</p>
+<ol>
+<li>图片输入特征多 图片输入特征多，但是一个3x3的卷积操作只有10个参数，就可以对整个图片进行扫描。</li>
+<li>特征局部性 卷积操作的每个运算只在特定相邻区域内进行，并不要所有输入特征都参与运算。</li>
+<li>平移不变性 卷积操作在整个图片上进行滑动检测，就是假设图片的特征具有平移不变性。</li>
+</ol>
+<p>所以对于一个3x3的卷积操作，它只用10个参数就可以在任意大的图片上提取特征。</p>
+<p>卷积操作和全连接操作并没有本质的不同。对于一个3x3的卷积操作，你可以看成是一个连接9个输入的神经元，它有9个weight参数，一个bias参数。这个神经元会用同样的参数对输入特征图上的任意3x3区域进行计算，形成输出的特征图。</p>
+<p>所以卷积操作可看作带有先验知识（局部性、平移不变性）的参数共享全连接层。</p>
+<p>对应通道，对应高，对应宽位置上的输入和权重相乘，最后累加所有通道的值，再加上b值，经过激活函数，得到3x3x3输入区域的特征值a。</p>
+<p>如果通道数为C，那么卷积核的通道数也必须为C，但是输出的特征图还只是一个通道。那么我们在一个卷积层里可以定义多个Filter（卷积操作），当我们定义了几个Filter，输出的通道数就为几。</p>
+<p>感受野是指当前特征图里的每个特征是由原始多大区域的像素参与运算得到的。</p>
+<p>随着卷积的不断进行，生成的特征图越来越小，但是特征图的感受野越来越大。这刚好也契合了深度神经网络的特性，浅层网络发现细节局部的特征，深层网络发现更加宏观整体的特征。</p>
+<p>池化层一般跟在一个或者多个卷积层的后边，构成一个特征提取模块。一个卷积神经网络里可以有多个这样的模块。池化层的作用有以下几个：</p>
+<ol>
+<li>减少特征图的大小。</li>
+<li>过滤一些干扰信息，因为最大池化层只提取一个区域内的最强激活值，忽略其他值。所以它有排除干扰信息的作用。</li>
+<li>提供小范围的平移不变性，因为不论最大特征出现在池化窗口内的任意位置，都以最大特征作为输出。</li>
+</ol>
+<p>多通道池化层是分通道进行的。在每个通道上独立进行池化操作。所以池化操作并不改变输入的通道数。这点和卷积操作不同，一个卷积核，它的通道数必须和输入通道数一样，计算时对多通道数据进行融合计算，最终不论输入是几通道，输出只有一个通道。为了输出多通道，就要设置多个卷积核。</p>
+<p>1x1卷积可以看成是一个全连接的神经元，它通过共享参数对多个通道相同位置的特征进行融合，线性回归计算，并通过激活函数，产生新的特征。所以它有融合特征，获取新特征的能力。1x1卷积不会加Padding，步长为1，生成的特征图尺寸和输入特征图一致。</p>
+<h1 id="Resnet"><a href="#Resnet" class="headerlink" title="Resnet"></a>Resnet</h1><p>网络增加一层后的输出由两部分构成，一部分是输入x，一部分是新增加层对x做的修改。对x做的修改部分叫做残差部分，用F(x)表示。增加的这一层最终输出的特征为F(x)+x。期望F(x)+x&#x3D;H(x)。这种通过人为修改网络架构的方式，将对x的映射分为两部分：x本身和对x改变的部分，让模型更容易学到恒等映射。</p>
+<p>残差连接还有一个好处，就是可以让梯度通过捷径直接传递到给网络的浅层，避免了梯度层层传递，带来的导数连乘让监督信号变弱。</p>
+<h1 id="BPE"><a href="#BPE" class="headerlink" title="BPE"></a>BPE</h1><p>字节对编码（Byte Pair Encoding，BPE）是一个常用的，用于构建NLP模型词典构造的方法。进行BPE编码前，需要提前指定：</p>
+<ol>
+<li>语料。也就是模型将来要处理的大量文本。</li>
+<li>词典的大小。指定一个数字，词典包含多少个Token。</li>
+</ol>
+<p>算法初始化时，首先给每个单词后边加上<code>&lt;/w&gt;</code>表示这是一个单词结束的位置。然后按照字母对每个单词进行切分，将切分后的字母和<code>&lt;/w&gt;</code>放入词典</p>
+<p>接下来对所有相邻token进行统计，找出出现最多的两个token组合，将它们合并为一个新的token，放入词典。同时记录合并规则。如果同时有多个token对出现次数一样且都是最大，则任选一对进行合并。</p>
+<h1 id="token编码"><a href="#token编码" class="headerlink" title="token编码"></a>token编码</h1><p>通过独热编码，神经网络可以接收数字向量作为输入。然而，独热编码也存在明显的缺点：</p>
+<p>维度高：词汇表越大，独热向量的维度越高，计算和存储成本增加。</p>
+<p>稀疏性强：大部分位置为0，信息利用率低。</p>
+<p>无法表达词之间的关系：不同Token之间的独热编码是正交的（即内积为0），无法体现它们之间的语义相似性。</p>
+<p>词嵌入（Word Embedding）是一种将Token编码成低维、稠密向量的技术。词嵌入的目标是通过学习，将语义相似的词映射到空间中相近的位置上。这里的词指的就是Token。</p>
+<p>低维稠密：大大降低了计算和存储成本。比如大语言模型里一般只用几千维的向量来表示一个Token。</p>
+<p>语义表达能力强：向量之间的距离、方向能够体现词的相似性、关系等语义特征。</p>
+<p>可迁移性好：预训练好的词嵌入可以迁移到不同的下游任务中使用，提升模型效果。</p>
+<p>Word2Vec是获取embedding的一种算法，用了两种训练方法，分别是CBOW（Continuous Bag of Words）和 Skip-gram。</p>
+<p>这两种训练方法的目标相同：从大量无标签文本中学习高质量的词向量，这些向量能够捕捉词语的语义和语法信息。但它们的实现方式和侧重点有所不同。</p>
+<p>两者都基于分布式假设：<strong>一个词的语义由其出现的上下文决定。</strong></p>
+<p>它们都是浅层神经网络模型。</p>
+<p>它们都采用无监督学习，只需要大量的原始文本。</p>
+<h2 id="CBOW"><a href="#CBOW" class="headerlink" title="CBOW"></a>CBOW</h2><p>是一种通过上下文预测中心词的词向量训练模型。其核心思想是用上下文词向量的平均值预测中心词。</p>
+<p>对每个Token生成独热编码，给每个Token随机初始化一个Embedding，这样，我们想取得一个Token的Embedding时，只需要用Token的独热编码乘以Embedding矩阵即可。</p>
+<p>对于中心词，它的输入有2 * n个词。首先获得这2 * n个词的Embedding，然后取平均值，再接一个线性层，这个线性层神经元的个数为词典的大小，用softmax做分类，Label为中心词。利用交叉熵损失函数训练模型。</p>
+<p>需要特别注意的是这里的Embedding矩阵里是可学习的参数，每次训练过程都会更新Embedding矩阵的值，同样网络的分类线性层的参数也是被更新的。但是最终我们训练的目的是得到Embedding矩阵的值，这个矩阵里每一行的向量代表了一个Token的Embedding。</p>
+<p>经过大量训练后，我们得到的Embedding矩阵就是所有Token很好的词向量。</p>
+<h2 id="Skip-gram"><a href="#Skip-gram" class="headerlink" title="Skip-gram"></a>Skip-gram</h2><p>Skip-gram与CBOW刚好相反，它是利用中心词来预测上下文的词。同样它需要对Token进行独热编码，和构建Embedding矩阵。</p>
+<p>Skip-gram模型的输入只有一个Token，所以不需要进行多Token Embedding的平均，直接用输入Token的Embedding作为输入，然后和CBOW一样接一个线性分类头，预测输出Token。</p>
+<p>现代大模型会随机初始化每个Token的Embedding，然后随着大模型本身任务的训练，一起同步训练Embedding。这样就会得到更适合任务本身的Token Embedding。</p>
+<h1 id="语言模型采样"><a href="#语言模型采样" class="headerlink" title="语言模型采样"></a>语言模型采样</h1><p>语言模型生成时每次都取最大概率的token，这是贪婪策略。但实际情况并非如此。因为我们的目的是生成整个输出序列的联合概率最大，而不是每一步最大。</p>
+<p>Beam Search，假如设置Beam为2，它会一直保留2个目前概率最大的序列，最终输出概率最大的那个序列。</p>
+<p>不论是贪婪生成策略，还是Beam Search, 语言模型生成的序列都是固定的，如果我们希望语言模型可以给我们生成笑话，我们希望它每次讲的笑话不一样。那么我们可以采取下边的策略：</p>
+<p><strong>Top_k</strong> 语言模型输出时，首先是输出每个token的logits的值，然后选取Top_k 个token保留他们的logits值，其他token的logits值设置为一个很大的负数。然后进行softmax()，这样，非Top_k的token被选择的概率就为0。然后按照token概率进行随机采样，生成下一个token。</p>
+<p><strong>Top_p</strong> 取概率最大的一批token，作为候选，它们的累加概率和必须刚好大于设置的参数Top_p。然后再对所有的候选token的概率值做softmax，让它们的概率和为1，然后按更新后的概率随机采样作为下一个token。</p>
+<p><strong>Temperature</strong> 控制语言模型生成随机性的还有一个重要的参数是温度值（Temperature）。当设置了温度值t后，大模型输出的logits会首先除以温度值。然后再进行后续的采样。温度值对softmax()最后生成的概率值的影响，如下图所示：</p>
+<h1 id="RNN"><a href="#RNN" class="headerlink" title="RNN"></a>RNN</h1><p>当前时刻的隐状态等于前一时刻的隐状态和当前时刻的序列输入进行拼接，然后经过隐藏层线性变化和激活函数后的输出。</p>
+<p>$h_t&#x3D;tanh([h_{t−1}∣x_t]w_h+b_h)$</p>
+<p>这里一般更常用$tanh$作为激活函数，也可以用ReLU。</p>
+<p>输出层是一个多分类，激活函数用softmax：</p>
+<p>$y_t&#x3D;softmax(h_tw_y+b_y)$</p>
+<p><img src="http://rethink.fun/imgs/1316.png" class="lazyload placeholder" data-srcset="http://rethink.fun/imgs/1316.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp"></p>
+<p>RNN中的循环实际上只发生在第一层，它是RNN的关键，是循环实际发生的地方，所以我们可以叫它<strong>循环层</strong>。每一个时间步对循环层的梯度更新会通过计算图递归调用到前边所有时间步的循环层。循环层的网络参数会被更新多次。</p>
+<p>上图中的第二层是<strong>普通层</strong>，它不参与循环。每一个时间步对普通层的梯度更新，只会发生在当前步，普通层的网络参数只会被更新一次。这和普通神经网络没有区别。</p>
+<p>所以说，<strong>循环层的递归调用才是RNN的本质。</strong>每一时间步通过对之前所有时间步的循环层的调用，输出关键的隐状态$h_t$。对于普通层，可以看成是每一时间步利用$h_t$向量作为输入，进行的额外的分类或者回归任务。普通层不是RNN的核心，它只是为了完成每一步的特定任务添加的任务层。</p>
+<p>RNN重要的是循环层，以及循环层在每个时刻输出的隐状态，普通层利用隐状态完成每个时间步的任务。</p>
+<p>不同类型的RNN，有的时间步是没有输出的，但是隐状态一直在传递。这正是前面所说的，循环层和隐状态才是RNN的关键。普通层只是为了完成特定任务额外添加的。</p>
+<h1 id="LSTM"><a href="#LSTM" class="headerlink" title="LSTM"></a>LSTM</h1><p>自然语言中存在大量的长期依赖，但是RNN的记忆一般是都是短期的，很难保留很长的时间步。</p>
+<p>从前向传播来看，虽然每个时间步的RNN都通过隐状态向下一时间步传递信息，但是隐状态和当前步的输入一起进入线性层，激活函数。复杂的线性变化和激活函数，让隐状态很难经过多个时间步后还能完整的保留之前的记忆信息。所以隐状态本身传递的是一种短期记忆（Short-Term Memory）。</p>
+<p>梯度需要经过大量的时间步向后传递，大量小数值的梯度值相乘，会出现梯度消失的问题。这和深度神经网络梯度很难传递到网络靠前的层是一样的。</p>
+<p>所以我们需要想办法解决RNN中长距离记忆传递，以及梯度消失的问题。</p>
+<p>LSTM（Long Short-Term Memory）长短期记忆网络就是被用来解决RNN没有长期记忆的问题的。</p>
+<p><img src="http://rethink.fun/imgs/1326.png" class="lazyload placeholder" data-srcset="http://rethink.fun/imgs/1326.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp"></p>
+<p>经过激活函数<code>tanh</code>后为将要写入记忆细胞的记忆。这里它不能直接写入，要不然它就完全覆盖了老的记忆，达不到长期记忆的效果。解决办法就是我们通过一个门函数来控制当前新信息里的哪些维度可以写入到长期记忆里，这里的门函数是<code>sigmoid</code>，它输出的也是一个向量，取值是0到1，对新信息里的每个维度进行独立控制。因为sigmoid在大部分定义域都接近0或者1，所以它可以看做是允许某些维度的新信息进入长期记忆，某些维度的新信息不能进入长期记忆。如果是在0到1之间的值，就代表部分可以进入长期记忆，我们把这个门叫做输入门。</p>
+<p>取出长期记忆时，需要通过一个sigmoid的遗忘门，来遗忘长期记忆里某些维度的信息，</p>
+<p>接下来把经过筛选的新信息和经过遗忘的长期记忆按位相加，然后经过一个<code>tanh</code>激活，作为当前记忆细胞待输出的记忆。</p>
+<p>目前的待输出信息是这个时间步更新后的长期记忆，需要经过一个<code>tanh</code>激活函数，进行转化，同时还要再加一个<code>sigmoid</code>的输出门来控制一下哪些值适合在当前时间步输出。这里的输出就对应之前RNN的隐状态。</p>
+<p>原来的RNN在多个时间步之间传递一个隐状态h<em>h</em>，现在就再多传递一个记忆细胞状态c<em>c</em>。</p>
+<p>四个向量$Z,Z_i,Z_f,Z_o$实际上都是上一个状态的$h_{t-1}$和当前时刻的$x_t$拼接后作为输入，分别做4个线性回归得到的logits值。这4个线性回归对应的权重分别为$w_h,w_i,w_f,w_o$</p>
+<p>记忆细胞的长期记忆有一个直接连接的通道，这条通道上没有线性回归，没有激活函数。长期记忆容易保持，反向传递时，梯度也更容易传递到前边的时间步。</p>
+<p>新信息的logits:</p>
+<p>$$Z &#x3D; [h_{t-1} | x_t] w_h + b_h$$​</p>
+<p>输入门:</p>
+<p>$$Z_i &#x3D; [h_{t-1} | x_t] w_i + b_i$$<br>$$G_i &#x3D; sigmoid(Z_i)$$​​</p>
+<p>遗忘门：</p>
+<p>$$Z_f &#x3D; [h_{t-1} | x_t] w_f + b_f$$<br>$$G_f &#x3D; sigmoid(Z_f)$$</p>
+<p>输出门:</p>
+<p>$$Z_o &#x3D; [h_{t-1} | x_t] w_o + b_o$$<br>$$G_o &#x3D; sigmoid(Z_o)$$​</p>
+<p>记忆细胞状态:</p>
+<p>$$c_t &#x3D; c_{t-1} \odot G_f + \tanh(Z) \odot G_i$$​</p>
+<p>隐状态:</p>
+<p>$$h_t &#x3D; \tanh(c_t) \odot G_o$$​​​​​</p>
+<h1 id="GRU"><a href="#GRU" class="headerlink" title="GRU"></a>GRU</h1><p>门控循环单元（Gated Recurrent Unit，GRU）是对LSTM的简化版，实验表明，GRU的性能基本和LSTM相当。GRU去掉了LSTM中的记忆细胞状态$c_t$，仅用隐状态$h_t$就解决了长期记忆和梯度消失的问题。</p>
+<p><img src="http://rethink.fun/imgs/1331.png" class="lazyload placeholder" data-srcset="http://rethink.fun/imgs/1331.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp"></p>
+<p>GRU里也通过一个遗忘门来决定从长期记忆里去掉一些信息。不过GRU里叫做重置门，$G_r$。重置门也是用<code>simgoid</code>函数，它的输入是上一时刻的记忆$h_{t-1}$和当前时刻的输入$x_t$进行拼接，然后经过一个线性层得到的。线性层的权重为$w_r$。</p>
+<p>$G_r&#x3D;sigmoid([h_{t−1}∣x_t]w_r+b_r)$</p>
+<p>于是$h_{t−1}⊙G_r$​就是经过重置后的长期记忆。</p>
+<p>重置后的长期记忆和当前输入$x_t$合并，然后经过一个线性层（权重为$w_h$），加<code>tanh</code>激活，就得到当前层的备用输出$\tilde{h}_t$。</p>
+<p>再用一个<code>sigmoid</code>更新门，生成一个更新向量，它和备用输出按位相乘，获得要更新到长期记忆里的信息。然后用1减去更新向量里的每一维，这样就得到了对长期记忆的保留向量。用保留向量与长期记忆按位点乘，就得到了保留的长期记忆，再和更新信息相加，就得到了这一步输出的长期记忆，$h_t$。</p>
+<p>重置门:<br>$$G_r &#x3D; sigmoid([h_{t-1} | x_t] w_r + b_r)$$</p>
+<p>更新门：<br>$$G_u &#x3D; sigmoid([h_{t-1} | x_t] w_u + b_u)$$</p>
+<p>备用输出:</p>
+<p>$\tilde{h}<em>t&#x3D;tanh([h</em>{t-1}⊙G_r|x_t]w_h) + b_h$</p>
+<p>隐状态:</p>
+<p>$$h_t &#x3D; G_u⊙\tilde{h}<em>t + (1 - G_u)⊙h</em>{t-1}$$</p>
+<h1 id="BiRNN"><a href="#BiRNN" class="headerlink" title="BiRNN"></a>BiRNN</h1><p>BiRNN的想法是创建两个RNN，一个对序列正向循环，一个是对序列反向循环，然后把对应的某个序列元素的在正向和反向循环输出的隐状态进行合并，再作为完成特定任务的普通层的输入。这个输入里就同时包含了序列元素前边和后边序列的信息。相当于它可以看到整个序列的信息来做出判断。</p>
+<p>双向循环神经网络必须输入完整的序列进行处理。这对于NER(<strong>Named Entity Recognition</strong>（命名实体识别）)，摘要，或者对序分类的任务都比单向RNN有优势。但是对于生成类的任务，这时BiRNN就不适用了。因为在生成任务时，后续的序列还不知道。所以生成任务是单向任务，只能用单向RNN来完成。</p>
+<h1 id="DeepRNN"><a href="#DeepRNN" class="headerlink" title="DeepRNN"></a>DeepRNN</h1><p><img src="http://rethink.fun/imgs/1336.png" class="lazyload placeholder" data-srcset="http://rethink.fun/imgs/1336.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp"></p>
+<p>对于第二个循环层来说，和第一个循环层是完全一样的，只不过第一个循环层当前时间步的输入是$x_t$，而第二个循环层当前时间步的输入是第一个循环层在当前时间步输出的隐状态。</p>
+<p>所以对于多循环层的某一时间步的输入就等于当前层上一时刻的隐状态与上一层当前时刻的隐状态拼接，然后经过当前循环层的线性变化，以tanh作为激活。</p>
+<p>因为循环层比较复杂，即使是深度循环神经网络，循环层一般也都取2-5层，对于普通层可以适当增加深度。</p>
+<h1 id="Attention-Mechanism"><a href="#Attention-Mechanism" class="headerlink" title="Attention Mechanism"></a>Attention Mechanism</h1><p>没有attention时：</p>
+<p><img src="http://rethink.fun/imgs/1338.png" class="lazyload placeholder" data-srcset="http://rethink.fun/imgs/1338.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp">在Encoder阶段，读入所有的英文token，最后只有一个隐状态传递给Decoder。Decoder阶段，第一个时间步的输入有两个：分别是代表序列开始的<code>&lt;bos&gt;</code> token，和Encoder传递来的隐状态。输出为中文的第一个token，和Decoder第一个时间步的隐状态。然后把输出的第一个中文token的embedding作为下一个时间步的token输入，外加上一时间步的隐状态，输出第二个中文token。依次类推，直到某个时间步Decoder输出的token为序列结束符<code>&lt;eos&gt;</code>。</p>
+<p>输入的英文句子很长，并且里边还有大量的比如时间这样的细节信息，这些信息都不可以被压缩到Encoder最终输出的这一个隐状态里，这种结构在输入句子较短的时候表现还可以，但是随着输入句子的长度增加，效果会随之下降。</p>
+<p>添加了注意力机制的Encoder-Decoder RNN在Decoder生成内容时，它有以下几个输入：</p>
+<ol>
+<li>上一时刻的隐状态（LSTM还有上一时刻的细胞状态）。</li>
+<li>上一时刻输出token的embedding（上一时刻的输出就是这一时刻的输入）。</li>
+<li>通过注意力观察后的由Encoder不同时间步的隐状态构成的注意力向量（即使是LSTM，也只用隐状态。因为隐状态更能代表当时时间步的信息，细胞状态是长期记忆信息）。</li>
+</ol>
+<p>注意力机制就是将Encoder在每个时间步，也就是对每个英文token生成的隐状态的值进行加权求和（权值之和为1）生成一个注意力向量。有了注意力向量，将它与每个时间步输入的中文token的embedding进行拼接作为输入就实现了带注意力的Encoder-Decoder RNN了。</p>
+<p><img src="http://rethink.fun/imgs/1340.png" class="lazyload placeholder" data-srcset="http://rethink.fun/imgs/1340.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp"></p>
+<p>带注意机制的Decoder部分，每个时间步不光有隐状态输入，还有注意力向量和上一步输出token的embedding进行拼接的向量作为输入。</p>
+<h1 id="BLEU"><a href="#BLEU" class="headerlink" title="BLEU"></a>BLEU</h1><p>BLEU（Bilingual Evaluation Understudy）是机器翻译中最常用的自动评价指标之一，它衡量的是机器翻译结果和一个或多个参考译文之间的相似度。</p>
+<p>BLEU指标的取值范围为[0,1]之间，值越大代表机器翻译与参考译文越相似，表明翻译效果越好。</p>
+<table>
+<thead>
+<tr>
+<th>BLEU得分</th>
+<th>模型表现</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0-0.1</td>
+<td>差，基本不可读</td>
+</tr>
+<tr>
+<td>0.1-0.2</td>
+<td>可表达大体意思，有时会有错误</td>
+</tr>
+<tr>
+<td>0.2-0.3</td>
+<td>基本流畅可用，有一定错误或者不自然</td>
+</tr>
+<tr>
+<td>0.3-0.4</td>
+<td>很流畅，但不完美</td>
+</tr>
+<tr>
+<td>0.4-0.5</td>
+<td>很好，接近人工翻译</td>
+</tr>
+<tr>
+<td>0.5-1.0</td>
+<td>非常好（罕见）</td>
+</tr>
+</tbody></table>
+<p>BLEU的大致原理是：</p>
+<ul>
+<li>将模型翻译句子和参考译文都转化成token序列。</li>
+<li>计算每个模型翻译的token在参考译文的token序列中出现率$p_1$。</li>
+<li>计算每两个连续翻译token序列在参考token序列中的出现率$p_2$。</li>
+<li>计算每三个，每四个连续翻译token序列在参考token序列中的出现率$p_3,p_4$。</li>
+<li>综合$p_1,p_2,p_3,p_4$​，并惩罚模型输出翻译太短的情况，得到BLEU最终得分。</li>
+</ul>
+<p>准确率$p_n$​衡量的是模型翻译的n个连续token参照参考翻译的准确率。</p>
+<p>$$p_n&#x3D;\frac{\sum clip_count}{\sum count}$$</p>
+<p>其中<code>count</code>为n个连续token在模型翻译$T_m$出现的个数，<code>clip_count</code>为n个连续token在$T_m$，$T_r$​中出现较小次数的count</p>
+<p>$$BLEU&#x3D;\prod_{n&#x3D;1}^{4}P_n^{\frac{1}{4}}$$</p>
+<p>算数平均值不能突出一组数中的小值，几何平均值对每个小的p都很敏感</p>
+<p>直接用几何平均数的连乘形式，有可能多个很小的数连乘，造成float无法表示。所以一般用它的另一种等价表示方式：</p>
+<p>$$BLEU&#x3D;\prod_{n&#x3D;1}^{4}P_n^{\frac{1}{4}}&#x3D;exp(\sum_{i&#x3D;1}^{4}\frac{1}{4}log\ p_n)$$</p>
+<p>对短句进行惩罚，做法就是在上边的p值几何平均数的结果上乘一个值。</p>
+<p>$$BP&#x3D;<br>\begin{cases}<br>1 &amp; \mathrm{if}\ m&gt;r \<br>exp(1-\frac{r}{m}) &amp; \mathrm{if}\ m\leq r &amp;<br>\end{cases}$$</p>
+<p>其中r表示参考翻译的长度，m表示模型翻译的长度。</p>
+<p>最终公式</p>
+<p>$$BLEU&#x3D;BP \cdot exp(\sum_{i&#x3D;1}^{4}\frac{1}{4}log\ p_n)$$</p>
+<p>也可以把1&#x2F;4改成不同的权重$w_n$</p>
+<h1 id="Transfomer"><a href="#Transfomer" class="headerlink" title="Transfomer"></a>Transfomer</h1><p>见<a target="_blank" rel="noopener" href="https://kazovo.cn/2025/03/11/transformer-notes/">https://kazovo.cn/2025/03/11/transformer-notes/</a></p>
 
       </div>
       <div class="post-tags-categories">
@@ -743,7 +923,7 @@
   <div class='content'>
     <div class="toc-main">
       <div class="toc-content">
-        <!-- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BA%BF%E6%80%A7%E5%8F%98%E6%8D%A2%E5%92%8C%E7%9F%A9%E9%98%B5"><span class="toc-text">线性变换和矩阵</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%82%B9%E4%B9%98%E5%92%8C%E5%8F%89%E4%B9%98"><span class="toc-text">点乘和叉乘</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%82%B9%E4%B9%98"><span class="toc-text">点乘</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%89%E4%B9%98"><span class="toc-text">叉乘</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%96%B9%E5%90%91%E5%AF%BC%E6%95%B0%E5%92%8C%E6%A2%AF%E5%BA%A6"><span class="toc-text">方向导数和梯度</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%9A%8F%E6%9C%BA%E5%8F%98%E9%87%8F%E5%8F%8A%E5%85%B6%E5%88%86%E5%B8%83"><span class="toc-text">随机变量及其分布</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A6%BB%E6%95%A3%E9%9A%8F%E6%9C%BA%E5%8F%98%E9%87%8F%E5%88%86%E5%B8%83"><span class="toc-text">离散随机变量分布</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9E%E7%BB%AD%E9%9A%8F%E6%9C%BA%E5%8F%98%E9%87%8F%E5%88%86%E5%B8%83"><span class="toc-text">连续随机变量分布</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B0%E5%AD%A6%E6%9C%9F%E6%9C%9B%E5%92%8C%E6%96%B9%E5%B7%AE"><span class="toc-text">数学期望和方差</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%A7%E6%95%B0%E5%AE%9A%E5%BE%8B"><span class="toc-text">大数定律</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%AD%E5%BF%83%E6%9E%81%E9%99%90%E5%AE%9A%E7%90%86"><span class="toc-text">中心极限定理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9E%81%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1"><span class="toc-text">极大似然估计</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Normalization"><span class="toc-text">Normalization</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%AD%A3%E5%88%99%E5%8C%96"><span class="toc-text">正则化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#L1%E6%AD%A3%E5%88%99%E5%8C%96"><span class="toc-text">L1正则化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#L2%E6%AD%A3%E5%88%99%E5%8C%96"><span class="toc-text">L2正则化</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8C%87%E6%95%B0%E5%8A%A0%E6%9D%83%E5%B9%B3%E5%9D%87"><span class="toc-text">指数加权平均</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8A%A8%E9%87%8F%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D"><span class="toc-text">动量梯度下降</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#RMSProp%E4%BC%98%E5%8C%96%E5%99%A8"><span class="toc-text">RMSProp优化器</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Adam"><span class="toc-text">Adam</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Weight-Decay"><span class="toc-text">Weight Decay</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Dropout"><span class="toc-text">Dropout</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%AD%E7%BB%83%E9%98%B6%E6%AE%B5"><span class="toc-text">训练阶段</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%A8%E7%90%86%E9%98%B6%E6%AE%B5"><span class="toc-text">推理阶段</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Batch-Normalization"><span class="toc-text">Batch Normalization</span></a></li></ol> -->
+        <!-- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BA%BF%E6%80%A7%E5%8F%98%E6%8D%A2%E5%92%8C%E7%9F%A9%E9%98%B5"><span class="toc-text">线性变换和矩阵</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%82%B9%E4%B9%98%E5%92%8C%E5%8F%89%E4%B9%98"><span class="toc-text">点乘和叉乘</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%82%B9%E4%B9%98"><span class="toc-text">点乘</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%89%E4%B9%98"><span class="toc-text">叉乘</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%96%B9%E5%90%91%E5%AF%BC%E6%95%B0%E5%92%8C%E6%A2%AF%E5%BA%A6"><span class="toc-text">方向导数和梯度</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%9A%8F%E6%9C%BA%E5%8F%98%E9%87%8F%E5%8F%8A%E5%85%B6%E5%88%86%E5%B8%83"><span class="toc-text">随机变量及其分布</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A6%BB%E6%95%A3%E9%9A%8F%E6%9C%BA%E5%8F%98%E9%87%8F%E5%88%86%E5%B8%83"><span class="toc-text">离散随机变量分布</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9E%E7%BB%AD%E9%9A%8F%E6%9C%BA%E5%8F%98%E9%87%8F%E5%88%86%E5%B8%83"><span class="toc-text">连续随机变量分布</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B0%E5%AD%A6%E6%9C%9F%E6%9C%9B%E5%92%8C%E6%96%B9%E5%B7%AE"><span class="toc-text">数学期望和方差</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%A7%E6%95%B0%E5%AE%9A%E5%BE%8B"><span class="toc-text">大数定律</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%AD%E5%BF%83%E6%9E%81%E9%99%90%E5%AE%9A%E7%90%86"><span class="toc-text">中心极限定理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9E%81%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1"><span class="toc-text">极大似然估计</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Normalization"><span class="toc-text">Normalization</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%AD%A3%E5%88%99%E5%8C%96"><span class="toc-text">正则化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#L1%E6%AD%A3%E5%88%99%E5%8C%96"><span class="toc-text">L1正则化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#L2%E6%AD%A3%E5%88%99%E5%8C%96"><span class="toc-text">L2正则化</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8C%87%E6%95%B0%E5%8A%A0%E6%9D%83%E5%B9%B3%E5%9D%87"><span class="toc-text">指数加权平均</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8A%A8%E9%87%8F%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D"><span class="toc-text">动量梯度下降</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#RMSProp%E4%BC%98%E5%8C%96%E5%99%A8"><span class="toc-text">RMSProp优化器</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Adam"><span class="toc-text">Adam</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Weight-Decay"><span class="toc-text">Weight Decay</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Dropout"><span class="toc-text">Dropout</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%AD%E7%BB%83%E9%98%B6%E6%AE%B5"><span class="toc-text">训练阶段</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%A8%E7%90%86%E9%98%B6%E6%AE%B5"><span class="toc-text">推理阶段</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Batch-Normalization"><span class="toc-text">Batch Normalization</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8D%B7%E7%A7%AF"><span class="toc-text">卷积</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Resnet"><span class="toc-text">Resnet</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#BPE"><span class="toc-text">BPE</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#token%E7%BC%96%E7%A0%81"><span class="toc-text">token编码</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#CBOW"><span class="toc-text">CBOW</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Skip-gram"><span class="toc-text">Skip-gram</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E9%87%87%E6%A0%B7"><span class="toc-text">语言模型采样</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#RNN"><span class="toc-text">RNN</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#LSTM"><span class="toc-text">LSTM</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#GRU"><span class="toc-text">GRU</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#BiRNN"><span class="toc-text">BiRNN</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DeepRNN"><span class="toc-text">DeepRNN</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Attention-Mechanism"><span class="toc-text">Attention Mechanism</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#BLEU"><span class="toc-text">BLEU</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Transfomer"><span class="toc-text">Transfomer</span></a></li></ol> -->
         <div class="toc"></div>
       </div>
     </div>
