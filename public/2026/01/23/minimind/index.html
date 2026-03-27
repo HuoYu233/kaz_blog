@@ -380,7 +380,7 @@
         <h1 id="Minimind架构"><a href="#Minimind架构" class="headerlink" title="Minimind架构"></a>Minimind架构</h1><p>MiniMind 本质上是一个 <strong>Decoder-only Transformer</strong>。它的核心配置逻辑在 <code>MiniMindConfig</code> 中。</p>
 <ul>
 <li><strong>基础架构</strong>：类似于 LLaMA。</li>
-<li><strong>参数量级</strong>：极其轻量。<code>hidden_size=512</code>, <code>num_hidden_layers=8</code>，<code>vocab_size=6400</code>。这属于“麻雀”级别的模型，适合个人显卡甚至 CPU 快速实验和复现。</li>
+<li><strong>参数量级</strong>：极其轻量。<code>hidden_size=512</code>, <code>num_hidden_layers=8</code>，<code>vocab_size=6400</code>。 </li>
 <li><strong>特殊机制</strong>：<ul>
 <li>**MoE (混合专家模型)**：可选开启。</li>
 <li>**Weight Tying (权重共享)**：Embedding 层和输出层（LM Head）共享权重，这是小模型常用的压缩手段。</li>
